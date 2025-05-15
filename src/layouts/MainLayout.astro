@@ -1,22 +1,18 @@
 ---
-import Navbar from "../components/Navbar.astro";
-import MainHead from "./MainHead.astro";
+import Navbar from "../components/Navbar.astro"
+import MainHead from "./MainHead.astro"
 
-const { title, seoTitle, seoDesc } = Astro.props;
+const { title, seoTitle, seoDesc } = Astro.props
 ---
 
 <html>
-  <MainHead title={title} seoTitle={seoTitle} seoDesc={seoDesc} />
-  <body class="bg-[#29303B] text-slate-300">
-    <header class="fixed top-0 left-0 right-0 z-50">
-      <Navbar />
-    </header>
-
-    <div class="h-10"></div>
-    <main
-      class="relative px-0 md:px-21 h-[calc(100vh-60px)] overflow-y-auto custom-scrollbar overscroll-none"
-    >
-      <slot />
-    </main>
-  </body>
+    <MainHead title={ title } seoTitle={ seoTitle } seoDesc={ seoDesc }/>
+    <body class="bg-[#29303B] text-slate-300">
+        <header>
+            <Navbar/>
+        </header>
+        <div class="top-0 px-0 md:px-21 h-screen overflow-y-auto custom-scrollbar overscroll-none tranform translate-y-10"> 
+            <slot/>
+        </div>
+    </body>
 </html>
