@@ -11,11 +11,9 @@ const { title, seoTitle, seoDesc } = Astro.props
         <header>
             <Navbar/>
         </header>
-        <div class="flex flex-col">
-        <div class="h-10 flex flex-col"></div>
-        <div class="flex flex-col px-0 md:px-21 min-h-screen overflow-y-auto custom-scrollbar overscroll-none">
+        <div class="md:h-10 h-0"></div>
+        <div class="px-0 md:px-21 pt-10 md:pt-10 h-screen overflow-y-auto custom-scrollbar overscroll-none">
             <slot/>
-        </div>
         </div>
     </body>
 </html>
