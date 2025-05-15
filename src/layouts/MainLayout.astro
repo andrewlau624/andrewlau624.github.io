@@ -11,8 +11,8 @@ const { title, seoTitle, seoDesc } = Astro.props
         <header>
             <Navbar/>
         </header>
-        <div class="h-10"></div>
-        <div class="px-0 md:px-21 pt-0 h-screen overflow-y-auto custom-scrollbar overscroll-none">
+        <div class="block h-10"></div>
+        <div class="px-0 md:px-21 pt-0 overflow-y-auto custom-scrollbar overscroll-none" style="height: 100dvh;"> 
             <slot/>
         </div>
     </body>
