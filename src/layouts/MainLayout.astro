@@ -1,0 +1,12 @@
+---
+import MainHead from "./MainHead.astro"
+
+const { title, seoTitle, seoDesc } = Astro.props
+---
+
+<html>
+    <MainHead title={ title } seoTitle={ seoTitle } seoDesc={ seoDesc }/>
+    <body>
+        <slot/>
+    </body>
+</html>
