@@ -1,0 +1,218 @@
+---
+const navItems = [
+  { href: "#home", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#projects", label: "Projects" },
+];
+---
+
+<style>
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  .caret-custom {
+    position: absolute;
+    top: 0;
+    user-select: none;
+  }
+
+  .hidden-measure {
+    visibility: hidden;
+    position: absolute;
+    white-space: pre;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  #terminal-path::selection {
+    background: none;
+    color: inherit;
+  }
+
+  input:focus {
+    outline: none;
+    caret-color: transparent;
+  }
+</style>
+
+<nav class="fixed w-full bg-[#1B2027] font-mono px-4 py-2 z-50 h-10">
+  <div class="flex items-center justify-center md:justify-between w-full">
+    <div class="md:flex hidden items-center space-x-2 md:w-[80%] w-0 relative">
+      <div class="flex space-x-2 relative mr-5">
+        <div class="relative group">
+          <span class="block w-3 h-3 bg-red-500 rounded-full"></span>
+          <span
+            onclick="window.location.replace('#home');"
+            class="absolute inset-0 flex items-center justify-center text-xs font-bold text-red-800 opacity-0 group-hover:opacity-100 cursor-pointer select-none"
+          >
+            ×
+          </span>
+        </div>
+        <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block"></span>
+        <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+      </div>
+      <div
+        class="relative items-center whitespace-nowrap overflow-hidden text-base select-none w-full"
+        id="terminal-container"
+      >
+        <span id="terminal-prefix">C:\Users\andrewlau.dev\</span>
+        <input
+          id="terminal-path"
+          aria-label="Terminal navigation path input"
+          class="border-none caret-transparent"
+          maxlength="20"
+          spellcheck="false"
+          autocomplete="off"
+        />
+        <span id="caret" class="animate-blink caret-custom cursor-text">█</span>
+        <span id="text-measure" class="hidden-measure"></span>
+      </div>
+    </div>
+    <ul class="grid grid-cols-3 gap-6 text-sm w-full max-w-[400px] mx-auto">
+      {
+        navItems.map((item) => (
+          <li class="text-center">
+            <a href={item.href} class="hover:underline">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+<nav
+  class="fixed md:top-10 bottom-0 md:left-0 left-1/2 transform md:translate-0 -translate-x-1/2 bg-[#222831] md:h-[calc(100%-2.5rem)] md:w-21 w-fit px-6 py-2 flex md:flex-col flex-row items-center justify-center rounded-2xl md:rounded-none md:mb-0 mb-3"
+>
+  <ul
+    class="flex md:flex-col flex-row items-center justify-center gap-6 text-slate-200 text-4xl"
+  >
+    <li>
+      <a
+        href="https://linkedin.com/in/andrew-lau-dev"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+      >
+        <i class="bx bxl-linkedin-square"></i>
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://github.com/andrewlau624"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Github"
+      >
+        <i class="bx bxl-github"></i>
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://instagram.com/andrewl.au"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+      >
+        <i class="bx bxl-instagram"></i>
+      </a>
+    </li>
+    <li>
+      <a
+        href=""
+        id="email-link"
+        target="_blank"
+        aria-label="Gmail"
+        rel="noopener noreferrer"
+      >
+        <i class="bx bxl-gmail"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  const navRoutes = new Set(["#home", "#about", "#projects"]);
+
+  const input = document.getElementById("terminal-path") as HTMLInputElement;
+  const caret = document.getElementById("caret");
+  const measure = document.getElementById("text-measure");
+  const prefix = document.getElementById("terminal-prefix");
+
+  function updateCaret() {
+    if (!input || !caret || !measure || !prefix) return;
+
+    const caretPos = input.selectionStart ?? input.value.length;
+    const beforeCaret = input.value.slice(0, caretPos);
+
+    measure.textContent = prefix.textContent + beforeCaret + "█";
+    const width = measure.offsetWidth;
+
+    caret.style.left = `${width}px`;
+    caret.style.color =
+      document.activeElement === input ? "white" : "transparent";
+  }
+
+  function updateTerminalPath() {
+    const hash = location.hash || "#home";
+    input.value = hash;
+    updateCaret();
+  }
+
+  const updateEvents = ["input", "keyup", "click", "select", "pointerup"];
+  updateEvents.forEach((event) => {
+    input.addEventListener(event, updateCaret);
+  });
+
+  function loadGmail() {
+    const user = "andrewlau2007";
+    const domain = "gmail.com";
+    const email = `${user}@${domain}`;
+    const mailtoLink = `mailto:${email}`;
+
+    const emailAnchor = document.getElementById(
+      "email-link"
+    ) as HTMLAnchorElement;
+    if (emailAnchor) {
+      emailAnchor.href = mailtoLink;
+    }
+  }
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const val = input.value.trim();
+      const validHref = navRoutes.has(val);
+      if (validHref) {
+        location.hash = val;
+      } else {
+        console.log("Invalid section");
+      }
+    }
+  });
+
+  input.addEventListener("focus", () => {
+    if (caret) caret.style.color = "white";
+  });
+
+  input.addEventListener("blur", () => {
+    if (caret) caret.style.color = "transparent";
+  });
+
+  window.addEventListener("hashchange", updateTerminalPath);
+  window.addEventListener("DOMContentLoaded", () => {
+    loadGmail();
+    updateTerminalPath();
+    updateCaret();
+  });
+</script>
