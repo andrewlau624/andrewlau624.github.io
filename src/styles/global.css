@@ -9,7 +9,13 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 2.5rem;
 }
+
+.custom-scrollbar {
+    scroll-behavior: smooth;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
     width: 10px;
   }

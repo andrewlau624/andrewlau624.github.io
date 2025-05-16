@@ -1,5 +1,78 @@
 <section id="home" class="h-[900px]">
-    <div>
-        <h1>Andrew Lau</h1>
+  <div class="w-full">
+    <div
+      class="mx-auto mt-20 w-[80%] rounded-2xl border border-[#545454]/60 overflow-hidden font-light text-slate-300"
+    >
+      <div class="flex items-center gap-2 px-3 py-2 bg-[#404040]/60 rounded-t-2xl">
+        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+        <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+      </div>
+
+      <div
+        class="bg-[#272727]/60 font-mono p-5 rounded-b-2xl overflow-x-auto"
+      >
+        <p id="line1" class="leading-tight"></p>
+        <p id="line2" class="leading-tight mt-1"></p>
+        <pre id="asciiText" class="mt-2 text-sm whitespace-pre leading-tight">
+        </pre>
+        <p>&nbsp;</p>
+        <p id="terminalPrompt" class="cursor mt-2" style="opacity: 0;"></p>
+      </div>
     </div>
+  </div>
 </section>
+
+<style>
+  .cursor::after {
+    content: "█";
+    animation: blink 1s step-start infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const line1Text = "andrewlau@Andrews-MacBook-Pro ~ % intro.sh";
+  const line2Text = "Hi, my name is";
+  const asciiArt = `
+      ___              __                     __               
+     /   |  ____  ____/ /_______ _      __   / /   ____ ___  __
+    / /| | / __ \\/ __  / ___/ _ \\ | /| / /  / /   / __ \`/ / / /
+   / ___ |/ / / / /_/ / /  /  __/ |/ |/ /  / /___/ /_/ / /_/ / 
+  /_/  |_/_/ /_/\\__,_/_/   \\___/|__/|__/  /_____/\\__,_/\\__,_/`;
+
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  async function typeTextCharByChar(elementId, text, speed = 30) {
+    const el = document.getElementById(elementId);
+    el.classList.add("cursor");
+    el.textContent = "";
+
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+      await delay(speed);
+    }
+
+    el.classList.remove("cursor");
+  }
+
+  async function typeHero() {
+    await typeTextCharByChar("line1", line1Text, 40);
+    await delay(300);
+    await typeTextCharByChar("line2", line2Text, 10);
+    await delay(300);
+    await typeTextCharByChar("asciiText", asciiArt, 2);
+
+    const promptEl = document.getElementById("terminalPrompt");
+    promptEl.textContent = "andrewlau@Andrews-MacBook-Pro ~ % ";
+    promptEl.classList.add("cursor");
+    promptEl.style.opacity = "1";
+  }
+
+  window.addEventListener("DOMContentLoaded", typeHero);
+</script>
