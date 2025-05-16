@@ -1,23 +1,56 @@
-<section id="home" class="h-[900px]">
-  <div class="w-full">
+<section id="home" class="h-full">
+  <div class="w-full pt-20 px-20">
     <div
-      class="mx-auto mt-20 w-[80%] rounded-2xl border border-[#545454]/60 overflow-hidden font-light text-slate-300"
+      id="hero-terminal-container"
+      class="mx-auto md:w-full w-[95%] h-150 rounded-xl border border-[#545454]/60 overflow-hidden font-light text-slate-300"
     >
-      <div class="flex items-center gap-2 px-3 py-2 bg-[#404040]/60 rounded-t-2xl">
+      <div
+        id="hero-terminal-bar"
+        class="flex items-center gap-2 px-3 py-2 bg-[#37393d] rounded-t-xl"
+      >
         <div class="w-3 h-3 bg-red-500 rounded-full"></div>
         <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
         <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+        <div class="flex mx-auto gap-2 select-none">
+        <div class="flex flex-col text-xs -translate-x-15">
+          <i class="bx bx-folder text-base"></i>
+        </div>
+        <div class="flex flex-col text-xs -translate-x-15">
+          <span class="align-text">Drag Me</span>
+        </div>
+        </div>
       </div>
 
       <div
-        class="bg-[#272727]/60 font-mono p-5 rounded-b-2xl overflow-x-auto"
+        id="hero-terminal"
+        class="bg-[#222428] h-full p-5 rounded-b-xl overflow-x-auto text-sm select-none cursor-text"
       >
-        <p id="line1" class="leading-tight"></p>
+        <span>andrewlau@Andrews-MacBook-Pro ~ %</span><span
+          id="line1"
+          class="leading-tight"></span>
         <p id="line2" class="leading-tight mt-1"></p>
-        <pre id="asciiText" class="mt-2 text-sm whitespace-pre leading-tight">
+        <pre
+          id="asciiNameText"
+          class="text-sm whitespace-pre leading-tight">
         </pre>
         <p>&nbsp;</p>
-        <p id="terminalPrompt" class="cursor mt-2" style="opacity: 0;"></p>
+        <p id="line3" class="leading-tight mt-1"></p>
+        <p>&nbsp;</p>
+        <pre
+          id="asciiCalText"
+          class="text-sm whitespace-pre leading-tight">
+        </pre>
+        <p>&nbsp;</p>
+        <p id="line4" class="leading-tight mt-1"></p>
+        <p>&nbsp;</p>
+        <p id="line5" class="leading-tight mt-1 underline"></p>
+        <p>&nbsp;</p>
+        <p id="line6" class="leading-tight mt-1"></p>
+        <p id="line7" class="leading-tight mt-1"></p>
+        <p id="line8" class="leading-tight mt-1"></p>
+        <p id="line9" class="leading-tight mt-1"></p>
+        <p>&nbsp;</p>
+        <p id="terminalPrompt" class="cursor mt-2 mb-9" style="opacity: 0;"></p>
       </div>
     </div>
   </div>
@@ -37,42 +70,163 @@
 </style>
 
 <script>
-  const line1Text = "andrewlau@Andrews-MacBook-Pro ~ % intro.sh";
+  const line1Text = " introduction.sh";
   const line2Text = "Hi, my name is";
-  const asciiArt = `
+  const asciiNameArt = `
       ___              __                     __               
      /   |  ____  ____/ /_______ _      __   / /   ____ ___  __
     / /| | / __ \\/ __  / ___/ _ \\ | /| / /  / /   / __ \`/ / / /
    / ___ |/ / / / /_/ / /  /  __/ |/ |/ /  / /___/ /_/ / /_/ / 
   /_/  |_/_/ /_/\\__,_/_/   \\___/|__/|__/  /_____/\\__,_/\\__,_/`;
+  const line3Text =
+    "and I'm a Software Engineer pursuing a Bachelor's degree in Computer Science as a first year at";
+  const asciiCalArt = `                
+                @@@@@@                   
+            @@@@@@@@@@@                  
+         @@@@@@@   @@@@            @@@@@@
+       @@@@@@@  @@@@@             @@@@@@@
+     @@@@@@@     @@             @@@@@@@@ 
+    @@@@@@@                   @@@@@ @@@  
+   @@@@@@@                   @@@@@ @@@   
+  @@@@@@@          @@@@@@@@  @@@@@@@@    
+ @@@@@@@        @@@@@ @@@@@ @@@@@@@@     
+ @@@@@@@      @@@@@  @@@@@  @@@@@@       
+ @@@@@@@     @@@@@  @@@@@   @@@@@        
+ @@@@@@@    @@@@@@ @@@@@   @@@@@@        
+  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@      
+      @@@@     @@@@  @@@@       @@@@@@   
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     
+@@@@                   @@@@@@@  `;
 
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  const line4Text =
+    "I am a passionate developer and researcher exploring software and AI catered to helping others.";
+  const line5Text = "Contacts:";
+  const line6HTML = `LinkedIn: <a href="https://www.linkedin.com/in/andrew-lau-dev" target="_blank" class="text-blue-400 hover:underline">https://www.linkedin.com/in/andrew-lau-dev</a>`;
+  const line7HTML = `GitHub: <a href="https://github.com/andrewlau624" target="_blank" class="text-blue-400 hover:underline">https://github.com/andrewlau624</a>`;
+  const line8HTML = `Instagram: <a href="https://instagram.com/andrewl.au" target="_blank" class="text-blue-400 hover:underline">@andrewl.au</a>`;
+  const line9HTML = `Email: <a href="mailto:andrew.lau@berkeley.edu" class="text-blue-400 hover:underline">andrew.lau@berkeley.edu</a>`;
 
-  async function typeTextCharByChar(elementId, text, speed = 30) {
+  const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+  async function typeTextCharByChar(
+    elementId: string,
+    text: string,
+    speed = 30,
+    isHTML = false
+  ) {
     const el = document.getElementById(elementId);
-    el.classList.add("cursor");
-    el.textContent = "";
 
-    for (let i = 0; i < text.length; i++) {
-      el.textContent += text[i];
-      await delay(speed);
+    if (el) {
+      el.classList.add("cursor");
+      if (!isHTML) el.textContent = "";
+      else el.innerHTML = "";
+
+      for (let i = 0; i < text.length; i++) {
+        if (!isHTML) {
+          el.textContent += text[i];
+        } else {
+          el.innerHTML = text.slice(0, i + 1);
+        }
+        await delay(speed);
+      }
+
+      el.classList.remove("cursor");
+      const terminal = document.getElementById("hero-terminal");
+
+      if (terminal) terminal.scrollTo(0, terminal.scrollHeight);
     }
-
-    el.classList.remove("cursor");
   }
 
   async function typeHero() {
-    await typeTextCharByChar("line1", line1Text, 40);
+    await typeTextCharByChar("line1", line1Text, 60);
     await delay(300);
     await typeTextCharByChar("line2", line2Text, 10);
+    await typeTextCharByChar("asciiNameText", asciiNameArt, 0);
     await delay(300);
-    await typeTextCharByChar("asciiText", asciiArt, 2);
+    await typeTextCharByChar("line3", line3Text, 10);
+    await typeTextCharByChar("asciiCalText", asciiCalArt, 0);
+    await delay(300);
+    await typeTextCharByChar("line4", line4Text, 10);
+    await delay(300);
+    await typeTextCharByChar("line5", line5Text, 10);
+    await delay(300);
+    await typeTextCharByChar("line6", line6HTML, 2, true);
+    await delay(300);
+    await typeTextCharByChar("line7", line7HTML, 2, true);
+    await delay(300);
+    await typeTextCharByChar("line8", line8HTML, 2, true);
+    await delay(300);
+    await typeTextCharByChar("line9", line9HTML, 2, true);
+    await delay(300);
 
     const promptEl = document.getElementById("terminalPrompt");
-    promptEl.textContent = "andrewlau@Andrews-MacBook-Pro ~ % ";
-    promptEl.classList.add("cursor");
-    promptEl.style.opacity = "1";
+    if (promptEl) {
+      promptEl.textContent = "andrewlau@Andrews-MacBook-Pro ~ % ";
+      promptEl.classList.add("cursor");
+      promptEl.style.opacity = "1";
+    }
   }
 
   window.addEventListener("DOMContentLoaded", typeHero);
+
+  const terminalContainer = document.getElementById("hero-terminal-container");
+  const terminalBar = document.getElementById("hero-terminal-bar");
+
+  if (terminalBar && terminalContainer) {
+    let isDragging = false;
+    let startMouse = { x: 0, y: 0 };
+    let startTranslate = { x: 0, y: 0 };
+
+    terminalBar.addEventListener("mousedown", (e) => {
+      isDragging = true;
+
+      startMouse.x = e.clientX;
+      startMouse.y = e.clientY;
+
+      const style = window.getComputedStyle(terminalContainer);
+      const transform = style.transform;
+
+      if (transform && transform !== "none") {
+        const matrix = new DOMMatrix(transform);
+        startTranslate.x = matrix.m41;
+        startTranslate.y = matrix.m42;
+      } else {
+        startTranslate.x = 0;
+        startTranslate.y = 0;
+      }
+
+      terminalContainer.style.transition = "transform 0.1s linear";
+      terminalContainer.style.position = "relative";
+
+      document.body.style.userSelect = "none";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - startMouse.x;
+      const deltaY = e.clientY - startMouse.y;
+
+      const translateX = startTranslate.x + deltaX;
+      const translateY = startTranslate.y + deltaY;
+
+      terminalContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.userSelect = "";
+
+        terminalContainer.style.transform = `translate(0px, 0px)`;
+
+        terminalContainer.addEventListener("transitionend", () => {
+          terminalContainer.style.transition = "none";
+        });
+
+        terminalContainer.style.transition = "transform 0.3s ease";
+      }
+    });
+  }
 </script>

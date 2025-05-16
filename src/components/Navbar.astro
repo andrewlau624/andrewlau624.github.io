@@ -27,6 +27,10 @@ const navItems = [
     user-select: none;
   }
 
+  .caret-transparent::selection {
+    background-color: white;
+  }
+
   .hidden-measure {
     visibility: hidden;
     position: absolute;
@@ -46,32 +50,77 @@ const navItems = [
   }
 </style>
 
-<nav class="fixed w-full bg-[#1B2027] font-mono px-4 py-2 z-50 h-10">
-  <div class="flex items-center justify-center md:justify-between w-full">
-    <div class="md:flex hidden items-center space-x-2 md:w-[80%] w-0 relative">
-      <div class="flex space-x-2 relative mr-5">
-        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-        <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block"></span>
-        <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
-      </div>
+<nav class="fixed w-full bg-[#1B2027] px-4 py-3 z-50 h-13">
+  <div class="flex items-center justify-between w-full">
+    <div class="flex items-center gap-4 flex-grow">
+      <ul class="flex items-center gap-4 text-slate-200 text-xl">
+        <li>
+          <a
+            href="https://linkedin.com/in/andrew-lau-dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
+            <i class="bx bxl-linkedin-square"></i>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/andrewlau624"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Github"
+          >
+            <i class="bx bxl-github"></i>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://instagram.com/andrewl.au"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+        </li>
+        <li>
+          <a
+            href=""
+            id="email-link"
+            target="_blank"
+            aria-label="Gmail"
+            rel="noopener noreferrer"
+          >
+            <i class="bx bxl-gmail"></i>
+          </a>
+        </li>
+      </ul>
       <div
-        class="relative items-center whitespace-nowrap overflow-hidden text-base select-none w-full"
-        id="terminal-container"
+        class="bg-[#212730] px-3 py-1 rounded-lg flex-grow min-w-0 hidden lg:flex"
       >
-        <span id="terminal-prefix">C:\Users\andrewlau.dev\</span>
-        <input
-          id="terminal-path"
-          aria-label="Terminal navigation path input"
-          class="border-none caret-transparent"
-          maxlength="20"
-          spellcheck="false"
-          autocomplete="off"
-        />
-        <span id="caret" class="animate-blink caret-custom cursor-text">█</span>
-        <span id="text-measure" class="hidden-measure"></span>
+        <div
+          class="relative flex flex-nowrap overflow-hidden text-base min-w-0 w-full cursor-default "
+          id="terminal-container"
+        >
+          <span id="terminal-prefix" class="cursor-default">C:\Users\andrewlau.dev\</span>
+          <input
+            id="terminal-path"
+            class="border-none caret-transparent text-white w-full cursor-default selection:bg-white"
+            maxlength="8"
+            spellcheck="false"
+            autocomplete="off"
+          />
+          <span id="caret" class="animate-blink caret-custom"
+            >█</span
+          >
+          <span id="text-measure" class="hidden-measure"></span>
+        </div>
       </div>
     </div>
-    <ul class="grid grid-cols-3 gap-6 text-sm w-full max-w-[400px] mx-auto">
+    <ul
+      class="flex flex-nowrap items-center justify-center gap-6 text-slate-200 text-xl pl-5"
+    >
       {
         navItems.map((item) => (
           <li class="text-center">
@@ -88,55 +137,6 @@ const navItems = [
     </ul>
   </div>
 </nav>
-<nav
-  class="fixed z-50 md:top-10 bottom-0 md:left-0 left-1/2 transform md:translate-0 -translate-x-1/2 bg-[#222831] md:h-[calc(100%-2.5rem)] md:w-21 w-fit px-6 py-2 flex md:flex-col flex-row items-center justify-center rounded-2xl md:rounded-none md:mb-0 mb-3"
->
-  <ul
-    class="flex md:flex-col flex-row items-center justify-center gap-6 text-slate-200 text-4xl"
-  >
-    <li>
-      <a
-        href="https://linkedin.com/in/andrew-lau-dev"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="LinkedIn"
-      >
-        <i class="bx bxl-linkedin-square"></i>
-      </a>
-    </li>
-    <li>
-      <a
-        href="https://github.com/andrewlau624"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Github"
-      >
-        <i class="bx bxl-github"></i>
-      </a>
-    </li>
-    <li>
-      <a
-        href="https://instagram.com/andrewl.au"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram"
-      >
-        <i class="bx bxl-instagram"></i>
-      </a>
-    </li>
-    <li>
-      <a
-        href=""
-        id="email-link"
-        target="_blank"
-        aria-label="Gmail"
-        rel="noopener noreferrer"
-      >
-        <i class="bx bxl-gmail"></i>
-      </a>
-    </li>
-  </ul>
-</nav>
 
 <script is:inline>
   const navRoutes = new Set(["home", "about", "projects"]);
@@ -152,7 +152,7 @@ const navItems = [
     const caretPos = input.selectionStart ?? input.value.length;
     const beforeCaret = input.value.slice(0, caretPos);
 
-    measure.textContent = prefix.textContent + beforeCaret + "█";
+    measure.textContent = prefix.textContent + beforeCaret;
     const width = measure.offsetWidth;
 
     caret.style.left = `${width}px`;
@@ -173,8 +173,8 @@ const navItems = [
   });
 
   function loadGmail() {
-    const user = "andrewlau2007";
-    const domain = "gmail.com";
+    const user = "andrew.lau";
+    const domain = "berkeley.edu";
     const email = `${user}@${domain}`;
     const mailtoLink = `mailto:${email}`;
 
