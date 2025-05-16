@@ -8,7 +8,7 @@ import mailObfuscation from "astro-mail-obfuscation";
 export default defineConfig({
   site: "https://andrewlau624.github.io",
   base: "",
-
+  output: "static",
   vite: {
     plugins: [tailwindcss()],
   },

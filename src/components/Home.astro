@@ -49,13 +49,12 @@
         <p id="line8" class="leading-tight mt-1"></p>
         <span id="line9" class="leading-tight mt-1"></span>
         <a
-          id="email-link"
+          id="line9-email"
           href="andrew.lau@berkeley.edu"
-          class="text-blue-400 hover:underline"
-          data-obfuscation="0"
+          class="text-blue-400 hover:underline hidden"
+          data-obfuscation="1"
           target="_blank"
           rel="noopener noreferrer"
-          style="opacity: 0;"
         >
           andrew.lau@berkeley.edu
         </a>
@@ -170,9 +169,9 @@
     await typeTextCharByChar("line9", line9HTML, 2, true);
     await delay(300);
 
-    const emailLink = document.getElementById("email-link");
+    const emailLink = document.getElementById("line9-email");
     if (emailLink) {
-      emailLink.style.opacity = "1";
+      emailLink.classList.remove("hidden");
     }
 
     const promptEl = document.getElementById("terminalPrompt");
