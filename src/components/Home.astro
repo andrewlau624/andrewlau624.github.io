@@ -12,15 +12,15 @@
         <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
         <div class="w-3 h-3 bg-green-500 rounded-full"></div>
         <div class="flex mx-auto gap-2 select-none -translate-x-7.5">
-        <div class="flex flex-col text-xs">
-          <i class="bx bx-folder text-base"></i>
-        </div>
-        <div class="md:flex hidden flex-col text-xs">
-          <span class="align-text">andrewlau - (drag me)</span>
-        </div>
-        <div class="flex md:hidden flex-col text-xs">
-          <span class="align-text">andrewlau</span>
-        </div>
+          <div class="flex flex-col text-xs">
+            <i class="bx bx-folder text-base"></i>
+          </div>
+          <div class="md:flex hidden flex-col text-xs">
+            <span class="align-text">andrewlau - (drag me)</span>
+          </div>
+          <div class="flex md:hidden flex-col text-xs">
+            <span class="align-text">andrewlau</span>
+          </div>
         </div>
       </div>
 
@@ -32,16 +32,12 @@
           id="line1"
           class="leading-tight"></span>
         <p id="line2" class="leading-tight mt-1"></p>
-        <pre
-          id="asciiNameText"
-          class="text-sm whitespace-pre leading-tight">
+        <pre id="asciiNameText" class="text-sm whitespace-pre leading-tight">
         </pre>
         <p>&nbsp;</p>
         <p id="line3" class="leading-tight mt-1"></p>
         <p>&nbsp;</p>
-        <pre
-          id="asciiCalText"
-          class="text-sm whitespace-pre leading-tight">
+        <pre id="asciiCalText" class="text-sm whitespace-pre leading-tight">
         </pre>
         <p>&nbsp;</p>
         <p id="line4" class="leading-tight mt-1"></p>
@@ -51,7 +47,18 @@
         <p id="line6" class="leading-tight mt-1"></p>
         <p id="line7" class="leading-tight mt-1"></p>
         <p id="line8" class="leading-tight mt-1"></p>
-        <p id="line9" class="leading-tight mt-1"></p>
+        <span id="line9" class="leading-tight mt-1"></span>
+        <a
+          id="email-link"
+          href="andrew.lau@berkeley.edu"
+          class="text-blue-400 hover:underline"
+          data-obfuscation="0"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="opacity: 0;"
+        >
+          andrew.lau@berkeley.edu
+        </a>
         <p>&nbsp;</p>
         <p id="terminalPrompt" class="cursor mt-2 mb-9" style="opacity: 0;"></p>
       </div>
@@ -108,7 +115,7 @@
   const line6HTML = `LinkedIn: <a href="https://www.linkedin.com/in/andrew-lau-dev" target="_blank" class="text-blue-400 hover:underline">https://www.linkedin.com/in/andrew-lau-dev</a>`;
   const line7HTML = `GitHub: <a href="https://github.com/andrewlau624" target="_blank" class="text-blue-400 hover:underline">https://github.com/andrewlau624</a>`;
   const line8HTML = `Instagram: <a href="https://instagram.com/andrewl.au" target="_blank" class="text-blue-400 hover:underline">@andrewl.au</a>`;
-  const line9HTML = `Email: <a href="mailto:andrew.lau@berkeley.edu" class="text-blue-400 hover:underline">andrew.lau@berkeley.edu</a>`;
+  const line9HTML = `Email: `;
 
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -162,6 +169,11 @@
     await delay(300);
     await typeTextCharByChar("line9", line9HTML, 2, true);
     await delay(300);
+
+    const emailLink = document.getElementById("email-link");
+    if (emailLink) {
+      emailLink.style.opacity = "1";
+    }
 
     const promptEl = document.getElementById("terminalPrompt");
     if (promptEl) {

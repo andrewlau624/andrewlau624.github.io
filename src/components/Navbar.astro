@@ -82,11 +82,12 @@ const navItems = [
         </li>
         <li>
           <a
-            href=""
+            href="javascript:location='mailto:\u0061\u006e\u0064\u0072\u0065\u0077\u002e\u006c\u0061\u0075\u0040\u0062\u0065\u0072\u006b\u0065\u006c\u0065\u0079\u002e\u0065\u0064\u0075';void 0"
             id="email-link"
             target="_blank"
             aria-label="Gmail"
             rel="noopener noreferrer"
+            data-obfuscation="0"
           >
             <i class="bx bxl-gmail"></i>
           </a>
@@ -99,7 +100,9 @@ const navItems = [
           class="relative flex flex-nowrap overflow-hidden text-base min-w-0 w-full cursor-default select-none"
           id="terminal-container"
         >
-          <span id="terminal-prefix" class="cursor-default">C:\Users\andrewlau.dev\</span>
+          <span id="terminal-prefix" class="cursor-default"
+            >C:\Users\andrewlau.dev\</span
+          >
           <input
             id="terminal-path"
             class="border-none caret-transparent bg-transparent text-white w-full cursor-default selection:bg-white"
@@ -107,9 +110,7 @@ const navItems = [
             spellcheck="false"
             autocomplete="off"
           />
-          <span id="caret" class="animate-blink caret-custom"
-            >█</span
-          >
+          <span id="caret" class="animate-blink caret-custom">█</span>
           <span id="text-measure" class="hidden-measure"></span>
         </div>
       </div>
@@ -186,8 +187,6 @@ const navItems = [
       const validHref = navRoutes.has(val);
       if (validHref) {
         location.hash = val;
-      } else {
-        console.log("Invalid section");
       }
     }
   });
