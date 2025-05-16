@@ -196,7 +196,6 @@
         startTranslate.y = 0;
       }
 
-      terminalContainer.style.transition = "transform 0.1s linear";
       terminalContainer.style.position = "relative";
 
       document.body.style.userSelect = "none";
@@ -211,6 +210,7 @@
       const translateX = startTranslate.x + deltaX;
       const translateY = startTranslate.y + deltaY;
 
+      terminalContainer.style.transition = "transform 0.1s linear";
       terminalContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
     });
 
