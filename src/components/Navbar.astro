@@ -27,10 +27,6 @@ const navItems = [
     user-select: none;
   }
 
-  .caret-transparent::selection {
-    background-color: white;
-  }
-
   .hidden-measure {
     visibility: hidden;
     position: absolute;
@@ -100,13 +96,13 @@ const navItems = [
         class="bg-[#212730] px-3 py-1 rounded-lg flex-grow min-w-0 hidden lg:flex"
       >
         <div
-          class="relative flex flex-nowrap overflow-hidden text-base min-w-0 w-full cursor-default "
+          class="relative flex flex-nowrap overflow-hidden text-base min-w-0 w-full cursor-default select-none"
           id="terminal-container"
         >
           <span id="terminal-prefix" class="cursor-default">C:\Users\andrewlau.dev\</span>
           <input
             id="terminal-path"
-            class="border-none caret-transparent text-white w-full cursor-default selection:bg-white"
+            class="border-none caret-transparent bg-transparent text-white w-full cursor-default selection:bg-white"
             maxlength="8"
             spellcheck="false"
             autocomplete="off"
@@ -123,7 +119,7 @@ const navItems = [
     >
       {
         navItems.map((item) => (
-          <li class="text-center">
+          <li class="flex items-center justify-center text-center">
             <a
               href={item.href}
               class="hover:underline text-base"
