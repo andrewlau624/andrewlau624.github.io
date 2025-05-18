@@ -1,49 +1,55 @@
 ---
-import Navbar from "../components/Navbar.astro"
-import MainHead from "./MainHead.astro"
+import Navbar from "../components/Navbar.astro";
+import MainHead from "./MainHead.astro";
 
-const { title, seoTitle, seoDesc } = Astro.props
+const { title, seoTitle, seoDesc } = Astro.props;
 ---
 
-<html>
-    <MainHead title={ title } seoTitle={ seoTitle } seoDesc={ seoDesc }/>
-    <body class="bg-[#29303B] text-slate-300 overflow-hidden">
-        <header>
-            <Navbar/>
-        </header>
-        <div class="min-h-10"></div>
-        <div class="h-screen overflow-y-scroll custom-scrollbar"> 
-            <slot/>
-        </div>
-    </body>
+<html lang="en">
+  <MainHead title={title} seoTitle={seoTitle} seoDesc={seoDesc} />
+  <body class="bg-[#29303B] text-slate-300 overflow-hidden">
+    <header>
+      <Navbar />
+    </header>
+    <div class="min-h-10"></div>
+    <div id="scroll-container" class="h-screen overflow-y-scroll custom-scrollbar">
+      <slot />
+    </div>
+  </body>
 </html>
 
-<script is:inline>
-    const sections = ["home", "about", "projects"];
-  
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.6
-    };
-  
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          if (id && location.hash !== `#${id}`) {
-            history.replaceState(null, "", `#${id}`);
-            document.getElementById("terminal-path").value = id;
+<script is:inline type="module">
+  const sections = ["home", "about", "projects"];
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.5,
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const target = entry.target;
+
+      if (entry.isIntersecting) {
+        const id = target.id;
+        if (id && location.hash !== `#${id}`) {
+          history.replaceState(null, "", `#${id}`);
+          const terminalPath = document.getElementById("terminal-path");
+          if (terminalPath) {
+            terminalPath.value = id;
           }
         }
       }
-    }, observerOptions);
-  
-    window.addEventListener("DOMContentLoaded", () => {
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-      });
+    }
+  }, observerOptions);
+
+  window.addEventListener("DOMContentLoaded", () => {
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        observer.observe(el);
+      }
     });
-  </script>
-  
+  });
+</script>

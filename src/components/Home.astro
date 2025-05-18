@@ -1,4 +1,4 @@
-<section id="home" class="h-full">
+<section id="home" class="h-screen">
   <div class="relative w-full h-0 overflow-visible">
     <div
       class="md:flex hidden relative top-1/2 mx-auto translate-y-[120px] opacity-40 pointer-events-none select-none w-96 max-w-full -z-50"
@@ -10,15 +10,17 @@
         class="flex flex-row"
       />
       <div class="flex flex-row w-full -translate-x-20">
-      <span class="text-slate-500/20 text-7xl">◀</span>
-      <span class="text-2xl font-normal bg-slate-500/20 h-fit p-7 rounded-4xl">You found me!</span>
+        <span class="text-slate-500/20 text-7xl">◀</span>
+        <span class="text-2xl font-normal bg-slate-500/20 h-fit p-7 rounded-4xl"
+          >You found me!</span
+        >
       </div>
     </div>
   </div>
-  <div class="w-full pt-20 md:px-20 px-2 z-10">
+  <div class="w-full pt-20 md:px-20 px-2 z-10 h-[90%]">
     <div
       id="hero-terminal-container"
-      class="mx-auto md:w-full w-[95%] h-150 rounded-xl border border-[#545454]/60 overflow-hidden font-light text-slate-300"
+      class="mx-auto md:w-full w-[95%] h-full rounded-xl border border-[#545454]/60 overflow-hidden font-light text-slate-300"
     >
       <div
         id="hero-terminal-bar"
@@ -240,7 +242,8 @@
       const translateX = startTranslate.x + deltaX;
       const translateY = startTranslate.y + deltaY;
 
-      terminalContainer.style.transition = "transform 0.1s linear";
+      terminalContainer.style.zIndex = "40";
+      terminalContainer.style.transition = "transform 0.2s linear";
       terminalContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
     });
 

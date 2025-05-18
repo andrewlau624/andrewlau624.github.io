@@ -14,5 +14,8 @@
     "astro-mail-obfuscation": "^2.3.4",
     "astro-seo": "^0.8.4",
     "tailwindcss": "^4.1.6"
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.7"
   }
 }

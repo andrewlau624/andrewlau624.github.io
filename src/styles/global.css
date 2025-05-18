@@ -2,32 +2,46 @@
 @import "tailwindcss";
 
 * {
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-style: normal;
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+   -moz-user-select: none;
+   -webkit-user-select: none;
+
+   -ms-user-select: none;
+   user-select: none;
 }
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 2.5rem;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2.5rem;
 }
 
 .custom-scrollbar {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: #222831;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #7f7f7f;
-  }
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #222831;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #7f7f7f;
+}
+
+#about:hover {
+  cursor: url("/src//assets//cursors/default.svg"), auto;
+}
+
+#about .textarea:hover {
+  cursor: url("/src/assets/cursors/text.svg"), text;
+}

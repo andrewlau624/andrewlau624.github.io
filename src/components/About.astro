@@ -1,22 +1,527 @@
-<section id="about" class="h-full" transition:animate="slide">
-  <div class="w-full pt-20">
-    <div class="h-full">
+---
+const backgroundDesc =
+  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their backend systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefitting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
+
+const appData = [
+  {
+    name: "Trash",
+    imgSrc: "/src/assets/icons/trashIcon.png",
+  },
+];
+
+const techStackData = [
+  { name: "Java", imgSrc: "/src/assets/icons/javaLogo.png" },
+  { name: "Python", imgSrc: "/src/assets/icons/pythonLogo.png" },
+  { name: "C++", imgSrc: "/src/assets/icons/cppLogo.png" },
+
+  { name: "HTML", imgSrc: "/src/assets/icons/htmlLogo.png" },
+  { name: "JavaScript", imgSrc: "/src/assets/icons/jsLogo.png" },
+  { name: "TypeScript", imgSrc: "/src/assets/icons/tsLogo.png" },
+
+  { name: "React", imgSrc: "/src/assets/icons/reactLogo.png" },
+  { name: "Next.js", imgSrc: "/src/assets/icons/nextLogo.png" },
+
+  { name: "MySQL", imgSrc: "/src/assets/icons/mysqlLogo.png" },
+
+  { name: "DigitalOcean", imgSrc: "/src/assets/icons/digitalOceanLogo.png" },
+];
+
+const aboutNavigationAppData = [
+  {
+    name: "Background",
+    imgSrc: "/src/assets/icons/notepadIcon.png",
+  },
+  {
+    name: "Tech Stack",
+    imgSrc: "/src/assets/icons/folderIcon.png",
+  },
+];
+---
+
+<section id="about" class="relative h-[8000px]">
+  <div class="sticky top-3 h-[calc(100vh-34px)] overflow-y-auto">
+    <div
+      class="h-full bg-[url(/src/assets/images/wallpaper.jpg)] overflow-y-scroll"
+    >
       <div
-        class="flex items-center gap-2 px-3 py-2 border-t-1 border-t-[#545454]/60 bg-[#37393d]"
+        class="bg-black/20 h-5 flex items-center text-white text-sm py-3 select-none"
       >
-        <div class="flex mx-auto gap-2 select-none -translate-x-7.5">
-          <div class="flex flex-col text-xs">
-            <i class="bx bx-images text-base"></i>
-          </div>
-          <div class="flex flex-col text-xs">
-            <span class="align-text">about me</span>
-          </div>
+        <div class="pl-3 flex items-center gap-1 w-[20%] min-w-fit">
+          <i class="bx bx-notification"></i>
+        </div>
+        <div class="flex-grow flex justify-center items-center text-center">
+          <span id="name-time">andrewlau</span>
+        </div>
+        <div class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit">
+          <i class="bx bx-wifi"></i>
+          <i class="bx bxs-volume-full"></i>
+          <i class="bx bxs-battery"></i>
+        </div>
+      </div>
+      <div>
+        <div
+          class="m-3 grid grid-cols-1 gap-6 justify-items-start overflow-y-auto w-fit p-3"
+        >
+          {
+            appData.map((app) => (
+              <div
+                id="app"
+                class="w-20 h-20 flex flex-col items-center justify-center rounded-lg"
+              >
+                <img
+                  src={app.imgSrc}
+                  alt={app.name}
+                  draggable="false"
+                  class="h-15 w-15 object-contain flex flex-col mb-1 p-1"
+                />
+                <span class="flex flex-col text-xs font-medium text-white text-shadow-md px-1">
+                  {app.name}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+        <div
+          class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center items-center px-7 py-2 gap-4 mb-2"
+        >
+          {
+            aboutNavigationAppData.map((item, index) => (
+              <div
+                class="group app-nav-item flex flex-col items-center gap-1 text-white text-xs font-medium"
+                data-index={index}
+              >
+                <img
+                  src={item.imgSrc}
+                  alt={item.name}
+                  draggable="false"
+                  class="h-14 w-14 object-contain p-1 group-hover:bg-white/30 rounded-md"
+                />
+                <div class="indicator-bar bg-white h-1 rounded-full" />
+              </div>
+            ))
+          }
         </div>
       </div>
 
-      <div class="bg-[#222428] h-20">
-        
+      <div id="window" class="absolute w-full h-full top-0 left-0">
+        <div
+          id="window-0"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[9vh] md:left-[17vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+        >
+          <div
+            id="draggable-window-tab"
+            class="relative w-full bg-[#3c4657] h-7 flex items-center"
+          >
+            <div
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+            >
+              <span class="text-sm text-slate-300/85 font-medium"
+                >andrewlau@background</span
+              >
+            </div>
+            <div
+              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+            >
+              <i class="bx bx-x-circle close-window"></i>
+            </div>
+          </div>
+          <div class="w-full h-full">
+            <div
+              class="hidden bg-[#4a5467] md:flex flex-row text-center h-7 text-sm border-y-1 border-y-slate-800/30"
+            >
+              <span class="px-3 py-1 hover:bg-white/20">File</span>
+              <span class="px-3 py-1 hover:bg-white/20">Edit</span>
+              <span class="px-3 py-1 hover:bg-white/20">View</span>
+              <span class="px-3 py-1 hover:bg-white/20">Selection</span>
+              <span class="px-3 py-1 hover:bg-white/20">Find</span>
+              <span class="px-3 py-1 hover:bg-white/20">Packages</span>
+              <span class="px-3 py-1 hover:bg-white/20">Help</span>
+            </div>
+            <div
+              class="flex flex-col w-full bg-[#4b5568]/90 md:pb-0 pb-4 py-3 h-full px-4"
+            >
+              <div class="bg-blur"></div>
+              <div
+                contenteditable="true"
+                class="textarea h-full resize-none p-2 text-white bg-transparent outline-none w-full whitespace-pre-wrap overflow-y-auto"
+              >
+                {backgroundDesc}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="window-1"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[10vh] md:left-[18.5vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+        >
+          <div
+            id="draggable-window-tab"
+            class="relative w-full bg-[#3c4657] h-7 flex items-center"
+          >
+            <div
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+            >
+              <span class="text-sm text-slate-300/85 font-medium"
+                >andrewlau@techstack</span
+              >
+            </div>
+            <div
+              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+            >
+              <i class="bx bx-x-circle close-window"></i>
+            </div>
+          </div>
+          <div class="w-full h-full bg-[#4a5467]">
+            <div
+              class="hidden md:flex flex-row text-center h-7 text-sm border-y-1 border-y-slate-800/30"
+            >
+              <span class="px-3 py-1 hover:bg-white/20">File</span>
+              <span class="px-3 py-1 hover:bg-white/20">Edit</span>
+              <span class="px-3 py-1 hover:bg-white/20">View</span>
+              <span class="px-3 py-1 hover:bg-white/20">Go</span>
+              <span class="px-3 py-1 hover:bg-white/20">Bookmarks</span>
+              <span class="px-3 py-1 hover:bg-white/20">Help</span>
+            </div>
+            <div
+              class="flex flex-row w-full bg-[#444e61] md:pb-0 pb-4 py-3 h-full"
+            >
+              <div
+                class="hidden md:flex flex-col w-[15%] text-sm text-slate-300 select-none h-full"
+              >
+                <ul
+                  class="flex flex-col text-slate-300 gap-1 pl-3 pr-2 border-r-2 border-r-slate-800/35 h-full"
+                >
+                  <li
+                    class="px-4 rounded flex items-center gap-2 -translate-x-4 font-medium"
+                  >
+                    <span class="truncate max-w-[200px] block">▼ About Me</span>
+                  </li>
+                  <li
+                    class="px-4 hover:bg-slate-200/10 rounded flex items-center gap-2"
+                  >
+                    <i class="bx bx-desktop text-slate-400"></i>
+                    <span class="truncate max-w-[200px] block">Tech Stack</span>
+                  </li>
+                  <li
+                    class="px-4 rounded flex items-center gap-2 -translate-x-4 font-medium"
+                  >
+                    <span class="truncate max-w-[200px] block"
+                      >▼ My Computer</span
+                    >
+                  </li>
+                  <li
+                    class="px-4 hover:bg-slate-200/10 rounded flex items-center gap-2"
+                  >
+                    <i class="bx bx-home-alt text-slate-400"></i>
+                    <span class="truncate max-w-[200px] block">Home</span>
+                  </li>
+                  <li
+                    class="px-4 hover:bg-slate-200/10 rounded flex items-center gap-2"
+                  >
+                    <i class="bx bx-desktop text-slate-400"></i>
+                    <span class="truncate max-w-[200px] block">Desktop</span>
+                  </li>
+                  <li
+                    class="px-4 hover:bg-slate-200/10 rounded flex items-center gap-2"
+                  >
+                    <i class="bx bx-folder text-slate-400"></i>
+                    <span class="truncate max-w-[200px] block">Documents</span>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="flex flex-wrap md:gap-5 gap-8 p-4 overflow-auto max-h-fit md:justify-start justify-center mb-5"
+              >
+                {
+                  techStackData.map((app) => (
+                    <div
+                      id="tech-stack-app"
+                      class="md:w-20 w-18 md:h-20 h-18 flex flex-col items-center justify-center rounded-lg"
+                    >
+                      <img
+                        src={app.imgSrc}
+                        alt={app.name}
+                        draggable="false"
+                        class="h-18 w-18 object-contain mb-1 p-1"
+                      />
+                      <span class="text-xs font-medium text-white text-shadow-md text-center px-1">
+                        {app.name}
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  #app:hover * {
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  #tech-stack-app:hover * {
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  #window {
+    pointer-events: none;
+  }
+
+  #window .draggable-window {
+    pointer-events: auto;
+  }
+
+  #window-0,
+  #window-1 {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+    display: block;
+    position: absolute;
+    visibility: hidden;
+  }
+
+  #window-0.visible,
+  #window-1.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    visibility: visible;
+  }
+
+  #window-0.visible.zoom-in,
+  #window-1.visible.zoom-in {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+  }
+
+  .app-nav-item .indicator-bar {
+    transition: width 0.3s ease-in-out;
+    width: 0;
+  }
+
+  .app-nav-item.active .indicator-bar {
+    width: 1.75rem;
+  }
+
+  .app-nav-item.active:hover .indicator-bar {
+    width: 2.25rem;
+  }
+
+  .app-nav-item.inactive .indicator-bar {
+    width: 0;
+  }
+
+  @keyframes zoomOut {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  .window-exit {
+    animation: zoomOut 0.3s ease forwards;
+    pointer-events: none;
+  }
+
+  .bg-blur {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    backdrop-filter: blur(1.5px);
+    transition: backdrop-filter 0.3s ease;
+  }
+</style>
+
+<script>
+  function updateTime() {
+    const date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const currentTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes}`;
+
+    const nameTimeElement = document.getElementById("name-time");
+    if (nameTimeElement) nameTimeElement.innerHTML = "andrewlau " + currentTime;
+  }
+
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
+
+<script is:inline>
+  let chooseElement = null;
+  let startMouse = { x: 0, y: 0 };
+  let startPos = { x: 0, y: 0 };
+  let containerRect;
+  let maxZIndex = 1;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("window");
+    containerRect = container.getBoundingClientRect();
+
+    const draggableWindows = document.querySelectorAll(".draggable-window");
+
+    draggableWindows.forEach((window) => {
+      const tab = window.querySelector("#draggable-window-tab");
+
+      window.style.position = "absolute";
+      window.style.zIndex = "1";
+
+      window.addEventListener("mousedown", () => {
+        maxZIndex++;
+        window.style.zIndex = maxZIndex;
+      });
+
+      if (tab) {
+        tab.addEventListener("mousedown", (e) => {
+          chooseElement = window;
+
+          maxZIndex++;
+          chooseElement.style.zIndex = maxZIndex.toString();
+
+          startMouse.x = e.clientX;
+          startMouse.y = e.clientY;
+
+          const computedStyle = getComputedStyle(chooseElement);
+          startPos.x = parseFloat(computedStyle.left);
+          startPos.y = parseFloat(computedStyle.top);
+
+          e.preventDefault();
+        });
+      }
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!chooseElement) return;
+
+      const deltaX = e.clientX - startMouse.x;
+      const deltaY = e.clientY - startMouse.y;
+
+      let newLeft = startPos.x + deltaX;
+      let newTop = startPos.y + deltaY;
+
+      const elemRect = chooseElement.getBoundingClientRect();
+
+      if (newLeft < 0) newLeft = 0;
+      if (newLeft + elemRect.width > containerRect.width) {
+        newLeft = containerRect.width - elemRect.width;
+      }
+
+      if (newTop < 24) newTop = 24;
+      if (newTop + elemRect.height > containerRect.height - 56) {
+        newTop = containerRect.height - elemRect.height - 56;
+      }
+
+      chooseElement.style.left = newLeft + "px";
+      chooseElement.style.top = newTop + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+      chooseElement = null;
+    });
+
+    const scrollContent = document.getElementById("scroll-container");
+    const backgroundWindow = document.getElementById("window-0");
+    const techStackWindow = document.getElementById("window-1");
+    const navItems = document.querySelectorAll(".app-nav-item");
+    const closeButtons = document.querySelectorAll(".close-window");
+
+    navItems.forEach((item, i) => {
+      item.addEventListener("click", () => {
+        const windowContent = document.getElementById(`window-${i}`);
+        if (item.classList.contains("active")) {
+          windowContent.classList.add("window-exit");
+          setTimeout(() => {
+            windowContent.classList.remove("visible", "window-exit");
+          }, 300);
+          windowContent.style.zIndex = ++maxZIndex;
+          item.classList.remove("active");
+          item.classList.add("inactive");
+        } else {
+          windowContent.classList.add("visible");
+          windowContent.style.zIndex = ++maxZIndex;
+          item.classList.add("active");
+          item.classList.remove("inactive");
+        }
+      });
+    });
+
+    closeButtons.forEach((item, i) => {
+      item.addEventListener("click", () => {
+        const windowContent = document.getElementById(`window-${i}`);
+        windowContent.classList.add("window-exit");
+        setTimeout(() => {
+          windowContent.classList.remove("visible", "window-exit");
+        }, 300);
+        windowContent.style.zIndex = ++maxZIndex;
+        navItems[i].classList.remove("active");
+        navItems[i].classList.add("inactive");
+      });
+    });
+
+    let lastScrollTop = 0;
+
+    scrollContent.addEventListener("scroll", () => {
+      const scrollY = scrollContent.scrollTop;
+      const isScrollingUp = scrollY < lastScrollTop;
+      lastScrollTop = scrollY;
+
+      if (scrollY < 1500) {
+        if (isScrollingUp) {
+          backgroundWindow.classList.add("window-exit");
+          navItems[1]?.classList.add("inactive");
+          navItems[1]?.classList.remove("active");
+          setTimeout(() => {
+            backgroundWindow.classList.remove("visible", "window-exit");
+          }, 300);
+        }
+      } else if (scrollY >= 1500 && scrollY < 2300) {
+        backgroundWindow.classList.add("visible");
+
+        if (!techStackWindow.classList.contains("visible")) {
+          maxZIndex++;
+          backgroundWindow.style.zIndex = maxZIndex;
+        }
+
+        navItems[0]?.classList.remove("inactive");
+        navItems[0]?.classList.add("active");
+
+        if (isScrollingUp) {
+          techStackWindow.classList.add("window-exit");
+          navItems[1]?.classList.add("inactive");
+          navItems[1]?.classList.remove("active");
+          setTimeout(() => {
+            techStackWindow.classList.remove("visible", "window-exit");
+          }, 300);
+        }
+      } else if (scrollY >= 3000) {
+        techStackWindow.classList.add("visible");
+
+        if(!isScrollingUp) {
+          maxZIndex++;
+          techStackWindow.style.zIndex = maxZIndex;
+        }
+
+        navItems[1]?.classList.remove("inactive");
+        navItems[1]?.classList.add("active");
+      }
+    });
+  });
+</script>
