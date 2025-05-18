@@ -39,9 +39,9 @@ html {
 }
 
 #about:hover {
-  cursor: url("/src//assets//cursors/default.svg"), auto;
+  cursor: url("/public//assets//cursors/default.svg"), auto;
 }
 
 #about .textarea:hover {
-  cursor: url("/src/assets/cursors/text.svg"), text;
+  cursor: url("/public/assets/cursors/text.svg"), text;
 }
