@@ -190,10 +190,6 @@ const navItems = [
     if (caret) caret.style.color = "transparent";
   });
 
-  document.addEventListener("astro:after-swap", () => {
-    updateTerminalPath();
-  });
-
   window.addEventListener("DOMContentLoaded", () => {
     updateTerminalPath();
     updateCaret();

@@ -12,7 +12,10 @@ const { title, seoTitle, seoDesc } = Astro.props;
       <Navbar />
     </header>
     <div class="min-h-10"></div>
-    <div id="scroll-container" class="h-screen overflow-y-scroll custom-scrollbar">
+    <div
+      id="scroll-container"
+      class="h-screen overflow-y-scroll custom-scrollbar"
+    >
       <slot />
     </div>
   </body>
@@ -24,7 +27,7 @@ const { title, seoTitle, seoDesc } = Astro.props;
   const observerOptions = {
     root: null,
     rootMargin: "0px",
-    threshold: 0.5,
+    threshold: 0.3,
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -33,12 +36,12 @@ const { title, seoTitle, seoDesc } = Astro.props;
 
       if (entry.isIntersecting) {
         const id = target.id;
-        if (id && location.hash !== `#${id}`) {
-          history.replaceState(null, "", `#${id}`);
-          const terminalPath = document.getElementById("terminal-path");
-          if (terminalPath) {
-            terminalPath.value = id;
-          }
+
+        history.replaceState(null, "", `#${id}`);
+        const terminalPath = document.getElementById("terminal-path");
+        console.log(id);
+        if (terminalPath) {
+          terminalPath.value = id;
         }
       }
     }
