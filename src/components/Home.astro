@@ -1,10 +1,15 @@
+---
+import { Image } from "astro:assets"
+import EasterEggImage from "./assets/images/easterEgg.png"
+---
+
 <section id="home" class="h-screen">
   <div class="relative w-full h-0 overflow-visible">
     <div
       class="md:flex hidden relative top-1/2 mx-auto translate-y-[120px] opacity-40 pointer-events-none select-none w-96 max-w-full -z-50"
     >
-      <img
-        src="/public/assets/images/EASTER_EGG.png"
+      <Image
+        src={EasterEggImage}
         alt="Secret Easter Egg"
         height="80"
         class="flex flex-row"

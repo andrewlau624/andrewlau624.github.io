@@ -1,39 +1,61 @@
 ---
+import { Image } from 'astro:assets';
+
+import Wallpaper from './assets/images/wallpaper.jpg'
+
+import TrashIcon from './assets/icons/trashIcon.png';
+
+import JavaLogo from './assets/icons/javaLogo.png';
+import PythonLogo from './assets/icons/pythonLogo.png';
+import CppLogo from './assets/icons/cppLogo.png';
+
+import HtmlLogo from './assets/icons/htmlLogo.png';
+import JsLogo from './assets/icons/jsLogo.png';
+import TsLogo from './assets/icons/tsLogo.png';
+
+import ReactLogo from './assets/icons/reactLogo.png';
+import NextLogo from './assets/icons/nextLogo.png';
+
+import MySqlLogo from './assets/icons/mysqlLogo.png';
+import DigitalOceanLogo from './assets/icons/digitalOceanLogo.png';
+
+import NotepadIcon from './assets/icons/notepadIcon.png';
+import FolderIcon from './assets/icons/folderIcon.png';
+
 const backgroundDesc =
   "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their backend systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefitting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
 
 const appData = [
   {
     name: "Trash",
-    imgSrc: "/public/assets/icons/trashIcon.png",
+    imgSrc: TrashIcon,
   },
 ];
 
 const techStackData = [
-  { name: "Java", imgSrc: "/public/assets/icons/javaLogo.png" },
-  { name: "Python", imgSrc: "/public/assets/icons/pythonLogo.png" },
-  { name: "C++", imgSrc: "/public/assets/icons/cppLogo.png" },
+  { name: "Java", imgSrc: JavaLogo },
+  { name: "Python", imgSrc: PythonLogo },
+  { name: "C++", imgSrc: CppLogo },
 
-  { name: "HTML", imgSrc: "/public/assets/icons/htmlLogo.png" },
-  { name: "JavaScript", imgSrc: "/public/assets/icons/jsLogo.png" },
-  { name: "TypeScript", imgSrc: "/public/assets/icons/tsLogo.png" },
+  { name: "HTML", imgSrc: HtmlLogo },
+  { name: "JavaScript", imgSrc: JsLogo },
+  { name: "TypeScript", imgSrc: TsLogo },
 
-  { name: "React", imgSrc: "/public/assets/icons/reactLogo.png" },
-  { name: "Next.js", imgSrc: "/public/assets/icons/nextLogo.png" },
+  { name: "React", imgSrc: ReactLogo },
+  { name: "Next.js", imgSrc: NextLogo },
 
-  { name: "MySQL", imgSrc: "/public/assets/icons/mysqlLogo.png" },
-
-  { name: "DigitalOcean", imgSrc: "/public/assets/icons/digitalOceanLogo.png" },
+  { name: "MySQL", imgSrc: MySqlLogo },
+  { name: "DigitalOcean", imgSrc: DigitalOceanLogo },
 ];
 
 const aboutNavigationAppData = [
   {
     name: "Background",
-    imgSrc: "/public/assets/icons/notepadIcon.png",
+    imgSrc: NotepadIcon,
   },
   {
     name: "Tech Stack",
-    imgSrc: "/public/assets/icons/folderIcon.png",
+    imgSrc: FolderIcon,
   },
 ];
 ---
@@ -41,7 +63,7 @@ const aboutNavigationAppData = [
 <section class="relative h-[8000px]">
   <div id="about" class="sticky top-3 h-[calc(100vh-34px)] overflow-y-auto">
     <div
-      class="h-full bg-[url(/public/assets/images/wallpaper.jpg)] overflow-y-scroll"
+      class="h-full bg-[url(../../public/assets/images/wallpaper.jpg)] overflow-y-scroll"
     >
       <div
         class="bg-black/20 h-5 flex items-center text-white text-sm py-3 select-none"
@@ -68,7 +90,7 @@ const aboutNavigationAppData = [
                 id="app"
                 class="w-20 h-20 flex flex-col items-center justify-center rounded-lg"
               >
-                <img
+                <Image
                   src={app.imgSrc}
                   alt={app.name}
                   draggable="false"
@@ -90,7 +112,7 @@ const aboutNavigationAppData = [
                 class="group app-nav-item flex flex-col items-center gap-1 text-white text-xs font-medium"
                 data-index={index}
               >
-                <img
+                <Image
                   src={item.imgSrc}
                   alt={item.name}
                   draggable="false"
@@ -239,7 +261,7 @@ const aboutNavigationAppData = [
                       id="tech-stack-app"
                       class="md:w-20 w-18 md:h-20 h-18 flex flex-col items-center justify-center rounded-lg"
                     >
-                      <img
+                      <Image
                         src={app.imgSrc}
                         alt={app.name}
                         draggable="false"

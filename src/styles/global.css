@@ -39,7 +39,7 @@ html {
 }
 
 #about:hover {
-  cursor: url("/public//assets//cursors/default.svg"), auto;
+  cursor: url("/public/assets/cursors/default.svg"), auto;
 }
 
 #about .textarea:hover {
