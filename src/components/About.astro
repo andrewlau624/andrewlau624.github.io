@@ -506,8 +506,8 @@ const aboutNavigationAppData = [
       if (scrollY < 1500) {
         if (isScrollingUp) {
           backgroundWindow.classList.add("window-exit");
-          navItems[1]?.classList.add("inactive");
-          navItems[1]?.classList.remove("active");
+          navItems[0]?.classList.add("inactive");
+          navItems[0]?.classList.remove("active");
           setTimeout(() => {
             backgroundWindow.classList.remove("visible", "window-exit");
           }, 300);

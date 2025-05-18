@@ -45,7 +45,3 @@ html {
 #about .textarea:hover {
   cursor: url("/public/assets/cursors/text.svg"), text;
 }
-
-#scroll-container {
-  z-index: 1000;
-}
