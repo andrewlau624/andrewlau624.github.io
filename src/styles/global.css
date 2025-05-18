@@ -18,12 +18,17 @@ html {
   scroll-padding-top: 2.5rem;
 }
 
+#scroll-container {
+  position: relative;
+  z-index: 1000;
+}
+
 .custom-scrollbar {
   scroll-behavior: smooth;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 10px;;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
