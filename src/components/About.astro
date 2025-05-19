@@ -71,7 +71,12 @@ const experienceData = [
     companyLogo: HIMLogo,
     jobTitle: "Technical Lead & Fullstack Developer",
     duration: "Jan 2023 - Present",
-    description: ["Worked on developing scalable web applications and APIs."],
+    description: ["Developed a website with Next.js, TypeScript, Prisma, and MySQL.", "Maintained back-end systems on DigitalOcean and Azure."],
+  },
+  {
+    companyName: "Feel free to explore this section before moving on to the next section :)",
+    companyLogo: HIMLogo,
+    jobTitle: "That's all about me!",
   }
 ];
 ---
@@ -306,7 +311,7 @@ const experienceData = [
               class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
             >
               <span class="text-sm text-slate-300/85 font-medium"
-                >andrewlau@experience</span
+                >andrewlau@experience (scroll to play)</span
               >
             </div>
             <div
@@ -339,7 +344,7 @@ const experienceData = [
                   class="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none"
                   style={{
                     background:
-                      "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+                      "linear-gradient(to top, rgba(0,0,0,0.5), transparent)",
                     zIndex: 10,
                   }}
                 >
@@ -374,19 +379,22 @@ const experienceData = [
                           style={{ fontFamily: "'chalk-board', regular" }}
                         >
                           {exp.companyName}
+                          { exp.companyLocation && 
                           <span
                             class="italic text-sm ml-2"
                             style={{ fontFamily: "'chalk-board', regular" }}
                           >
                             ({exp.companyLocation})
                           </span>
+                          }
                         </p>
-                        <p
-                          class="text-sm sm:text-base text-gray-300 mb-3"
+                        { exp.duration && <p
+                          class="text-xl sm:text-xl text-white mb-3"
                           style={{ fontFamily: "'chalk-board', regular" }}
                         >
                           {exp.duration}
-                        </p>
+                        </p>}
+                        { exp.description && 
                         <div
                           class="text-base sm:text-lg leading-relaxed whitespace-pre-line"
                           style={{ fontFamily: "'chalk-board', regular" }}
@@ -401,6 +409,7 @@ const experienceData = [
                             ))}
                           </ul>
                         </div>
+                        }
                       </div>
                     </div>
                   ))
@@ -762,7 +771,7 @@ const experienceData = [
       } else if (scrollY >= 3000 && scrollY <= 4500) {
         techStackWindow.classList.add("visible");
 
-        if (!experienceWindow.classList.contains("visible")) {
+        if (!isScrollingUp) {
           maxZIndex++;
           techStackWindow.style.zIndex = maxZIndex;
         }
@@ -792,7 +801,7 @@ const experienceData = [
         const timelineElement = document.getElementById("vlc-timeline");
         const timestampElement = document.getElementById("vlc-timestamp");
 
-        const timelineStart = 4700;
+        const timelineStart = 5000;
         const timelineEnd =
           document.getElementById("about").parentElement.offsetHeight;
 
@@ -817,7 +826,7 @@ const experienceData = [
         timelineElement.style.width = `${timelineWidth}%`;
         timestampElement.innerHTML = formattedTime;
 
-        const experienceLength = 1;
+        const experienceLength = 2;
 
         const experienceDuration =
           (timelineEnd - timelineStart) / experienceLength;
