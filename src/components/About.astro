@@ -169,9 +169,9 @@ const experienceData = [
               >
             </div>
             <div
-              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+              class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle close-window"></i>
+              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
             </div>
           </div>
           <div class="w-full h-full">
@@ -216,9 +216,9 @@ const experienceData = [
               >
             </div>
             <div
-              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+              class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle close-window"></i>
+              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
             </div>
           </div>
           <div class="w-full h-full bg-[#4a5467]">
@@ -318,16 +318,12 @@ const experienceData = [
             >
               <span class="text-sm text-slate-300/85 font-medium"
                 >andrewlau@experience</span
-              ><span
-                class="text-sm text-slate-300/85 font-medium lg:inline hidden"
-              >
-                (scroll to play)</span
               >
             </div>
             <div
-              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+              class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle close-window"></i>
+              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
             </div>
           </div>
           <div class="w-full h-full">
@@ -624,6 +620,12 @@ const experienceData = [
 
     -webkit-mask-position: center;
     mask-position: center;
+  }
+
+  @media (max-width: 768px) {
+    #vlc-play {
+      display: none;
+    }
   }
 </style>
 
