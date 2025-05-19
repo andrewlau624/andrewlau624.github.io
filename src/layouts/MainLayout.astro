@@ -38,7 +38,6 @@ const { title, seoTitle, seoDesc } = Astro.props;
 
         history.replaceState(null, "", `#${id}`);
         const terminalPath = document.getElementById("terminal-path");
-        console.log(id);
         if (terminalPath) {
           terminalPath.value = id;
         }

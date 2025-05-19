@@ -1,27 +1,30 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import TrashIcon from './assets/icons/trashIcon.png';
+import TrashIcon from "./assets/icons/trashIcon.png";
 
-import JavaLogo from './assets/icons/javaLogo.png';
-import PythonLogo from './assets/icons/pythonLogo.png';
-import CppLogo from './assets/icons/cppLogo.png';
+import JavaLogo from "./assets/icons/javaLogo.png";
+import PythonLogo from "./assets/icons/pythonLogo.png";
+import CppLogo from "./assets/icons/cppLogo.png";
 
-import HtmlLogo from './assets/icons/htmlLogo.png';
-import JsLogo from './assets/icons/jsLogo.png';
-import TsLogo from './assets/icons/tsLogo.png';
+import HtmlLogo from "./assets/icons/htmlLogo.png";
+import JsLogo from "./assets/icons/jsLogo.png";
+import TsLogo from "./assets/icons/tsLogo.png";
 
-import ReactLogo from './assets/icons/reactLogo.png';
-import NextLogo from './assets/icons/nextLogo.png';
+import ReactLogo from "./assets/icons/reactLogo.png";
+import NextLogo from "./assets/icons/nextLogo.png";
 
-import MySqlLogo from './assets/icons/mySqlLogo.png';
-import DigitalOceanLogo from './assets/icons/digitalOceanLogo.png';
+import MySqlLogo from "./assets/icons/mySqlLogo.png";
+import DigitalOceanLogo from "./assets/icons/digitalOceanLogo.png";
 
-import NotepadIcon from './assets/icons/notepadIcon.png';
-import FolderIcon from './assets/icons/folderIcon.png';
+import NotepadIcon from "./assets/icons/notepadIcon.png";
+import FolderIcon from "./assets/icons/folderIcon.png";
+import VlcIcon from "./assets/icons/vlcIcon.png";
+
+import HIMLogo from "./assets/icons/heartInMotionLogo.png";
 
 const backgroundDesc =
-  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their backend systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefitting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
+  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
 
 const appData = [
   {
@@ -55,13 +58,28 @@ const aboutNavigationAppData = [
     name: "Tech Stack",
     imgSrc: FolderIcon,
   },
+  {
+    name: "Experience",
+    imgSrc: VlcIcon,
+  },
+];
+
+const experienceData = [
+  {
+    companyName: "Heart in Motion",
+    companyLocation: "San Francisco, CA",
+    companyLogo: HIMLogo,
+    jobTitle: "Technical Lead & Fullstack Developer",
+    duration: "Jan 2023 - Present",
+    description: ["Worked on developing scalable web applications and APIs."],
+  }
 ];
 ---
 
-<section class="relative md:h-[8000px] h-[4000px]">
+<section class="relative md:h-[10000px] h-[9000px]">
   <div id="about" class="sticky top-3 h-[calc(100dvh-52px)] overflow-y-auto">
     <div
-      class="h-full bg-[url(../../public/assets/images/wallpaper.jpg)] overflow-y-scroll"
+      class="h-full bg-[url(/assets/images/wallpaper.jpg)] overflow-y-scroll"
     >
       <div
         class="bg-black/20 h-5 flex items-center text-white text-sm py-3 select-none"
@@ -163,7 +181,7 @@ const aboutNavigationAppData = [
               <div class="bg-blur"></div>
               <div
                 contenteditable="true"
-                class="textarea h-full resize-none p-2 text-white bg-transparent outline-none w-full whitespace-pre-wrap overflow-y-auto"
+                class="textarea h-full mb-5 resize-none p-2 text-white bg-transparent outline-none w-full whitespace-pre-wrap overflow-y-auto"
               >
                 {backgroundDesc}
               </div>
@@ -251,7 +269,7 @@ const aboutNavigationAppData = [
                 </ul>
               </div>
               <div
-                class="flex flex-wrap md:gap-5 gap-8 p-4 overflow-auto max-h-fit md:justify-start justify-center mb-5"
+                class="flex flex-wrap md:gap-5 gap-8 p-4 overflow-y-auto min-h-fit sm:h-fit md:justify-start justify-center"
               >
                 {
                   techStackData.map((app) => (
@@ -271,6 +289,197 @@ const aboutNavigationAppData = [
                     </div>
                   ))
                 }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="window-2"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[11vh] md:left-[20vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+        >
+          <div
+            id="draggable-window-tab"
+            class="relative w-full bg-[#3c4657] h-7 flex items-center"
+          >
+            <div
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+            >
+              <span class="text-sm text-slate-300/85 font-medium"
+                >andrewlau@experience</span
+              >
+            </div>
+            <div
+              class="pr-3 flex items-center gap-1 justify-end w-[20%] min-w-fit ml-auto text-slate-500"
+            >
+              <i class="bx bx-x-circle close-window"></i>
+            </div>
+          </div>
+          <div class="w-full h-full">
+            <div
+              class="bg-slate-100 flex flex-row text-center h-7 text-sm border-y-1 border-y-slate-800/30 text-slate-600 sm:text-xs"
+            >
+              <span class="px-3 py-1 hover:bg-black/10">Media</span>
+              <span class="px-3 py-1 hover:bg-black/10 sm:flex hidden"
+                >Playback</span
+              >
+              <span class="px-3 py-1 hover:bg-black/10">Audio</span>
+              <span class="px-3 py-1 hover:bg-black/10 sm:flex hidden"
+                >Subtitle</span
+              >
+              <span class="px-3 py-1 hover:bg-black/10">Tools</span>
+              <span class="px-3 py-1 hover:bg-black/10">View</span>
+              <span class="px-3 py-1 hover:bg-black/10">Help</span>
+            </div>
+            <div class="flex flex-col w-full h-full">
+              <div
+                class="flex flex-col w-full h-[400px] relative bg-[url(/assets/images/chalkboardBackground.jpg)] bg-cover overflow-hidden"
+              >
+                <div
+                  class="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+                    zIndex: 10,
+                  }}
+                >
+                </div>
+                {
+                  experienceData.map((exp, index) => (
+                    <div
+                      id={`experience-${index}`}
+                      class="absolute inset-0 flex items-center justify-center text-white w-full clip-start-hidden"
+                      style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+                    >
+                      <div class="w-full max-w-3xl min-w-0">
+                        {" "}
+                        <div class="flex flex-row items-center mb-2 min-w-0">
+                          {" "}
+                          <div class="w-24 md:w-40 flex-shrink-0">
+                            <Image
+                              src={exp.companyLogo}
+                              alt={exp.companyName}
+                              class="w-24 h-24 md:w-40 md:h-40 bg-white chalky-mask"
+                            />
+                          </div>
+                          <h3
+                            class="ml-4 flex-1 text-3xl sm:text-4xl md:text-5xl font-bold break-words"
+                            style={{ fontFamily: "'chalk-board', regular" }}
+                          >
+                            {exp.jobTitle}
+                          </h3>
+                        </div>
+                        <p
+                          class="text-base sm:text-lg mb-2 break-words"
+                          style={{ fontFamily: "'chalk-board', regular" }}
+                        >
+                          {exp.companyName}
+                          <span
+                            class="italic text-sm ml-2"
+                            style={{ fontFamily: "'chalk-board', regular" }}
+                          >
+                            ({exp.companyLocation})
+                          </span>
+                        </p>
+                        <p
+                          class="text-sm sm:text-base text-gray-300 mb-3"
+                          style={{ fontFamily: "'chalk-board', regular" }}
+                        >
+                          {exp.duration}
+                        </p>
+                        <div
+                          class="text-base sm:text-lg leading-relaxed whitespace-pre-line"
+                          style={{ fontFamily: "'chalk-board', regular" }}
+                        >
+                          <ul class="list-disc list-inside">
+                            {exp.description.map((point) => (
+                              <li
+                                style={{ fontFamily: "'chalk-board', regular" }}
+                              >
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <div
+                class="w-full bg-gray-100 border-t border-gray-300 text-sm text-slate-700"
+              >
+                <div class="flex items-center justify-between px-4 pt-2">
+                  <span id="vlc-timestamp" class="text-xs">01:26</span>
+
+                  <div
+                    class="flex-1 mx-4 relative h-2 rounded bg-gray-300 overflow-hidden"
+                  >
+                    <div
+                      id="vlc-timeline"
+                      class="absolute top-0 left-0 h-full bg-blue-500"
+                    >
+                    </div>
+                  </div>
+
+                  <span class="text-xs">10:00</span>
+                </div>
+
+                <div
+                  class="flex items-center justify-between px-4 py-2 h-18 text-slate-500 gap-7"
+                >
+                  <div class="flex items-center gap-5 text-3xl">
+                    <i
+                      class="bx bx-play hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                    ></i>
+                    <div class="flex gap-2">
+                      <i
+                        class="bx bx-skip-previous hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                      <i
+                        class="bx bx-stop hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                      <i
+                        class="bx bx-fast-forward hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                    </div>
+                    <div class="lg:flex hidden gap-2">
+                      <i
+                        class="bx bx-fullscreen hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                      <i
+                        class="bx bx-slider hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                    </div>
+                    <div class="md:flex hidden gap-2">
+                      <i
+                        class="bx bx-list-ul hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                      <i
+                        class="bx bx-repeat hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                      <i
+                        class="bx bx-exit hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-2 min-w-[160px]">
+                    <i class="bx bxs-volume-full text-xl"></i>
+                    <div class="relative w-[80px] h-[30px]">
+                      <div
+                        class="w-full h-full bg-gray-300"
+                        style="clip-path: polygon(0% 100%, 100% 100%, 100% 0%);"
+                      >
+                        <div
+                          class="w-[80%] h-full bg-green-500"
+                          style="clip-path: polygon(0% 100%, 100% 100%, 100% 0%);"
+                        >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -297,8 +506,7 @@ const aboutNavigationAppData = [
     pointer-events: auto;
   }
 
-  #window-0,
-  #window-1 {
+  [id^="window-"] {
     opacity: 0;
     pointer-events: none;
     transform: scale(0.9);
@@ -310,16 +518,14 @@ const aboutNavigationAppData = [
     visibility: hidden;
   }
 
-  #window-0.visible,
-  #window-1.visible {
+  [id^="window-"].visible {
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
     visibility: visible;
   }
 
-  #window-0.visible.zoom-in,
-  #window-1.visible.zoom-in {
+  [id^="window-"]visible.zoom-in {
     display: block;
     opacity: 1;
     pointer-events: auto;
@@ -361,11 +567,27 @@ const aboutNavigationAppData = [
 
   .bg-blur {
     width: 100%;
-    height: 100%;
+    height: 95%;
     position: absolute;
+    pointer-events: none;
     z-index: -1;
     backdrop-filter: blur(1.5px);
     transition: backdrop-filter 0.3s ease;
+  }
+
+  .clip-start-hidden {
+    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  }
+
+  .chalky-mask {
+    -webkit-mask-image: url("/assets/images/chalkOverlay.png");
+    mask-image: url("/assets/images/chalkOverlay.png");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
   }
 </style>
 
@@ -393,10 +615,15 @@ const aboutNavigationAppData = [
   let maxZIndex = 1;
 
   document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("window");
+    let container = document.getElementById("window");
     containerRect = container.getBoundingClientRect();
 
     const draggableWindows = document.querySelectorAll(".draggable-window");
+
+    window.addEventListener("resize", () => {
+      container = document.getElementById("window");
+      containerRect = container.getBoundingClientRect();
+    });
 
     draggableWindows.forEach((window) => {
       const tab = window.querySelector("#draggable-window-tab");
@@ -460,6 +687,7 @@ const aboutNavigationAppData = [
     const scrollContent = document.getElementById("scroll-container");
     const backgroundWindow = document.getElementById("window-0");
     const techStackWindow = document.getElementById("window-1");
+    const experienceWindow = document.getElementById("window-2");
     const navItems = document.querySelectorAll(".app-nav-item");
     const closeButtons = document.querySelectorAll(".close-window");
 
@@ -531,16 +759,109 @@ const aboutNavigationAppData = [
             techStackWindow.classList.remove("visible", "window-exit");
           }, 300);
         }
-      } else if (scrollY >= 3000) {
+      } else if (scrollY >= 3000 && scrollY <= 4500) {
         techStackWindow.classList.add("visible");
 
-        if(!isScrollingUp) {
+        if (!experienceWindow.classList.contains("visible")) {
           maxZIndex++;
           techStackWindow.style.zIndex = maxZIndex;
         }
 
         navItems[1]?.classList.remove("inactive");
         navItems[1]?.classList.add("active");
+
+        if (isScrollingUp) {
+          experienceWindow.classList.add("window-exit");
+          navItems[2]?.classList.add("inactive");
+          navItems[2]?.classList.remove("active");
+          setTimeout(() => {
+            experienceWindow.classList.remove("visible", "window-exit");
+          }, 300);
+        }
+      } else if (scrollY >= 4700) {
+        experienceWindow.classList.add("visible");
+
+        if (!isScrollingUp) {
+          maxZIndex++;
+          experienceWindow.style.zIndex = maxZIndex;
+        }
+
+        navItems[2]?.classList.remove("inactive");
+        navItems[2]?.classList.add("active");
+
+        const timelineElement = document.getElementById("vlc-timeline");
+        const timestampElement = document.getElementById("vlc-timestamp");
+
+        const timelineStart = 4700;
+        const timelineEnd =
+          document.getElementById("about").parentElement.offsetHeight;
+
+        const timelineProgress = Math.min(
+          Math.max(
+            (scrollY - timelineStart) / (timelineEnd - timelineStart),
+            0
+          ),
+          1
+        );
+
+        const totalSeconds = 600;
+        const timestampProgress = totalSeconds * timelineProgress;
+
+        const minutes = Math.floor(timestampProgress / 60);
+        const seconds = Math.floor(timestampProgress % 60);
+
+        const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+        const timelineWidth = timelineProgress * 100;
+
+        timelineElement.style.width = `${timelineWidth}%`;
+        timestampElement.innerHTML = formattedTime;
+
+        const experienceLength = 2;
+
+        const experienceDuration =
+          (timelineEnd - timelineStart) / experienceLength;
+
+        const currentExperienceIndex = Math.floor(
+          (scrollY - timelineStart) / experienceDuration
+        );
+
+        for (let i = 0; i < experienceLength; i++) {
+          const el = document.getElementById("experience-" + i);
+          if (el) el.classList.add("hidden");
+        }
+
+        const currentExperienceElement = document.getElementById(
+          "experience-" + currentExperienceIndex
+        );
+
+        if (currentExperienceElement) {
+          currentExperienceElement.classList.remove("hidden");
+
+          const segmentStart =
+            timelineStart + currentExperienceIndex * experienceDuration;
+
+          const segmentProgress = Math.min(
+            Math.max((scrollY - segmentStart) / experienceDuration, 0),
+            1
+          );
+
+          const appearDuration = 0.5;
+          const visibleDuration = 0.4;
+          const leaveDuration = 0.1;
+
+          let clipProgress;
+
+          if (segmentProgress < appearDuration) {
+            clipProgress = (segmentProgress / appearDuration) * 100;
+          } else if (segmentProgress < appearDuration + visibleDuration) {
+            clipProgress = 100;
+          } else {
+            clipProgress = ((1 - segmentProgress) / leaveDuration) * 100;
+          }
+
+          currentExperienceElement.style.clipPath = `polygon(0 0, ${clipProgress}% 0, ${clipProgress}% 100%, 0 100%)`;
+        }
       }
     });
   });
