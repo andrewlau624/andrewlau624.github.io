@@ -23,6 +23,8 @@ import VlcIcon from "./assets/icons/vlcIcon.png";
 
 import HIMLogo from "./assets/icons/heartInMotionLogo.png";
 
+import SeniorImage from "./assets/images/seniorImage.jpg";
+
 const backgroundDesc =
   "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
 
@@ -69,15 +71,19 @@ const experienceData = [
     companyName: "Heart in Motion",
     companyLocation: "San Francisco, CA",
     companyLogo: HIMLogo,
-    jobTitle: "Technical Lead & Fullstack Developer",
-    duration: "Jan 2023 - Present",
-    description: ["Developed a website with Next.js, TypeScript, Prisma, and MySQL.", "Maintained back-end systems on DigitalOcean and Azure."],
+    jobTitle: "Technical Lead Fullstack Developer",
+    duration: "Aug 2022 - Present",
+    description: [
+        "Built and maintained the official website using Next.js (React), TypeScript, Prisma, and MySQL.",
+        "Managed and deployed backend infrastructure on DigitalOcean and Azure.",
+    ],
   },
   {
-    companyName: "Feel free to explore this section before moving on to the next section :)",
-    companyLogo: HIMLogo,
+    companyName:
+      "Feel free to explore this section before moving on to the next one :)",
+    companyLogo: SeniorImage,
     jobTitle: "That's all about me!",
-  }
+  },
 ];
 ---
 
@@ -149,7 +155,7 @@ const experienceData = [
       <div id="window" class="absolute w-full h-full top-0 left-0">
         <div
           id="window-0"
-          class="border-1 border-slate-300/10 draggable-window absolute top-[9vh] md:left-[17vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[9vh] lg:left-[17vw] left-[4vw] lg:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
         >
           <div
             id="draggable-window-tab"
@@ -196,7 +202,7 @@ const experienceData = [
 
         <div
           id="window-1"
-          class="border-1 border-slate-300/10 draggable-window absolute top-[10vh] md:left-[18.5vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[10vh] lg:left-[18.5vw] left-[4vw] lg:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
         >
           <div
             id="draggable-window-tab"
@@ -301,7 +307,7 @@ const experienceData = [
 
         <div
           id="window-2"
-          class="border-1 border-slate-300/10 draggable-window absolute top-[11vh] md:left-[20vw] left-[4vw] md:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
+          class="border-1 border-slate-300/10 draggable-window absolute top-[11vh] lg:left-[20vw] left-[4vw] lg:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
         >
           <div
             id="draggable-window-tab"
@@ -311,7 +317,11 @@ const experienceData = [
               class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
             >
               <span class="text-sm text-slate-300/85 font-medium"
-                >andrewlau@experience (scroll to play)</span
+                >andrewlau@experience</span
+              ><span
+                class="text-sm text-slate-300/85 font-medium lg:inline hidden"
+              >
+                (scroll to play)</span
               >
             </div>
             <div
@@ -360,15 +370,15 @@ const experienceData = [
                         {" "}
                         <div class="flex flex-row items-center mb-2 min-w-0">
                           {" "}
-                          <div class="w-24 md:w-40 flex-shrink-0">
+                          <div class="w-24 md:w-32 flex-shrink-0">
                             <Image
                               src={exp.companyLogo}
                               alt={exp.companyName}
-                              class="w-24 h-24 md:w-40 md:h-40 bg-white chalky-mask"
+                              class="w-24 h-24 md:w-32 md:h-32 bg-white chalky-mask object-cover"
                             />
                           </div>
                           <h3
-                            class="ml-4 flex-1 text-3xl sm:text-4xl md:text-5xl font-bold break-words"
+                            class="ml-4 flex-1 text-3xl sm:text-4xl font-bold break-words"
                             style={{ fontFamily: "'chalk-board', regular" }}
                           >
                             {exp.jobTitle}
@@ -379,37 +389,41 @@ const experienceData = [
                           style={{ fontFamily: "'chalk-board', regular" }}
                         >
                           {exp.companyName}
-                          { exp.companyLocation && 
-                          <span
-                            class="italic text-sm ml-2"
+                          {exp.companyLocation && (
+                            <span
+                              class="italic text-sm ml-2"
+                              style={{ fontFamily: "'chalk-board', regular" }}
+                            >
+                              ({exp.companyLocation})
+                            </span>
+                          )}
+                        </p>
+                        {exp.duration && (
+                          <p
+                            class="text-md sm:text-xl text-white mb-3"
                             style={{ fontFamily: "'chalk-board', regular" }}
                           >
-                            ({exp.companyLocation})
-                          </span>
-                          }
-                        </p>
-                        { exp.duration && <p
-                          class="text-xl sm:text-xl text-white mb-3"
-                          style={{ fontFamily: "'chalk-board', regular" }}
-                        >
-                          {exp.duration}
-                        </p>}
-                        { exp.description && 
-                        <div
-                          class="text-base sm:text-lg leading-relaxed whitespace-pre-line"
-                          style={{ fontFamily: "'chalk-board', regular" }}
-                        >
-                          <ul class="list-disc list-inside">
-                            {exp.description.map((point) => (
-                              <li
-                                style={{ fontFamily: "'chalk-board', regular" }}
-                              >
-                                {point}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        }
+                            {exp.duration}
+                          </p>
+                        )}
+                        {exp.description && (
+                          <div
+                            class="text-sm sm:text-lg leading-relaxed whitespace-pre-line"
+                            style={{ fontFamily: "'chalk-board', regular" }}
+                          >
+                            <ul class="list-disc list-inside">
+                              {exp.description.map((point) => (
+                                <li
+                                  style={{
+                                    fontFamily: "'chalk-board', regular",
+                                  }}
+                                >
+                                  {point}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))
@@ -591,10 +605,13 @@ const experienceData = [
   .chalky-mask {
     -webkit-mask-image: url("/assets/images/chalkOverlay.png");
     mask-image: url("/assets/images/chalkOverlay.png");
+
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-size: contain;
+
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+
     -webkit-mask-position: center;
     mask-position: center;
   }
