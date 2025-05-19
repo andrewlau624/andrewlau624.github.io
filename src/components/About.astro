@@ -74,8 +74,8 @@ const experienceData = [
     jobTitle: "Technical Lead Fullstack Developer",
     duration: "Aug 2022 - Present",
     description: [
-        "Built and maintained the official website using Next.js (React), TypeScript, Prisma, and MySQL.",
-        "Managed and deployed backend infrastructure on DigitalOcean and Azure.",
+      "Built and maintained the official website using Next.js (React), TypeScript, Prisma, and MySQL.",
+      "Managed and deployed backend infrastructure on DigitalOcean and Azure.",
     ],
   },
   {
@@ -433,7 +433,7 @@ const experienceData = [
                 class="w-full bg-gray-100 border-t border-gray-300 text-sm text-slate-700"
               >
                 <div class="flex items-center justify-between px-4 pt-2">
-                  <span id="vlc-timestamp" class="text-xs">01:26</span>
+                  <span id="vlc-timestamp" class="text-xs">0:00</span>
 
                   <div
                     class="flex-1 mx-4 relative h-2 rounded bg-gray-300 overflow-hidden"
@@ -452,17 +452,27 @@ const experienceData = [
                   class="flex items-center justify-between px-4 py-2 h-18 text-slate-500 gap-7"
                 >
                   <div class="flex items-center gap-5 text-3xl">
+                    <div id="vlc-play">
                     <i
                       class="bx bx-play hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                     ></i>
+                    </div>
+                    <div id="vlc-pause" class="hidden">
+                    <i
+                      class="bx bx-pause hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                    ></i>
+                    </div>
                     <div class="flex gap-2">
                       <i
-                        class="bx bx-skip-previous hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      id="vlc-rewind"
+                        class="bx bx-rewind hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                       <i
+                        id="vlc-stop"
                         class="bx bx-stop hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                       <i
+                      id="vlc-forward"
                         class="bx bx-fast-forward hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                     </div>
@@ -589,7 +599,7 @@ const experienceData = [
   }
 
   .bg-blur {
-    width: 100%;
+    width: 95%;
     height: 95%;
     position: absolute;
     pointer-events: none;
@@ -717,6 +727,79 @@ const experienceData = [
     const navItems = document.querySelectorAll(".app-nav-item");
     const closeButtons = document.querySelectorAll(".close-window");
 
+    const vlcPlayElement = document.getElementById("vlc-play");
+    const vlcPauseElement = document.getElementById("vlc-pause");
+    const vlcStopElement = document.getElementById("vlc-stop");
+    const vlcForwardElement = document.getElementById("vlc-forward");
+    const vlcRewindElement = document.getElementById("vlc-rewind");
+
+    let vlcPlaying = false;
+
+    function vlcStop() {
+      vlcPlaying = false
+      vlcPlayElement.classList.remove('hidden')
+      vlcPauseElement.classList.add('hidden')
+    }
+
+    scrollContent.addEventListener("wheel", () => {
+      vlcStop()
+    });
+
+    vlcPlayElement.addEventListener("click", () => {
+      if (vlcPlaying) return;
+      vlcPlaying = true;
+
+      vlcPlayElement.classList.add('hidden')
+      vlcPauseElement.classList.remove('hidden')
+
+      function scrollStep() {
+        if (!vlcPlaying) return;
+
+        scrollContent.scrollTop += 10;
+
+        scrollTimeout = setTimeout(scrollStep, 1);
+      }
+
+      if (scrollContent.scrollTop < 5000) {
+        scrollContent.scrollTop = 5000;
+
+        const waitForScroll = setInterval(() => {
+          if (scrollContent.scrollTop >= 5000) {
+            clearInterval(waitForScroll);
+            scrollStep();
+          }
+        }, 10);
+      } else {
+        scrollStep();
+      }
+    });
+
+    vlcPauseElement.addEventListener("click", () => {
+      vlcStop()
+    });
+
+    vlcStopElement.addEventListener("click", () => {
+      vlcStop()
+      if(scrollContent.scrollTop > 5000)
+        scrollContent.scrollTop = 5000
+    })
+
+    vlcForwardElement.addEventListener("click", () => {
+      vlcStop()
+      if(scrollContent.scrollTop + 300 < document.getElementById("about").parentElement.offsetHeight)
+        scrollContent.scrollTop += 300
+      else 
+        scrollContent.scrollTop = document.getElementById("about").parentElement.offsetHeight;
+    })
+
+    vlcRewindElement.addEventListener("click", () => {
+      vlcStop()
+      if(scrollContent.scrollTop - 300 > 5000)
+        scrollContent.scrollTop -= 300
+      else
+        scrollContent.scrollTop = 5000
+    })
+
     navItems.forEach((item, i) => {
       item.addEventListener("click", () => {
         const windowContent = document.getElementById(`window-${i}`);
@@ -769,7 +852,7 @@ const experienceData = [
       } else if (scrollY >= 1500 && scrollY < 2300) {
         backgroundWindow.classList.add("visible");
 
-        if (!techStackWindow.classList.contains("visible")) {
+        if (!techStackWindow.classList.contains("visible") && !vlcPlaying) {
           maxZIndex++;
           backgroundWindow.style.zIndex = maxZIndex;
         }
@@ -788,7 +871,7 @@ const experienceData = [
       } else if (scrollY >= 3000 && scrollY <= 4500) {
         techStackWindow.classList.add("visible");
 
-        if (!isScrollingUp) {
+        if (!isScrollingUp && !vlcPlaying) {
           maxZIndex++;
           techStackWindow.style.zIndex = maxZIndex;
         }
@@ -829,6 +912,8 @@ const experienceData = [
           ),
           1
         );
+
+        if(timelineProgress == 1) vlcPlaying = false
 
         const totalSeconds = 600;
         const timestampProgress = totalSeconds * timelineProgress;
