@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import ChatGPTLogo from "./assets/icons/chatGptLogo.png";
 import SoraIcon from "./assets/icons/soraIcon.png";
+import ProfilePicture from "./assets/images/andrewlau624.jpg";
 
 const projectsData = [
   {
@@ -57,11 +58,32 @@ const projectsData = [
 const chatCategoryData = [
   {
     name: "Projects",
-    chats: [{ name: "My Projects", id: "myprojects", chatData: projectsData }],
+    chats: [{
+      name: "Andrew's Projects",
+      id: "myprojects",
+      chatData: projectsData,
+      openingMessage: "Can you show me Andrew Lau's portfolio projects?",
+      openingResponse: "Sure! Here's a clean list of Andrew Lau's projects!"
+    }],
   },
   {
     name: "More",
-    chats: [{ name: "Publications", id: "publications", chatData: projectsData }, { name: "Awards", id: "awards", chatData: projectsData }],
+    chats: [
+      {
+        name: "Publications",
+        id: "publications",
+        chatData: projectsData,
+        openingMessage: "Do you have any published work?",
+        openingResponse: "These are Andrew's publications."
+      },
+      {
+        name: "Awards",
+        id: "awards",
+        chatData: projectsData,
+        openingMessage: "What awards have you won?",
+        openingResponse: "Here are some notable awards."
+      },
+    ],
   },
 ];
 ---
@@ -69,7 +91,7 @@ const chatCategoryData = [
 <section id="projects" class="h-[calc(100dvh-52px)]">
   <div class="flex flex-row h-full w-full overflow-y-hidden">
     <div
-      class="flex flex-col h-full sm:w-[300px] w-[400px] bg-[#171717] text-slate-100 font-[350] px-1"
+      class="md:flex hidden flex-col h-full sm:w-[300px] w-[400px] bg-[#171717] text-slate-100 font-[350] px-1"
     >
       <div
         class="flex justify-between items-center px-2 py-2 sticky top-0 bg-[#171717] z-10"
@@ -104,7 +126,7 @@ const chatCategoryData = [
           <Image
             src={SoraIcon}
             alt="Sora"
-            class="h-6 w-6 object-contai rounded-full border-slate-400/40"
+            class="h-6 w-6 object-contain rounded-full border-slate-400/40"
           />
           <span>Sora</span>
         </li>
@@ -131,7 +153,10 @@ const chatCategoryData = [
                 <span>{category.name}</span>
               </li>
               {category.chats.map((chat) => (
-                <li id={chat.id} class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer font-[350]">
+                <li
+                  id={chat.id}
+                  class="chat-selector flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer font-[350]"
+                >
                   <span>{chat.name}</span>
                 </li>
               ))}
@@ -140,19 +165,131 @@ const chatCategoryData = [
         }
       </div>
     </div>
-    <div class="flex bg-[#212121] h-full w-full"></div>
+    <div class="flex flex-col bg-[#212121] h-full w-full">
+      <div
+        class="hidden md:flex justify-between items-center px-5 py-1.5 sticky top-0 z-10 font-[350] text-slate-100 border-b border-b-white/7"
+      >
+        <div
+          class="flex hover:bg-white/5 rounded-lg px-2 py-1.5 cursor-pointer"
+        >
+          <span class="pl-2 text-lg">ChatGPT</span>
+          <i class="bx bx-chevron-down text-2xl pl-1 text-slate-400"></i>
+        </div>
+        <div class="flex items-center gap-2">
+          <div
+            class="flex items-center text-white border border-white/10 rounded-full px-3.5 py-2 hover:bg-white/7 cursor-pointer"
+          >
+            <i class="bx bx-export text-xl"></i>
+            <span class="pl-2 text-sm">Share</span>
+          </div>
+          <i
+            class="bx bx-dots-vertical-rounded text-2xl cursor-pointer transition-all duration-200 hover:bg-white/15 px-2.5 py-2 rounded-full"
+          ></i>
+          <Image
+            src={ProfilePicture}
+            alt="AndrewLau624"
+            class="h-10 w-10 object-cover m-1 cursor-pointer rounded-full p-1 transition-all duration-200 hover:bg-white/15"
+          />
+        </div>
+      </div>
+      <div
+        class="flex md:hidden justify-between items-center px-5 py-1.5 sticky top-0 z-10 font-[350] text-slate-100 border-b border-b-white/7"
+      >
+        <div class="flex items-center">
+          <i
+            class="bx bx-menu text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+        </div>
+        <div
+          class="flex hover:bg-white/5 rounded-lg px-2 py-1.5 cursor-pointer"
+        >
+          <span class="pl-2 text-lg">ChatGPT</span>
+          <i class="bx bx-chevron-down text-2xl pl-1 text-slate-400"></i>
+        </div>
+        <div class="flex items-center">
+          <i
+            class="bx bx-edit text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+        </div>
+      </div>
+        <div class="h-full overflow-y-auto">
+ <div class="px-20">
+            {
+            chatCategoryData.map((category) =>
+                category.chats.map((chat) => (
+                    <div>
+                    <div class="max-w-3xl mx-auto py-4 flex justify-end">
+                        <div class="bg-white/4 text-slate-100 px-5 py-3 rounded-xl max-w-lg w-fit">
+                            <p class="text-base font-light mt-0">{chat.openingMessage}</p>
+                        </div>
+                        </div>
+                    <div class="max-w-3xl mx-auto py-4">
+                        <p class="text-slate-100 font-light text-base mt-3">{chat.openingResponse}</p>
+                    </div>
+                    <hr class="text-white/5 max-w-3xl mx-auto"/>
+                { chat.chatData.map((message, index) => (
+                    <div class="max-w-3xl mx-auto py-4">
+                    <div class="flex items-start">
+                        <div class="text-slate-100 p-4 rounded-xl w-full">
+                        <div class="text-lg text-white mb-1 font-semibold">
+                            {index + 1 + ". " + message.title}
+                        </div>
+                        <p class="text-slate-100 font-light text-base mt-3">{message.description}</p>
+                        { message.code &&
+                            <p class="text-slate-100 font-light text-base mt-3"><span>Repo: </span><a class="text-blue-500 hover:underline" href={message.code}>{message.code}</a></p>
+                            }
+                        { message.demo &&
+                            <p class="text-slate-100 font-light text-base mt-3"><span>Demo: </span><a class="text-blue-500 hover:underline" href={message.demo}>{message.demo}</a></p>
+                        }
+                        </div>
+                    </div>
+                    </div>
+                    <hr class="text-white/5 max-w-3xl mx-auto"/>
+                ))}
+                </div>))
+            )
+            }
+        </div>
+        <div class="sticky bottom-0 bg-[#212121] px-6 py-4 border-t border-white/10 z-10">
+        <div class="flex gap-2 items-end">
+            <textarea
+            rows="1"
+            placeholder="Send a message..."
+            class="w-full resize-none rounded-xl bg-white/5 text-white placeholder:text-white/40 px-4 py-2 outline-none border border-white/10 focus:border-white/20 transition-all"
+            ></textarea>
+            <button
+            class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-all"
+            >
+            <i class="bx bx-send text-xl"></i>
+            </button>
+        </div>
+        </div>
+        </div>
+    </div>
   </div>
 </section>
 
 <style>
-    .chat-active {
-        background-color: rgba(255,255,255,0.1);
-    }
+  .chat-active {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 </style>
 
 <script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
-        let activeChatId = "myprojects"
-        document.getElementById(activeChatId).classList.add("chat-active")
-    })
+  document.addEventListener("DOMContentLoaded", () => {
+    const chatSelectors = document.querySelectorAll(".chat-selector");
+
+    let activeChatId = "myprojects";
+    let activeChat = document.getElementById(activeChatId);
+    if (activeChat) activeChat.classList.add("chat-active");
+
+    chatSelectors.forEach((selector) => {
+      selector.addEventListener("click", () => {
+        if (activeChat) activeChat.classList.remove("chat-active");
+
+        selector.classList.add("chat-active");
+        activeChat = selector;
+      });
+    });
+  });
 </script>

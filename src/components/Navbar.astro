@@ -167,7 +167,7 @@ const navItems = [
   const updateEvents = ["input", "keyup", "click", "select", "pointerup"];
   updateEvents.forEach((event) => {
     input.addEventListener(event, updateCaret);
-  })
+  });
 
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
