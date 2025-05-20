@@ -26,7 +26,7 @@ import HIMLogo from "./assets/icons/heartInMotionLogo.png";
 import SeniorImage from "./assets/images/seniorImage.jpeg";
 
 const backgroundDesc =
-  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!\n\n[Continue scrolling for more]";
+  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code in 8th grade during the COVID-19 quarantine (2020), picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!\n\n[Continue scrolling for more]";
 
 const appData = [
   {
@@ -121,6 +121,7 @@ const experienceData = [
                   src={app.imgSrc}
                   alt={app.name}
                   draggable="false"
+                  loading="eager"
                   class="h-15 w-15 object-contain flex flex-col mb-1 p-1"
                 />
                 <span class="flex flex-col text-xs font-medium text-white text-shadow-md px-1">
@@ -143,6 +144,7 @@ const experienceData = [
                   src={item.imgSrc}
                   alt={item.name}
                   draggable="false"
+                  loading="eager"
                   class="h-14 w-14 object-contain p-1 group-hover:bg-white/30 rounded-md"
                 />
                 <div class="indicator-bar bg-white h-1 rounded-full" />
@@ -195,9 +197,7 @@ const experienceData = [
               <div
                 contenteditable="true"
                 class="textarea h-full mb-5 resize-none p-2 text-white bg-transparent outline-none w-full whitespace-pre-wrap overflow-y-auto"
-              >
-                {backgroundDesc}
-              </div>
+              >{backgroundDesc}</div>
             </div>
           </div>
         </div>
@@ -305,6 +305,7 @@ const experienceData = [
                         alt={app.name}
                         draggable="false"
                         class="h-18 w-18 object-contain mb-1 p-1"
+                        loading="eager"
                       />
                       <span class="text-xs font-medium text-white text-shadow-md text-center px-1">
                         {app.name}
@@ -384,6 +385,7 @@ const experienceData = [
                             <Image
                               src={exp.companyLogo}
                               alt={exp.companyName}
+                              loading="eager"
                               class="w-24 h-24 md:w-32 md:h-32 bg-white chalky-mask object-cover"
                             />
                           </div>
