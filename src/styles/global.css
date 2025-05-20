@@ -16,11 +16,11 @@
   font-optical-sizing: auto;
   font-style: normal;
 
-   -moz-user-select: none;
-   -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 
-   -ms-user-select: none;
-   user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html {
@@ -33,7 +33,7 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -58,4 +58,17 @@ html {
 
 #projects * {
   font-family: "Noto Sans", sans-serif;
+}
+
+#scroll-container {
+  scroll-padding-top: 52px;
+  overflow-y: scroll;
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+#home,
+#projects,
+#about-container {
+  scroll-snap-align: start;
 }

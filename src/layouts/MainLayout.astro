@@ -20,17 +20,6 @@ const { title, seoTitle, seoDesc } = Astro.props;
   </body>
 </html>
 
-<style>
-  #scroll-container {
-  scroll-snap-type: y mandatory;
-  }
-
-  section {
-    scroll-snap-align: start;
-    height: 100vh;
-  }
-</style>
-
 <script is:inline type="module">
   const sections = ["home", "about", "projects"];
 
@@ -65,3 +54,4 @@ const { title, seoTitle, seoDesc } = Astro.props;
     });
   });
 </script>
+

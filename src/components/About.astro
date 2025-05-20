@@ -87,10 +87,10 @@ const experienceData = [
 ];
 ---
 
-<section class="relative h-[8000px] snap-start pt-13">
-  <div id="about" class="sticky top-3 h-[calc(100dvh-52px)] overflow-y-auto">
+<section id="about-container" class="relative h-[8000px]">
+  <div id="about" class="sticky top-3 h-[calc(100dvh-52px)] overflow-y-scroll">
     <div
-      class="h-full bg-[url(/assets/images/wallpaper.jpg)] overflow-y-scroll"
+      class="h-full bg-[url(/assets/images/wallpaper.jpg)]"
     >
       <div
         class="bg-black/20 h-5 flex items-center text-white text-sm py-3 select-none"
@@ -206,7 +206,9 @@ const experienceData = [
           class="absolute top-1/4 left-1/2 -translate-x-1/2 text-slate-800/40 font-light md:text-3xl flex flex-col items-center gap-4 w-full text-lg"
         >
           <span>Try scrolling down!</span>
-          <i class="bx bx-chevrons-down text-3xl text-slate-800/40 animate-bounce"></i>
+          <i
+            class="bx bx-chevrons-down text-3xl text-slate-800/40 animate-bounce"
+          ></i>
         </div>
         <div
           id="window-1"
@@ -867,7 +869,11 @@ const experienceData = [
       } else if (scrollY >= 1500 && scrollY < 2300) {
         backgroundWindow.classList.add("visible");
 
-        if ((!techStackWindow.classList.contains("visible") || !experienceWindow.classList.contains("visible")) && !vlcPlaying) {
+        if (
+          (!techStackWindow.classList.contains("visible") ||
+            !experienceWindow.classList.contains("visible")) &&
+          !vlcPlaying
+        ) {
           maxZIndex++;
           backgroundWindow.style.zIndex = maxZIndex;
         }
@@ -890,7 +896,11 @@ const experienceData = [
           }, 300);
         }
       } else if (scrollY >= 3000 && scrollY <= 4500) {
-        if ((!experienceWindow.classList.contains("visible") || !techStackWindow.classList.contains("visible")) && !vlcPlaying) {
+        if (
+          (!experienceWindow.classList.contains("visible") ||
+            !techStackWindow.classList.contains("visible")) &&
+          !vlcPlaying
+        ) {
           maxZIndex++;
           techStackWindow.style.zIndex = maxZIndex;
         }
@@ -996,18 +1006,19 @@ const experienceData = [
         }
       }
 
-        const scrollMessage = document.getElementById("scroll-message");
+      const scrollMessage = document.getElementById("scroll-message");
 
-        const fadeStart = 1000;
-        const fadeEnd = 1400;
+      const fadeStart = 1000;
+      const fadeEnd = 1400;
 
-        let opacity = 1;
+      let opacity = 1;
 
-        if (scrollY > fadeStart) {
-          opacity = 1 - Math.min((scrollY - fadeStart) / (fadeEnd - fadeStart), 1);
-        }
+      if (scrollY > fadeStart) {
+        opacity =
+          1 - Math.min((scrollY - fadeStart) / (fadeEnd - fadeStart), 1);
+      }
 
-        scrollMessage.style.opacity = opacity;
+      scrollMessage.style.opacity = opacity;
     });
   });
 </script>
