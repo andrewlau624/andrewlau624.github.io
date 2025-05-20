@@ -26,7 +26,7 @@ import HIMLogo from "./assets/icons/heartInMotionLogo.png";
 import SeniorImage from "./assets/images/seniorImage.jpeg";
 
 const backgroundDesc =
-  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!";
+  "Hi! My name is Andrew Lau and I grew up in San Francisco, California. I learnt how to code during the COVID-19 quarantine, picking up C# and Java skills from Unity game development.\n\nEventually, I wanted to do more than developing games and began fiddling with both software and web development, honing the skills I have today.\n\nDuring my junior year of high school at Galileo Academy of Science and Technology, I kickstarted my professional career as a Software Engineer by developing the website for the non-profit Heart in Motion and maintaining their back-end systems.\n\nNow, as a first year at UC Berkeley, I am dedicated to my many personal projects focused on helping others and benefiting society as a whole. If you want to learn more or join me in my journey of using software to build a better Earth, feel free to reach out!\n\n[Continue scrolling for more]";
 
 const appData = [
   {
@@ -87,7 +87,7 @@ const experienceData = [
 ];
 ---
 
-<section class="relative h-[8000px]">
+<section class="relative h-[8000px] snap-start pt-13">
   <div id="about" class="sticky top-3 h-[calc(100dvh-52px)] overflow-y-auto">
     <div
       class="h-full bg-[url(/assets/images/wallpaper.jpg)] overflow-y-scroll"
@@ -171,7 +171,9 @@ const experienceData = [
             <div
               class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
+              <i
+                class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"
+              ></i>
             </div>
           </div>
           <div class="w-full h-full">
@@ -199,7 +201,13 @@ const experienceData = [
             </div>
           </div>
         </div>
-
+        <div
+          id="scroll-message"
+          class="absolute top-1/4 left-1/2 -translate-x-1/2 text-slate-800/40 font-light md:text-3xl flex flex-col items-center gap-4 w-full text-lg"
+        >
+          <span>Try scrolling down!</span>
+          <i class="bx bx-chevrons-down text-3xl text-slate-800/40 animate-bounce"></i>
+        </div>
         <div
           id="window-1"
           class="border-1 border-slate-300/10 draggable-window absolute top-[10vh] lg:left-[18.5vw] left-[4vw] lg:w-[62vw] w-[90vw] h-[60vh] pointer-events-auto"
@@ -218,7 +226,9 @@ const experienceData = [
             <div
               class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
+              <i
+                class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"
+              ></i>
             </div>
           </div>
           <div class="w-full h-full bg-[#4a5467]">
@@ -317,13 +327,15 @@ const experienceData = [
               class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
             >
               <span class="text-sm text-slate-300/85 font-medium"
-                >andrewlau@experience</span
+                >andrewlau@workexperience</span
               >
             </div>
             <div
               class="mr-3 flex items-center justify-end w-[20%] min-w-fit ml-auto"
             >
-              <i class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"></i>
+              <i
+                class="bx bx-x-circle pl-2 close-window text-lg hover:text-slate-400 text-slate-500"
+              ></i>
             </div>
           </div>
           <div class="w-full h-full">
@@ -449,18 +461,18 @@ const experienceData = [
                 >
                   <div class="flex items-center gap-5 text-3xl">
                     <div id="vlc-play">
-                    <i
-                      class="bx bx-play hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
-                    ></i>
+                      <i
+                        class="bx bx-play hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
                     </div>
                     <div id="vlc-pause" class="hidden">
-                    <i
-                      class="bx bx-pause hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
-                    ></i>
+                      <i
+                        class="bx bx-pause hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
+                      ></i>
                     </div>
                     <div class="flex gap-2">
                       <i
-                      id="vlc-rewind"
+                        id="vlc-rewind"
                         class="bx bx-rewind hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                       <i
@@ -468,7 +480,7 @@ const experienceData = [
                         class="bx bx-stop hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                       <i
-                      id="vlc-forward"
+                        id="vlc-forward"
                         class="bx bx-fast-forward hover:text-slate-700 border-1 rounded-sm border-slate-300 shadow-sm"
                       ></i>
                     </div>
@@ -738,21 +750,21 @@ const experienceData = [
     let vlcPlaying = false;
 
     function vlcStop() {
-      vlcPlaying = false
-      vlcPlayElement.classList.remove('hidden')
-      vlcPauseElement.classList.add('hidden')
+      vlcPlaying = false;
+      vlcPlayElement.classList.remove("hidden");
+      vlcPauseElement.classList.add("hidden");
     }
 
     scrollContent.addEventListener("wheel", () => {
-      vlcStop()
+      vlcStop();
     });
 
     vlcPlayElement.addEventListener("click", () => {
       if (vlcPlaying) return;
       vlcPlaying = true;
 
-      vlcPlayElement.classList.add('hidden')
-      vlcPauseElement.classList.remove('hidden')
+      vlcPlayElement.classList.add("hidden");
+      vlcPauseElement.classList.remove("hidden");
 
       function scrollStep() {
         if (!vlcPlaying) return;
@@ -777,30 +789,31 @@ const experienceData = [
     });
 
     vlcPauseElement.addEventListener("click", () => {
-      vlcStop()
+      vlcStop();
     });
 
     vlcStopElement.addEventListener("click", () => {
-      vlcStop()
-      if(scrollContent.scrollTop > 5000)
-        scrollContent.scrollTop = 5000
-    })
+      vlcStop();
+      if (scrollContent.scrollTop > 5000) scrollContent.scrollTop = 5000;
+    });
 
     vlcForwardElement.addEventListener("click", () => {
-      vlcStop()
-      if(scrollContent.scrollTop + 300 < document.getElementById("about").parentElement.offsetHeight)
-        scrollContent.scrollTop += 300
-      else 
-        scrollContent.scrollTop = document.getElementById("about").parentElement.offsetHeight;
-    })
+      vlcStop();
+      if (
+        scrollContent.scrollTop + 300 <
+        document.getElementById("about").parentElement.offsetHeight
+      )
+        scrollContent.scrollTop += 300;
+      else
+        scrollContent.scrollTop =
+          document.getElementById("about").parentElement.offsetHeight;
+    });
 
     vlcRewindElement.addEventListener("click", () => {
-      vlcStop()
-      if(scrollContent.scrollTop - 300 > 5000)
-        scrollContent.scrollTop -= 300
-      else
-        scrollContent.scrollTop = 5000
-    })
+      vlcStop();
+      if (scrollContent.scrollTop - 300 > 5000) scrollContent.scrollTop -= 300;
+      else scrollContent.scrollTop = 5000;
+    });
 
     navItems.forEach((item, i) => {
       item.addEventListener("click", () => {
@@ -854,7 +867,7 @@ const experienceData = [
       } else if (scrollY >= 1500 && scrollY < 2300) {
         backgroundWindow.classList.add("visible");
 
-        if (!techStackWindow.classList.contains("visible") && !vlcPlaying) {
+        if ((!techStackWindow.classList.contains("visible") || !experienceWindow.classList.contains("visible")) && !vlcPlaying) {
           maxZIndex++;
           backgroundWindow.style.zIndex = maxZIndex;
         }
@@ -866,17 +879,23 @@ const experienceData = [
           techStackWindow.classList.add("window-exit");
           navItems[1]?.classList.add("inactive");
           navItems[1]?.classList.remove("active");
+
+          experienceWindow.classList.add("window-exit");
+          navItems[2]?.classList.add("inactive");
+          navItems[2]?.classList.remove("active");
+
           setTimeout(() => {
             techStackWindow.classList.remove("visible", "window-exit");
+            experienceWindow.classList.remove("visible", "window-exit");
           }, 300);
         }
       } else if (scrollY >= 3000 && scrollY <= 4500) {
-        techStackWindow.classList.add("visible");
-
-        if (!isScrollingUp && !vlcPlaying) {
+        if ((!experienceWindow.classList.contains("visible") || !techStackWindow.classList.contains("visible")) && !vlcPlaying) {
           maxZIndex++;
           techStackWindow.style.zIndex = maxZIndex;
         }
+
+        techStackWindow.classList.add("visible");
 
         navItems[1]?.classList.remove("inactive");
         navItems[1]?.classList.add("active");
@@ -915,7 +934,7 @@ const experienceData = [
           1
         );
 
-        if(timelineProgress == 1) vlcPlaying = false
+        if (timelineProgress == 1) vlcPlaying = false;
 
         const totalSeconds = 600;
         const timestampProgress = totalSeconds * timelineProgress;
@@ -976,6 +995,19 @@ const experienceData = [
           currentExperienceElement.style.clipPath = `polygon(0 0, ${clipProgress}% 0, ${clipProgress}% 100%, 0 100%)`;
         }
       }
+
+        const scrollMessage = document.getElementById("scroll-message");
+
+        const fadeStart = 1000;
+        const fadeEnd = 1400;
+
+        let opacity = 1;
+
+        if (scrollY > fadeStart) {
+          opacity = 1 - Math.min((scrollY - fadeStart) / (fadeEnd - fadeStart), 1);
+        }
+
+        scrollMessage.style.opacity = opacity;
     });
   });
 </script>

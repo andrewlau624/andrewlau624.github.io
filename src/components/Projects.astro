@@ -1,3 +1,158 @@
-<section id="projects" class="h-[900px]">
-    <div>Projects</div>
+---
+import { Image } from "astro:assets";
+import ChatGPTLogo from "./assets/icons/chatGptLogo.png";
+import SoraIcon from "./assets/icons/soraIcon.png";
+
+const projectsData = [
+  {
+    title: "DebateSphere",
+    description:
+      "A real-time debate platform with live audio, timer controls, and audience voting built using WebRTC, Socket.IO, and Next.js.",
+    tech: ["Next.js", "WebRTC", "Socket.IO", "Tailwind CSS"],
+    demo: "https://debatesphere.example.com",
+    code: "https://github.com/yourusername/debatesphere",
+  },
+  {
+    title: "Heart in Motion Dashboard",
+    description:
+      "An internal management dashboard for a nonprofit to track volunteer hours, projects, and event scheduling.",
+    tech: ["React", "Firebase", "Tailwind CSS"],
+    demo: "https://him-dashboard.example.com",
+    code: "https://github.com/yourusername/him-dashboard",
+  },
+  {
+    title: "Chinatown Connect",
+    description:
+      "A mobile-first directory for local Chinatown businesses, complete with filtering, reviews, and maps integration.",
+    tech: ["Next.js", "Supabase", "Mapbox", "Vercel"],
+    demo: "https://chinatown-connect.example.com",
+    code: "https://github.com/yourusername/chinatown-connect",
+  },
+  {
+    title: "CodeBuddy",
+    description:
+      "A collaborative code editor for remote tutoring sessions with syntax highlighting and real-time chat.",
+    tech: ["Monaco Editor", "Node.js", "Socket.IO", "Express"],
+    demo: "https://codebuddy.example.com",
+    code: "https://github.com/yourusername/codebuddy",
+  },
+  {
+    title: "ZenStudy",
+    description:
+      "A Pomodoro timer and task manager designed for students with gentle animations and focus mode.",
+    tech: ["React", "Framer Motion", "LocalStorage"],
+    demo: "https://zenstudy.example.com",
+    code: "https://github.com/yourusername/zenstudy",
+  },
+  {
+    title: "VolunteerVerse",
+    description:
+      "A platform that gamifies volunteering by allowing students to earn badges and track hours in a social feed.",
+    tech: ["Next.js", "MongoDB", "Clerk", "Tailwind"],
+    demo: "https://volunteerverse.example.com",
+    code: "https://github.com/yourusername/volunteerverse",
+  },
+];
+
+const chatCategoryData = [
+  {
+    name: "Projects",
+    chats: [{ name: "My Projects", id: "myprojects", chatData: projectsData }],
+  },
+  {
+    name: "More",
+    chats: [{ name: "Publications", id: "publications", chatData: projectsData }, { name: "Awards", id: "awards", chatData: projectsData }],
+  },
+];
+---
+
+<section id="projects" class="snap-start h-screen pt-13">
+  <div class="flex flex-row h-full w-full overflow-y-hidden">
+    <div
+      class="flex flex-col h-screen w-[20%] bg-[#171717] text-slate-100 font-[350 px-1"
+    >
+      <div
+        class="flex justify-between items-center px-2 py-2 sticky top-0 bg-[#171717] z-10"
+      >
+        <i
+          class="bx bx-book-content bx-flip-horizontal text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+        ></i>
+        <div class="flex">
+          <i
+            class="bx bx-search text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+          <i
+            class="bx bx-edit text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+        </div>
+      </div>
+      <ul class="flex flex-col px-2 pb-4 text-sm">
+        <li
+          class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer"
+        >
+          <Image
+            src={ChatGPTLogo}
+            alt="ChatGPT"
+            class="h-6 w-6 object-contain border-1 p-0.5 rounded-full border-slate-400/40"
+          />
+          <span>ChatGPT</span>
+        </li>
+
+        <li
+          class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer"
+        >
+          <Image
+            src={SoraIcon}
+            alt="Sora"
+            class="h-6 w-6 object-contai rounded-full border-slate-400/40"
+          />
+          <span>Sora</span>
+        </li>
+
+        <li
+          class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer"
+        >
+          <i class="bx bx-images text-lg mr-1"></i>
+          <span>Library</span>
+        </li>
+
+        <li
+          class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer"
+        >
+          <i class="bx bx-grid-alt text-lg mr-1"></i>
+          <span>Explore GPTs</span>
+        </li>
+      </ul>
+      <div class="flex flex-col gap-4 mt-2">
+        {
+          chatCategoryData.map((category) => (
+            <ul class="flex flex-col px-2 text-sm">
+              <li class="flex items-center gap-3 px-3 py-2 font-medium text-xs">
+                <span>{category.name}</span>
+              </li>
+              {category.chats.map((chat) => (
+                <li id={chat.id} class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer font-[350]">
+                  <span>{chat.name}</span>
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </div>
+    <div class="flex bg-[#212121] h-full w-full"></div>
+  </div>
 </section>
+
+<style>
+    .chat-active {
+        background-color: rgba(255,255,255,0.1);
+    }
+</style>
+
+<script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+        let activeChatId = "myprojects"
+        document.getElementById(activeChatId).classList.add("chat-active")
+    })
+</script>

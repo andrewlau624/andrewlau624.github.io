@@ -7,7 +7,7 @@ const { title, seoTitle, seoDesc } = Astro.props;
 
 <html lang="en">
   <MainHead title={title} seoTitle={seoTitle} seoDesc={seoDesc} />
-  <body class="bg-[#29303B] text-slate-300 overflow-hidden">
+  <body class="bg-[#222831] text-slate-300 overflow-hidden">
     <header>
       <Navbar />
     </header>
@@ -20,13 +20,24 @@ const { title, seoTitle, seoDesc } = Astro.props;
   </body>
 </html>
 
+<style>
+  #scroll-container {
+  scroll-snap-type: y mandatory;
+  }
+
+  section {
+    scroll-snap-align: start;
+    height: 100vh;
+  }
+</style>
+
 <script is:inline type="module">
   const sections = ["home", "about", "projects"];
 
   const observerOptions = {
     root: null,
     rootMargin: "0px",
-    threshold: 0.3,
+    threshold: 0.6,
   };
 
   const observer = new IntersectionObserver((entries) => {
