@@ -69,6 +69,6 @@ html {
 
 #home,
 #projects,
-#about-container {
+#about {
   scroll-snap-align: start;
 }
