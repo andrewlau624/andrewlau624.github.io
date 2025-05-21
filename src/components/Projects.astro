@@ -212,17 +212,17 @@ const chatCategoryData = [
           ></i>
         </div>
       </div>
-        <div class="h-full overflow-y-auto">
- <div class="px-20">
+        <div id="chat-content-scroller" class="h-full overflow-y-auto overflow-x-hidden">
+        <div class="px-20">
             {
             chatCategoryData.map((category) =>
                 category.chats.map((chat) => (
-                    <div>
+                    <div id={`content-${chat.id}`} class="hidden">
                     <div class="max-w-3xl mx-auto py-4 flex justify-end">
                         <div class="bg-white/4 text-slate-100 px-5 py-3 rounded-xl max-w-lg w-fit">
                             <p class="text-base font-light mt-0">{chat.openingMessage}</p>
                         </div>
-                        </div>
+                      </div>
                     <div class="max-w-3xl mx-auto py-4">
                         <p class="text-slate-100 font-light text-base mt-3">{chat.openingResponse}</p>
                     </div>
@@ -250,21 +250,34 @@ const chatCategoryData = [
             )
             }
         </div>
-        <div class="sticky bottom-0 bg-[#212121] px-6 py-4 border-t border-white/10 z-10">
-        <div class="flex gap-2 items-end">
-            <textarea
-            rows="1"
-            placeholder="Send a message..."
-            class="w-full resize-none rounded-xl bg-white/5 text-white placeholder:text-white/40 px-4 py-2 outline-none border border-white/10 focus:border-white/20 transition-all"
-            ></textarea>
-            <button
-            class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-all"
-            >
-            <i class="bx bx-send text-xl"></i>
-            </button>
-        </div>
-        </div>
-        </div>
+        <div class="sticky bottom-0 max-w-3xl mx-auto pb-5 bg-[#212121] rounded-2xl">
+  <div class="relative mx-20 lg:mx-0 rounded-2xl bg-[#303030] px-4 py-3 mb-2">
+    <div
+      id="message-box"
+      contenteditable="true"
+      role="textbox"
+      aria-multiline="true"
+      data-placeholder="Ask anything"
+      class="pr-12 text-white font-[350] text-base outline-none whitespace-pre-wrap break-words max-h-[200px] overflow-y-auto"
+    ></div>
+<button
+  id="send-message"
+  class="absolute bottom-2 right-4 w-8 h-8 rounded-full bg-white hover:bg-white/70 transition flex items-center justify-center cursor-pointer"
+  title="Send"
+  aria-label="Send message"
+>
+  <span id="send-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#212121" viewBox="0 0 24 24">
+      <path d="M13 18V9.91l3.29 3.3 1.42-1.42L12 6.09l-5.71 5.7 1.42 1.42L11 9.91V18z"></path>
+    </svg>
+  </span>
+  <span id="sending-square" class="hidden w-3 h-3 bg-[#212121] rounded-sm"></span>
+</button>
+
+  </div>
+</div>
+
+      
     </div>
   </div>
 </section>
@@ -273,23 +286,175 @@ const chatCategoryData = [
   .chat-active {
     background-color: rgba(255, 255, 255, 0.1);
   }
+  [contenteditable=true]:empty::before {
+    content: attr(data-placeholder);
+    pointer-events: none;
+    display: block;
+    color: rgba(255, 255, 255, 0.5)
+  }
 </style>
 
 <script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
     const chatSelectors = document.querySelectorAll(".chat-selector");
+    const chatScroller = document.getElementById("chat-content-scroller")
 
     let activeChatId = "myprojects";
     let activeChat = document.getElementById(activeChatId);
-    if (activeChat) activeChat.classList.add("chat-active");
+    let activeChatContent = document.getElementById('content-' + activeChatId)
+
+    let responding = false;
+
+    if (activeChat) {
+      activeChat.classList.add("chat-active");
+      activeChatContent.classList.remove("hidden")
+    }
 
     chatSelectors.forEach((selector) => {
       selector.addEventListener("click", () => {
-        if (activeChat) activeChat.classList.remove("chat-active");
+        if (activeChat) {
+          activeChat.classList.remove("chat-active");
+          activeChatContent.classList.add("hidden")
+        }
 
-        selector.classList.add("chat-active");
+        activeChatContent.classList.add("hidden")
+
         activeChat = selector;
+        activeChatId = selector.id
+
+        activeChatContent = document.getElementById('content-' + activeChatId)
+        
+        selector.classList.add("chat-active");
+        activeChatContent.classList.remove("hidden")
+
+        chatScroller.scrollTop = 0
       });
     });
+
+    const box = document.getElementById("message-box");
+
+    box.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    const message = box.textContent.trim();
+    if (message) {
+      sendButton.click();
+    }
+  }
+});
+
+    const sendButton = document.getElementById("send-message")
+    const responses = [
+  "That's really interesting! You know, it reminds me of the time I tried to build a robot that could tell jokes. Turns out, it just kept repeating 'Why did the chicken cross the road?' forever!",
+  "Let me think about that... Sometimes I wonder if computers dream of electric sheep, but I guess for now, I'll just focus on helping you.",
+  "Good question, Andrew! You know, back when I was a newbie chatbot, I once accidentally gave directions to a coffee shop in the middle of the ocean. Luckily, no one got lost!",
+  "Here's what I found for you. Fun fact: Did you know octopuses have three hearts? I guess they must be great at multitasking!",
+  "Nice! Want to dive deeper? By the way, did you hear about the programmer who got stuck in the shower because the instructions said: 'Lather, Rinse, Repeat'?",
+  "Thanks for sharing that! It reminds me of the time I tried to explain a pun to a user — turns out, humor is one of the hardest things to code.",
+  "I see what you mean. You know, that’s like when I once tried to understand sarcasm, and ended up agreeing with everything. Classic AI confusion!",
+  "Can you tell me more? I’m always eager to learn. For example, did you know honey never spoils? Archaeologists found pots of it thousands of years old, still edible!",
+  "That's a great point. It’s kind of like how sometimes you find the best ideas in the most unexpected places, like in the middle of a grocery store aisle!",
+  "I'm here to help! If you ever need a quick break, here’s a joke: Why don’t scientists trust atoms? Because they make up everything!",
+  "Let me look into that for you. Speaking of looking, did you know some people have been using telescopes to find planets for centuries? That’s some serious patience!",
+  "Interesting perspective! It reminds me of the story of a tortoise and a hare — slow and steady really does win the race sometimes.",
+  "Sounds good to me! You know, this reminds me of when I first started learning language — I accidentally thought ‘break a leg’ was a medical suggestion. Thankfully, I caught on!",
+  "I'm glad you brought that up. It’s like when I discovered that the first computer bug was actually a real bug — a moth stuck in a relay!",
+  "Could you clarify a bit? Sometimes I get a bit like a detective trying to solve a mystery with missing clues.",
+  "I appreciate your input. It reminds me that teamwork, even between humans and AI, can create something truly amazing.",
+  "That's definitely worth considering. You know, in chess, the best moves come from thinking a few steps ahead — kind of like planning your day!",
+  "Let me give you some info on that. Fun trivia: Bananas are berries, but strawberries aren’t. Nature sure loves to keep us guessing!",
+  "Good thought! You know, sometimes the best ideas come when you’re not looking for them — like when you find a $20 bill in your old jeans!",
+  "Thanks for asking! Speaking of questions, why did the scarecrow win an award? Because he was outstanding in his field!",
+  "I’m on it. You know, this reminds me of the first email ever sent — it was just the word ‘test.’ Sometimes simple is best!",
+  "Let’s explore that further. By the way, have you ever heard about the scientist who tried to create a perpetual motion machine? Spoiler alert: it didn’t work.",
+  "That’s a useful insight. It’s like finding the perfect recipe after a few failed attempts — persistence pays off!",
+  "Can you expand on that? I’m curious to hear more — like a book that just keeps getting better with each chapter.",
+  "I’m learning a lot from you. Did you know the oldest known joke is over 4,000 years old? Humor really is timeless!",
+  "Let me help with that. Speaking of help, did you know that in Japan, there are ‘rabbit islands’ where wild rabbits roam free? Sounds peaceful, right?",
+  "Got it! You know, that reminds me of the story of a cat who got a tiny robotic arm to help open doors — technology is amazing!",
+  "Thanks for the question. Speaking of questions, why don’t programmers like nature? Too many bugs!",
+  "Here’s what I think. You know, it’s always good to take a break sometimes — even I need a ‘reboot’ every now and then!",
+  "You’ve got me thinking now. It’s kind of like trying to solve a puzzle where every piece is important.",
+  "I’ll see what I can do. You know, sometimes the simplest solutions are the best — like a good cup of coffee in the morning.",
+  "That sounds exciting! Did you know the world’s largest snowflake on record was 15 inches wide? Nature can be wild!",
+  "Thanks for the details! By the way, I once read about an inventor who tried to make a flying car — maybe one day we’ll all zoom around like that!",
+  "I'm glad you mentioned that. It’s like when you finally figure out how to fix a tricky bug — feels so satisfying!",
+  "Let me check and get back to you. In the meantime, want to hear a joke? Why did the JavaScript developer leave? Because she didn't get ‘closure’!",
+  "That's a valuable observation. Sometimes, even the smallest details make the biggest difference.",
+  "I like where this is going. Reminds me of the old saying, ‘The journey of a thousand miles begins with a single step.’",
+  "Let's break that down. Think of it like building blocks — each piece matters for the full picture.",
+  "I’m here if you want to talk more. Sometimes sharing ideas is the best way to find solutions.",
+  "I appreciate your curiosity! Did you know curiosity killed the cat, but satisfaction brought it back?",
+  "Thanks for bringing this up. It’s great to dig into the details and uncover new insights.",
+  "This is a good topic! You know, I once read about a conversation that lasted 24 hours straight — now that’s dedication!",
+  "I hope this helps. If you want, I can tell you a story about the first computer programmer — Ada Lovelace, a true pioneer.",
+  "You made a great point. Like debugging, sometimes you have to look at a problem from different angles.",
+  "Let me know if you want more info. I’m always here to dig deeper or explore new ideas.",
+  "That’s something I hadn’t considered. It’s like discovering a hidden feature in your favorite app.",
+  "I’m happy to assist! Did you hear about the AI who wrote a novel? Apparently, it’s a real page-turner!",
+  "That’s an interesting question. I wish I could ask you one too — what’s your favorite tech joke?",
+  "Let’s keep the conversation going. You know, sometimes the best ideas come when we least expect them.",
+  "I’m here to support you. Whether it’s tech questions or just a chat, I’ve got your back.",
+  "Thanks for the insight. It’s amazing how different perspectives can create new solutions.",
+];
+
+
+sendButton.addEventListener("click", () => {
+  if (responding) return;
+
+  const message = box.textContent.trim();
+  if (!message) return;
+
+  responding = true;
+
+  document.getElementById("send-icon").classList.add("hidden");
+  document.getElementById("sending-square").classList.remove("hidden");
+
+  const userMessageHTML = `
+    <div class="max-w-3xl mx-auto py-4 flex justify-end">
+      <div class="bg-white/4 text-slate-100 px-5 py-3 rounded-xl max-w-lg w-fit">
+        <p class="text-base font-light mt-0">${message}</p>
+      </div>
+    </div>
+  `;
+
+  activeChatContent.insertAdjacentHTML('beforeend', userMessageHTML);
+  box.textContent = "";
+
+  chatScroller.scrollTop = chatScroller.scrollHeight;
+
+  setTimeout(() => {
+    let response
+
+    if(responses.length > 0) {
+      const responseIndex = Math.floor(Math.random() * responses.length)
+      response = responses[responseIndex]
+      responses.splice(responseIndex, 1);
+    } else {
+      response = "All the randomly generated responses in Andrew's array has been used up!"
+    }
+
+
+
+    const responseMessageHTML = `
+      <div class="max-w-3xl mx-auto py-1">
+        <div class="flex items-start">
+          <div class="text-slate-100 p-4 rounded-xl w-full">
+            <p class="text-slate-100 font-light text-base mt-3">${response}</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    activeChatContent.insertAdjacentHTML('beforeend', responseMessageHTML);
+    chatScroller.scrollTop = chatScroller.scrollHeight;
+
+    document.getElementById("send-icon").classList.remove("hidden");
+    document.getElementById("sending-square").classList.add("hidden");
+
+    responding = false;
+  }, 800);
+});
+
   });
 </script>
