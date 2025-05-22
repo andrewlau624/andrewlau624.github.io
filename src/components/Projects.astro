@@ -6,52 +6,75 @@ import ProfilePicture from "./assets/images/andrewlau624.jpg";
 
 const projectsData = [
   {
-    title: "DebateSphere",
+    title: "Chowtown (2025)",
     description:
-      "A real-time debate platform with live audio, timer controls, and audience voting built using WebRTC, Socket.IO, and Next.js.",
-    tech: ["Next.js", "WebRTC", "Socket.IO", "Tailwind CSS"],
-    demo: "https://debatesphere.example.com",
-    code: "https://github.com/yourusername/debatesphere",
+      "A hackathon project based on cultural food discovery connecting users with authentic Chinese restaurants. Educates users on traditional ingredients, provides personalized recommendations, and supports local businesses through AI-generated content and video recognition.",
+    sections: [
+      {
+        title: "Languages & Tools",
+        content: "Next.js, React, Typescript, Tailwind, Shadcn, MagicUI, Groq, ChatGPT-4o, TwelveLabs",
+      }
+    ],
+    links: [
+      {
+        title: "Devpost",
+        link: "https://devpost.com/software/chowtown"
+      },
+      {
+        title: "Repo",
+        link: "https://github.com/andrewlau624/chinatown-hacks-restaurant-project"
+      }
+    ]
   },
   {
-    title: "Heart in Motion Dashboard",
+    title: "Linear Regression (2024)",
+    description: "A visual explanation of linear regression that shows how the model learns from data and draws predictions using a best-fit line.",
+    sections: [
+    {
+        title: "Languages & Tools",
+        content: "Python",
+      }
+    ],
+    links: [
+      {
+        title: "Repo",
+        link: "https://github.com/andrewlau624/linear-regression"
+      }
+    ]
+  },
+    {
+    title: "3D Raycaster (2021)",
     description:
-      "An internal management dashboard for a nonprofit to track volunteer hours, projects, and event scheduling.",
-    tech: ["React", "Firebase", "Tailwind CSS"],
-    demo: "https://him-dashboard.example.com",
-    code: "https://github.com/yourusername/him-dashboard",
+      "3D raycasting is a computer graphics technique used to create a pseudo-3D perspective in 2D environments by tracing rays from the player's viewpoint to determine visible surfaces. This method efficiently simulates depth and distance and was famously used in early video games like Wolfenstein 3D to render realistic environments.",
+    sections: [
+      {
+        title: "Languages & Tools",
+        content: "Java",
+      }
+    ],
+    links: [
+      {
+        title: "Repo",
+        link: "https://github.com/andrewlau624/3d-ray-casting"
+      }
+    ]
   },
   {
-    title: "Chinatown Connect",
+    title: "Piano Visualizations 2 Autoplayer (2020)",
     description:
-      "A mobile-first directory for local Chinatown businesses, complete with filtering, reviews, and maps integration.",
-    tech: ["Next.js", "Supabase", "Mapbox", "Vercel"],
-    demo: "https://chinatown-connect.example.com",
-    code: "https://github.com/yourusername/chinatown-connect",
-  },
-  {
-    title: "CodeBuddy",
-    description:
-      "A collaborative code editor for remote tutoring sessions with syntax highlighting and real-time chat.",
-    tech: ["Monaco Editor", "Node.js", "Socket.IO", "Express"],
-    demo: "https://codebuddy.example.com",
-    code: "https://github.com/yourusername/codebuddy",
-  },
-  {
-    title: "ZenStudy",
-    description:
-      "A Pomodoro timer and task manager designed for students with gentle animations and focus mode.",
-    tech: ["React", "Framer Motion", "LocalStorage"],
-    demo: "https://zenstudy.example.com",
-    code: "https://github.com/yourusername/zenstudy",
-  },
-  {
-    title: "VolunteerVerse",
-    description:
-      "A platform that gamifies volunteering by allowing students to earn badges and track hours in a social feed.",
-    tech: ["Next.js", "MongoDB", "Clerk", "Tailwind"],
-    demo: "https://volunteerverse.example.com",
-    code: "https://github.com/yourusername/volunteerverse",
+      "A fun project to impress my friends on a Roblox piano-playing game during quarantine.",
+    sections: [
+      {
+        title: "Languages & Tools",
+        content: "Java",
+      }
+    ],
+    links: [
+      {
+        title: "Repo",
+        link: "https://github.com/andrewlau624/piano-visualizations-2-autoplayer"
+      }
+    ]
   },
 ];
 
@@ -69,43 +92,39 @@ const chatCategoryData = [
   {
     name: "More",
     chats: [
-      {
-        name: "Publications",
-        id: "publications",
-        chatData: projectsData,
-        openingMessage: "Do you have any published work?",
-        openingResponse: "These are Andrew's publications."
-      },
-      {
-        name: "Awards",
-        id: "awards",
-        chatData: projectsData,
-        openingMessage: "What awards have you won?",
-        openingResponse: "Here are some notable awards."
-      },
+
     ],
   },
 ];
 ---
 
 <section id="projects" class="h-[calc(100dvh-52px)]">
-  <div class="flex flex-row h-full w-full overflow-y-hidden">
-    <div
-      class="md:flex hidden flex-col h-full sm:w-[300px] w-[400px] bg-[#171717] text-slate-100 font-[350] px-1"
-    >
+  <div class="flex flex-row h-full w-full overflow-y-hidden relative">
+<div
+  id="projects-navbar"
+  class="absolute md:relative top-0 left-0 h-screen max-w-screen md:w-[300px] w-[400px] bg-[#171717] text-slate-100 font-[350] px-1 z-50 transition-transform duration-300"
+>
       <div
         class="flex justify-between items-center px-2 py-2 sticky top-0 bg-[#171717] z-10"
       >
+                <div class="flex md:hidden">
+            <i
+              class="projects-mobile-menu bx bx-menu text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+            ></i>
+          </div>
+
+        <div class="md:flex hidden">
         <i
-          class="bx bx-book-content bx-flip-horizontal text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          class="projects-desktop-menu bx bx-book-content bx-flip-horizontal text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
         ></i>
+        </div>
         <div class="flex">
           <i
             class="bx bx-search text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
           ></i>
-          <i
-            class="bx bx-edit text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
-          ></i>
+            <i
+              class="bx bx-edit text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+            ></i>
         </div>
       </div>
       <ul class="flex flex-col px-2 pb-4 text-sm">
@@ -169,12 +188,22 @@ const chatCategoryData = [
       <div
         class="hidden md:flex justify-between items-center px-5 py-1.5 sticky top-0 z-10 font-[350] text-slate-100 border-b border-b-white/7"
       >
-        <div
-          class="flex hover:bg-white/5 rounded-lg px-2 py-1.5 cursor-pointer"
+      <div class="flex">
+        <div id="desktop-menu-closed" class="hidden">
+                  <i
+            class="projects-desktop-menu bx bx-book-content bx-flip-horizontal text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+                    <i
+            class="bx bx-edit text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+          ></i>
+          </div>
+          <div
+          class="hover:bg-white/5 rounded-lg px-2 py-1.5 cursor-pointer"
         >
           <span class="pl-2 text-lg">ChatGPT</span>
           <i class="bx bx-chevron-down text-2xl pl-1 text-slate-400"></i>
         </div>
+      </div>
         <div class="flex items-center gap-2">
           <div
             class="flex items-center text-white border border-white/10 rounded-full px-3.5 py-2 hover:bg-white/7 cursor-pointer"
@@ -195,9 +224,9 @@ const chatCategoryData = [
       <div
         class="flex md:hidden justify-between items-center px-5 py-1.5 sticky top-0 z-10 font-[350] text-slate-100 border-b border-b-white/7"
       >
-        <div class="flex items-center">
+        <div id="mobile-menu-closed" class="items-center hidden">
           <i
-            class="bx bx-menu text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
+            class="projects-mobile-menu bx bx-menu text-2xl cursor-pointer hover:bg-white/5 p-2 rounded-lg"
           ></i>
         </div>
         <div
@@ -235,11 +264,20 @@ const chatCategoryData = [
                             {index + 1 + ". " + message.title}
                         </div>
                         <p class="text-slate-100 font-light text-base mt-3">{message.description}</p>
-                        { message.code &&
-                            <p class="text-slate-100 font-light text-base mt-3"><span>Repo: </span><a class="text-blue-500 hover:underline" href={message.code}>{message.code}</a></p>
-                            }
-                        { message.demo &&
-                            <p class="text-slate-100 font-light text-base mt-3"><span>Demo: </span><a class="text-blue-500 hover:underline" href={message.demo}>{message.demo}</a></p>
+                        {
+                          message.sections.map(section => (
+                            <div>
+                               <div class="text-base text-white mb-2 font-semibold pt-5">
+                                  {section.title}
+                              </div>
+                               <p class="text-slate-100 font-light text-base mb-5">{section.content}</p>
+                            </div>
+                          ))
+                        }
+                        { message.links &&
+                          message.links.map(link => (
+                            <p class="text-slate-100 font-light text-base mt-3"><span class="font-medium">{link.title}: </span><a target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline" href={link.link}>{link.link}</a></p>
+                          ))
                         }
                         </div>
                     </div>
@@ -250,8 +288,8 @@ const chatCategoryData = [
             )
             }
         </div>
-        <div class="sticky bottom-0 max-w-3xl mx-auto pb-5 bg-[#212121] rounded-2xl">
-  <div class="relative mx-20 lg:mx-0 rounded-2xl bg-[#303030] px-4 py-3 mb-2">
+        <div class="sticky bottom-0 max-w-4xl mx-auto pb-5 bg-[#212121] rounded-2xl">
+  <div class="relative lg:mx-20 mx-20 mt-10 rounded-2xl bg-[#303030] px-4 py-3 mb-2">
     <div
       id="message-box"
       contenteditable="true"
@@ -291,6 +329,14 @@ const chatCategoryData = [
     pointer-events: none;
     display: block;
     color: rgba(255, 255, 255, 0.5)
+  }
+  #projects-navbar {
+    transition: width 0.3s linear;
+    overflow: hidden;
+  }
+
+  #projects-navbar.closed {
+    width: 0;
   }
 </style>
 
@@ -434,8 +480,6 @@ sendButton.addEventListener("click", () => {
       response = "All the randomly generated responses in Andrew's array has been used up!"
     }
 
-
-
     const responseMessageHTML = `
       <div class="max-w-3xl mx-auto py-1">
         <div class="flex items-start">
@@ -455,6 +499,26 @@ sendButton.addEventListener("click", () => {
     responding = false;
   }, 800);
 });
+
+  const mobileMenuBtn = document.querySelectorAll('.projects-mobile-menu');
+  const projectsNavbar = document.getElementById('projects-navbar');
+  const desktopMenuBtn = document.querySelectorAll(".projects-desktop-menu")
+
+  mobileMenuBtn.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.getElementById("mobile-menu-closed").classList.toggle('hidden')
+        document.getElementById("desktop-menu-closed").classList.toggle('hidden')
+        projectsNavbar.classList.toggle('closed');
+      });
+  })
+
+  desktopMenuBtn.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.getElementById("mobile-menu-closed").classList.toggle('hidden')
+        document.getElementById("desktop-menu-closed").classList.toggle('hidden')
+        projectsNavbar.classList.toggle('closed'); 
+      });
+  })
 
   });
 </script>
