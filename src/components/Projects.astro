@@ -341,6 +341,7 @@ const chatCategoryData = [
 </style>
 
 <script is:inline>
+
   document.addEventListener("DOMContentLoaded", () => {
     const chatSelectors = document.querySelectorAll(".chat-selector");
     const chatScroller = document.getElementById("chat-content-scroller")
@@ -520,5 +521,10 @@ sendButton.addEventListener("click", () => {
       });
   })
 
+  if (window.innerWidth < 768) {
+    document.getElementById("mobile-menu-closed").classList.toggle('hidden')
+        document.getElementById("desktop-menu-closed").classList.toggle('hidden')
+        projectsNavbar.classList.toggle('closed'); 
+  }
   });
 </script>
