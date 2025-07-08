@@ -105,9 +105,11 @@ const experienceData = [
     jobTitle: "That's all about me!",
   },
 ];
+
+const pageSizeOn = experienceData.length * 100
 ---
 
-<section id="about-container" class="relative h-[12000px]">
+<section id="about-container" class=`relative h-[${5000 + pageSizeOn}px]`>
   <div id="about" class="sticky top-3 h-[calc(100dvh-52px)] overflow-y-scroll">
     <div
       class="h-full bg-[url(/assets/images/wallpaper.jpg)]"
