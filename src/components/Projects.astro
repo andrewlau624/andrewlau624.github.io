@@ -91,9 +91,25 @@ const chatCategoryData = [
   },
   {
     name: "More",
-    chats: [
-
-    ],
+    chats: [{
+        name: "Andrew's Resume",
+        id: "resume",
+        chatData: [
+          {
+            title: "Resume",
+            description: "You can view Andrew Lau's resume at the link below!",
+            sections: [],
+            links: [
+              {
+                title: "Resume Link",
+                link: "https://docs.google.com/document/d/1TvYbQk8t6L7jwoTzvZzU9jAU1ztx2ec7pu2YPoqBsQw/edit?usp=sharing"
+              }
+            ]
+          }
+        ],
+        openingMessage: "Can you show me Andrew Lau's resume?",
+        openingResponse: "Sure! Here's a link to Andrew Lau's resume!",
+      }],
   },
 ];
 ---
