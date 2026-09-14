@@ -77,6 +77,8 @@ see is exactly what ships. The markdown behaves like an editor:
 - Enter continues a list or a quote, and an empty item ends it
 - Tab and Shift+Tab indent and outdent
 - Cmd or Ctrl with B or I, and the toolbar toggles rather than inserting
+- **Link** wraps whatever is selected, so the text carries the link. With
+  nothing selected it drops in `[text](url)` and leaves `text` picked out
 - Image and File upload to `assets/` and drop the markdown in for you
 - Cover picks the one image the list shows
 - maths, written as `$z_i$` inline or `$$ ... $$` on its own, rendered by
