@@ -4,7 +4,7 @@ window.POSTS = [
     "slug": "intro-to-llms",
     "title": "Intro to LLMs",
     "date": "2026-09-14",
-    "excerpt": "While many use it regularly, they may not know the inner workings of LLMs. On a high-level, LLMs are autoregressive models, meaning that the",
+    "excerpt": "A basic overview of LLM architecture.",
     "image": ""
   },
   {

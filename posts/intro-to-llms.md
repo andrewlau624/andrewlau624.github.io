@@ -1,7 +1,7 @@
 ---
 title: Intro to LLMs
 date: 2026-09-14
-excerpt: 
+excerpt: A basic overview of LLM architecture.
 image: 
 ---
 
