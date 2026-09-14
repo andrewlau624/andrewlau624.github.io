@@ -498,10 +498,12 @@ async function saveUpload(body) {
 
 /* stage everything, commit it, and push. a fresh clone, or a branch made by
    hand, can arrive with no upstream, so set one on the first push. */
-async function gitCommit(label) {
+async function gitCommit(label, paths) {
   if (!useGit) return "--no-git was set, nothing was committed";
 
-  const add = await run("git", ["add", "-A"]);
+  /* only the files this change owns, so a post never sweeps up whatever else
+     happens to be lying in the working tree */
+  const add = await run("git", ["add", "-A", "--"].concat(paths || ["."]));
   if (!add.ok) return "git add failed:\n  " + add.out.trim();
 
   const commit = await run("git", ["commit", "-m", label]);
@@ -519,7 +521,7 @@ async function gitCommit(label) {
 
 async function saveContent(state) {
   await writeFile(contentFile, serialize(state));
-  return "wrote content.js\n\n" + (await gitCommit("content: edit the page"));
+  return "wrote content.js\n\n" + (await gitCommit("content: edit the page", ["content.js"]));
 }
 
 /* --------------------------------------------------------------- server */
@@ -600,7 +602,7 @@ const server = http.createServer(async (req, res) => {
       const message =
         "wrote posts/" + saved.slug + ".md\n" +
         "rebuilt posts.js (" + posts.length + " posts)\n\n" +
-        (await gitCommit("post: " + (post.title || saved.slug)));
+        (await gitCommit("post: " + (post.title || saved.slug), ["posts", "posts.js", "assets"]));
       ok(res, { ok: true, slug: saved.slug, posts: posts, message: message });
     } catch (e) {
       fail(res, e.message);
@@ -616,7 +618,7 @@ const server = http.createServer(async (req, res) => {
       const message =
         "deleted posts/" + body.slug + ".md\n" +
         "rebuilt posts.js (" + posts.length + " posts)\n\n" +
-        (await gitCommit("post: delete " + body.slug));
+        (await gitCommit("post: delete " + body.slug, ["posts", "posts.js", "assets"]));
       ok(res, { ok: true, posts: posts, message: message });
     } catch (e) {
       fail(res, e.message);
