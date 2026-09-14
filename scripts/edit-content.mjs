@@ -255,7 +255,7 @@ const PAGE = `<!doctype html>
     <span class="edSheet__end">
       <label class="btn">Cover<input id="edPostCover" type="file" accept="image/*" style="display:none"></label>
       <button class="btn" id="edPostDelete">Delete</button>
-      <button class="btn btn--solid" id="edPostSave">Save</button>
+      <button class="btn btn--solid" id="edPostSave">Save &amp; push</button>
       <button class="btn" id="edPostBack">Back</button>
     </span>
   </div>

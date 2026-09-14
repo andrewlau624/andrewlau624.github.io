@@ -879,6 +879,7 @@
       posts = out.posts;
       renderPosts();
       el("edPostsStatus").textContent = posts.length + (posts.length === 1 ? " post" : " posts");
+      showMessage(out.message);
     });
   }
 
@@ -908,6 +909,7 @@
       posts = out.posts;
       renderPosts();
       closePost();
+      showMessage(out.message);
     }).catch(function (err) {
       save.disabled = false;
       showMessage("Failed: " + err.message);
@@ -926,6 +928,7 @@
       posts = out.posts;
       renderPosts();
       closePost();
+      showMessage(out.message);
     });
   });
 
