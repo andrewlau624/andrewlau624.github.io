@@ -148,16 +148,16 @@ window.PORTFOLIO = {
           "label": "Personal",
           "items": [
             {
-              "name": "Soccer",
-              "note": "Pickup games, weekends"
+              "name": "Hobbies",
+              "note": "Cars, Cooking, Soccer, Swimming",
+              "year": "",
+              "href": ""
             },
             {
-              "name": "Cars",
-              "note": "Track days and wrenching"
-            },
-            {
-              "name": "Swimming",
-              "note": "Laps, most mornings"
+              "name": "Favorite Movie",
+              "note": "18×2 Beyond Youthful Days",
+              "year": "2024",
+              "href": "https://www.imdb.com/title/tt31039829/"
             }
           ]
         }
