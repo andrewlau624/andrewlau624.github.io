@@ -817,9 +817,23 @@
     b.addEventListener("click", function () { toggleLine(b.getAttribute("data-line")); });
   });
 
+  /* wrap what is selected, so a link always has its text on it */
+  function insertLink(url) {
+    var t = el("edPostBody");
+    var s = t.selectionStart;
+    var e = t.selectionEnd;
+    var label = t.value.slice(s, e) || "text";
+    var insert = "[" + label + "](" + url + ")";
+
+    t.value = t.value.slice(0, s) + insert + t.value.slice(e);
+    /* leave the label selected, so it can be typed over */
+    focusRange(s + 1, s + 1 + label.length);
+    paintPost();
+  }
+
   el("edPostLink").addEventListener("click", function () {
     var url = window.prompt("Link to where?", "https://");
-    if (url) wrapMark("[](" + url + ")");
+    if (url) insertLink(url);
   });
 
   function uploadPost(kind) {

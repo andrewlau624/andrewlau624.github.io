@@ -21,13 +21,20 @@
     });
   }
 
+  function linkRel(href) {
+    return /^https?:\/\//i.test(href) ? ' target="_blank" rel="noreferrer"' : "";
+  }
+
   function inline(text) {
     return esc(text)
       .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img src="$2" alt="$1">')
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/\*([^*]+)\*/g, "<em>$1</em>")
-      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" rel="noreferrer">$1</a>');
+      /* a link with no text falls back to the address, so it is never blank */
+      .replace(/\[([^\]]*)\]\(([^)\s]+)\)/g, function (whole, label, href) {
+        return '<a href="' + href + '"' + linkRel(href) + ">" + (label || href) + "</a>";
+      });
   }
 
   var BULLET = /^(\s*)([-*+])\s+(.*)$/;

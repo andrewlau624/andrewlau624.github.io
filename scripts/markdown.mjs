@@ -20,13 +20,19 @@ export function esc(value) {
   });
 }
 
+function linkRel(href) {
+  return /^https?:\/\//i.test(href) ? ' target="_blank" rel="noreferrer"' : "";
+}
+
 export function renderInline(text) {
   return esc(text)
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img src="$2" alt="$1">')
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" rel="noreferrer">$1</a>');
+    /* a link with no text falls back to the address, so it is never blank */
+    .replace(/\[([^\]]*)\]\(([^)\s]+)\)/g, (whole, label, href) =>
+      '<a href="' + href + '"' + linkRel(href) + ">" + (label || href) + "</a>");
 }
 
 const BULLET = /^(\s*)([-*+])\s+(.*)$/;
