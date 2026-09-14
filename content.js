@@ -25,13 +25,15 @@ window.PORTFOLIO = {
           "items": [
             {
               "name": "Pacific",
-              "note": "Software Engineer",
-              "year": "2026 - Present"
+              "note": "Software Engineer Intern",
+              "year": "2026 - Present",
+              "href": ""
             },
             {
               "name": "Apple",
-              "note": "Machine Learning Engineer, contract",
-              "year": "2026"
+              "note": "Machine Learning Engineer (Contract)",
+              "year": "2026",
+              "href": ""
             },
             {
               "name": "UC Berkeley EECS",
@@ -45,13 +47,15 @@ window.PORTFOLIO = {
             },
             {
               "name": "Influcio",
-              "note": "Software Engineer",
-              "year": "2025"
+              "note": "Software Engineer Intern",
+              "year": "2025",
+              "href": ""
             },
             {
               "name": "Heart in Motion",
-              "note": "Technical Lead, full stack",
-              "year": "2022 - 2025"
+              "note": "Technical Lead, Full-stack Engineer",
+              "year": "2022 - 2025",
+              "href": ""
             }
           ]
         },
@@ -59,26 +63,22 @@ window.PORTFOLIO = {
           "label": "Projects",
           "items": [
             {
-              "name": "Chowtown",
-              "note": "Chinatown Hacks winner",
-              "year": "2026",
-              "href": "https://github.com/andrewlau624/chinatown-hacks-restaurant-project"
-            },
-            {
               "name": "NerfGuard",
-              "note": "Local AI gateway",
-              "year": "2026"
-            },
-            {
-              "name": "Picobot",
-              "note": "Email agent system",
-              "year": "2026"
+              "note": "Local AI gateway for token optimization.",
+              "year": "2026",
+              "href": "https://nerfguard.com/"
             },
             {
               "name": "Orpheus Live",
-              "note": "On device voice agent",
+              "note": "Simulating conversational cognition through Orpheus TTS.",
               "year": "2025",
               "href": "https://github.com/andrewlau624/orpheus-live"
+            },
+            {
+              "name": "Chowtown",
+              "note": "Chinatown Hacks winner.",
+              "year": "2025",
+              "href": "https://github.com/andrewlau624/chinatown-hacks-restaurant-project"
             }
           ]
         },
@@ -87,8 +87,9 @@ window.PORTFOLIO = {
           "items": [
             {
               "name": "UC Berkeley",
-              "note": "Computer Science, B.S.",
-              "year": "2025 - 2028"
+              "note": "Computer Science, B.A.",
+              "year": "2025 - 2028",
+              "href": ""
             }
           ]
         }
