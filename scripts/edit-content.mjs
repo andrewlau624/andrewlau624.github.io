@@ -465,7 +465,12 @@ async function saveContent(state) {
     if (!commit.ok && commit.out.indexOf("nothing to commit") === -1) {
       return report + "\n\ngit commit failed:\n  " + commit.out.trim();
     }
-    const push = await run("git", ["push"]);
+    /* a fresh clone, or a branch made by hand, can arrive with no upstream.
+       set one on the first push instead of failing. */
+    let push = await run("git", ["push"]);
+    if (!push.ok && /upstream/i.test(push.out)) {
+      push = await run("git", ["push", "--set-upstream", "origin", "HEAD"]);
+    }
     report += push.ok ? "\n\npushed to the repo" : "\n\ngit push failed:\n  " + push.out.trim();
   } else {
     report += "\n\n--no-git was set, nothing was committed";
