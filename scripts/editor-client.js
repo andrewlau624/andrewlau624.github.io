@@ -2,16 +2,16 @@
    scripts/editor-client.js
    --------------------------------------------------------------------------
    The editing layer behind npm run edit. It loads after render.js has drawn
-   the real page, then hands every field a small set of controls:
+   the real page, then gives every field a small, quiet control that sits
+   inside the thing it changes:
 
-     up, down        reorder it in its list
-     edit            change its fields
-     del             remove it
-     add             grow a list
+     edit   change it, on the spot
+     del    remove it, after a confirm
+     add    grow a list
 
-   On the page the controls sit in the right margin, in one column, so they
-   line up. The tab and link rows keep theirs inline, because they are one
-   line each. The writing list is the real blog list, with controls on it.
+   Reordering is not on the page. Open edit and the card carries up and down
+   as well, so the page itself stays the page. The writing list is the real
+   blog list, with its controls on each row's date line.
 
    Press Done and the server writes content.js, then commits and pushes.
    Saving a post writes posts/<slug>.md and rebuilds posts.js, so one Done
@@ -43,6 +43,8 @@
   var modalTitle = q("#edModalTitle");
   var modalFields = q("#edModalFields");
   var modalList = q("#edModalList");
+  var modalUp = q("#edModalUp");
+  var modalDown = q("#edModalDown");
   var applyBtn = q("#edApply");
   var statusEl = q("#edStatus");
 
@@ -65,25 +67,59 @@
     return { title: title, obj: obj, fields: fields };
   }
 
-  /* a target that can be moved and removed inside a list */
-  function listTarget(base, list, index) {
-    base.up = function () { move(list, index, index - 1); };
-    base.upOff = index === 0;
-    base.down = function () { move(list, index, index + 1); };
-    base.downOff = index === list.length - 1;
-    base.remove = function () { list.splice(index, 1); };
+  /* A target that lives in a list. Its place is looked up when it is used, so
+     a move inside the edit card never leaves a stale index behind. */
+  function listTarget(base, list, obj) {
+    base.up = function () {
+      var at = list.indexOf(obj);
+      if (at > 0) move(list, at, at - 1);
+    };
+    base.down = function () {
+      var at = list.indexOf(obj);
+      if (at > -1 && at < list.length - 1) move(list, at, at + 1);
+    };
+    base.upOff = function () { return list.indexOf(obj) === 0; };
+    base.downOff = function () { return list.indexOf(obj) === list.length - 1; };
+    base.remove = function () {
+      var at = list.indexOf(obj);
+      if (at > -1) list.splice(at, 1);
+    };
     return base;
   }
 
-  function itemTarget(item, list, index) {
+  function itemTarget(item, list) {
     return listTarget({
       title: "Item",
       obj: item,
       fields: [["name", "Name"], ["note", "Note"], ["year", "Year"], ["href", "Link"]]
-    }, list, index);
+    }, list, item);
   }
 
-  function carTarget(car, index) {
+  function linkTarget(link) {
+    return listTarget({
+      title: "Link",
+      obj: link,
+      fields: [["label", "Label"], ["href", "Link"]]
+    }, S.links, link);
+  }
+
+  function tabTarget(tab) {
+    return listTarget({
+      title: "Tab",
+      obj: tab,
+      fields: [["label", "Label"], ["id", "Id"]]
+    }, S.tabs, tab);
+  }
+
+  function groupTarget(tab, group) {
+    return listTarget({
+      title: "Group",
+      obj: group,
+      fields: [["label", "Label"]]
+    }, tab.groups, group);
+  }
+
+  function carTarget(car) {
     return listTarget({
       title: "Car",
       obj: car,
@@ -96,65 +132,41 @@
       ],
       afterSave: function () { openList("cars"); },
       cancelTo: function () { openList("cars"); }
-    }, S.car.models, index);
+    }, S.car.models, car);
   }
 
-  function linkTarget(link, index) {
-    return listTarget({
-      title: "Link",
-      obj: link,
-      fields: [["label", "Label"], ["href", "Link"]]
-    }, S.links, index);
-  }
-
-  function tabTarget(tab, index) {
-    return listTarget({
-      title: "Tab",
-      obj: tab,
-      fields: [["label", "Label"], ["id", "Id"]]
-    }, S.tabs, index);
-  }
-
-  function groupTarget(tab, group, index) {
-    return listTarget({
-      title: "Group",
-      obj: group,
-      fields: [["label", "Label"]]
-    }, tab.groups, index);
-  }
-
-  function additionsOf(kind, make) {
+  function addition(label, make) {
     return {
-      addLabel: kind,
+      addLabel: label,
       add: function () { return make(); }
     };
   }
 
-  var linkAdd = additionsOf("add link", function () {
+  var linkAdd = addition("+ add link", function () {
     var link = { label: "New link", href: "https://" };
     S.links.push(link);
-    return linkTarget(link, S.links.length - 1);
+    return linkTarget(link);
   });
 
-  var tabAdd = additionsOf("add tab", function () {
+  var tabAdd = addition("+ add tab", function () {
     var tab = { id: "tab-" + Date.now().toString(36), label: "New tab", groups: [{ label: "", items: [] }] };
     S.tabs.push(tab);
-    return tabTarget(tab, S.tabs.length - 1);
+    return tabTarget(tab);
   });
 
   function groupAdd(tab) {
-    return additionsOf("add group", function () {
+    return addition("+ add group", function () {
       var group = { label: "New group", items: [] };
       tab.groups.push(group);
-      return groupTarget(tab, group, tab.groups.length - 1);
+      return groupTarget(tab, group);
     });
   }
 
   function itemAdd(group) {
-    return additionsOf("add item", function () {
+    return addition("+ add item", function () {
       var item = { name: "New item", note: "", year: "" };
       group.items.push(item);
-      return itemTarget(item, group.items, group.items.length - 1);
+      return itemTarget(item, group.items);
     });
   }
 
@@ -192,24 +204,19 @@
 
   function controls(t) {
     var items = [];
-    if (t.up) items.push(["↑", function () { t.up(); redraw(); }, "Move up", t.upOff]);
-    if (t.down) items.push(["↓", function () { t.down(); redraw(); }, "Move down", t.downOff]);
-    if (t.fields) items.push(["edit", function () { openForm(t); }, "Edit " + t.title.toLowerCase()]);
-    if (t.remove) items.push(["del", function () { t.remove(); redraw(); }, "Delete " + t.title.toLowerCase()]);
+    if (t.fields) items.push(["edit", function () { openForm(t); }, "Edit"]);
+    if (t.remove) items.push(["del", function () { t.remove(); redraw(); }, "Delete"]);
     if (t.add) items.push([t.addLabel || "add", function () { runAdd(t); }, t.addLabel]);
     return cluster(items);
   }
 
-  /* a block hands its controls to the right margin. placeControls lines them up */
-  function intoBlock(node, t) {
-    if (!node) return;
-    node.classList.add("edBlock");
-    node.appendChild(controls(t));
-  }
+  /* place the controls inside the thing they change */
+  function into(node, t) { if (node) node.appendChild(controls(t)); }
 
+  /* a line of its own, under a list */
   function addBlock(t) {
     var wrap = document.createElement("div");
-    wrap.className = "edBlock edAdd";
+    wrap.className = "edAdd";
     wrap.appendChild(controls(t));
     return wrap;
   }
@@ -224,49 +231,24 @@
     if (node && node.parentNode) node.parentNode.insertBefore(next, node.nextSibling);
   }
 
-  /* line every block control up in the right margin of its container */
-  function placeControls() {
-    qa(".edBlock > .edCtl").forEach(function (ctl) {
-      var block = ctl.parentNode;
-      var host = block.closest(".foot") || block.closest(".page") || block.closest(".blog");
-      if (!host) return;
-      var b = block.getBoundingClientRect();
-      var h = host.getBoundingClientRect();
-      ctl.style.top = Math.round(b.top - h.top + b.height / 2) + "px";
-      ctl.style.left = Math.round(h.width + 14) + "px";
-    });
-  }
-
   function annotate() {
     S = window.PORTFOLIO;
 
     /* the intro: name, role, line, and the location in the footer */
-    intoBlock(q("#intro .name"), target("Name", S.meta, [["name", "Name"]]));
-    intoBlock(q("#intro .role"), target("Role", S.meta, [["role", "Role"], ["school", "School"]]));
-    intoBlock(q("#intro .bio"), target("Intro line", S.intro, [["bio", "Line"]]));
-    intoBlock(q("#foot"), target("Location", S.meta, [["location", "Location"]]));
+    into(q("#intro .name"), target("Name", S.meta, [["name", "Name"]]));
+    into(q("#intro .role"), target("Role", S.meta, [["role", "Role"], ["school", "School"]]));
+    into(q("#intro .bio"), target("Intro line", S.intro, [["bio", "Line"]]));
+    into(q("#foot"), target("Location", S.meta, [["location", "Location"]]));
 
-    /* the links row stays on one line, so its controls sit inline */
+    /* the links row */
     qa("#links a").forEach(function (a, i) {
-      if (!S.links[i]) return;
-      after(a, controls(linkTarget(S.links[i], i)));
+      if (S.links[i]) after(a, controls(linkTarget(S.links[i])));
     });
     var linksNav = q("#links");
     if (linksNav) linksNav.appendChild(addInline(linkAdd));
 
-    /* the tabs, and the blog tab, also on one line */
-    qa("#tabs .tab[data-tab]").forEach(function (buttonEl) {
-      var tab = tabById(buttonEl.getAttribute("data-tab"));
-      if (!tab) return;
-      after(buttonEl, controls(tabTarget(tab, S.tabs.indexOf(tab))));
-    });
-    after(q("#tabs .tab--link"), controls({
-      title: "Blog tab",
-      obj: S.blog,
-      fields: [["label", "Label"], ["href", "Link"]]
-    }));
-    var tabsNav = q("#tabs");
-    if (tabsNav) tabsNav.appendChild(addInline(tabAdd));
+    /* the tab row stays the tab row. the tabs are managed from the card,
+       behind the tabs button, so the row reads exactly like the site. */
 
     /* the panels: groups and their items */
     qa("#panels .panel[data-panel]").forEach(function (panel) {
@@ -277,18 +259,20 @@
         var group = tab.groups[gi];
         if (!group) return;
 
+        /* a group with no label still needs a line to hang its controls on */
         var labelEl = q(".label", groupEl);
         if (!labelEl) {
           labelEl = document.createElement("p");
           labelEl.className = "label label--blank";
           groupEl.insertBefore(labelEl, groupEl.firstChild);
         }
-        intoBlock(labelEl, groupTarget(tab, group, gi));
+        into(labelEl, groupTarget(tab, group));
 
         var rowsEl = q(".rows", groupEl);
         if (rowsEl) {
           qa("li", rowsEl).forEach(function (li, ii) {
-            if (group.items[ii]) intoBlock(li, itemTarget(group.items[ii], group.items, ii));
+            var item = group.items[ii];
+            if (item) into(q(".row", li) || li, itemTarget(item, group.items));
           });
           after(rowsEl, addBlock(itemAdd(group)));
         }
@@ -297,13 +281,24 @@
       panel.appendChild(addBlock(groupAdd(tab)));
 
       var player = q(".player", panel);
-      if (player) intoBlock(player, target("Song", S.song, [["url", "Spotify link"]]));
+      if (player) into(player, target("Song", S.song, [["url", "Spotify link"]]));
     });
-
-    placeControls();
   }
 
   /* ------------------------------------------------------------- the modal */
+
+  function refreshMove() {
+    var t = formTarget;
+    if (!t || !t.up) {
+      modalUp.style.display = "none";
+      modalDown.style.display = "none";
+      return;
+    }
+    modalUp.style.display = "";
+    modalDown.style.display = "";
+    modalUp.disabled = t.upOff();
+    modalDown.disabled = t.downOff();
+  }
 
   function openForm(t) {
     formTarget = t;
@@ -328,20 +323,71 @@
       modalFields.appendChild(label);
     });
 
+    refreshMove();
     modal.classList.add("edModal--on");
     var first = q("input", modalFields);
     if (first) { first.focus(); first.select(); }
   }
 
   function openList(kind) {
-    if (kind !== "cars") return;
     formTarget = null;
-    modalTitle.textContent = "Cars";
+    modalTitle.textContent = kind === "tabs" ? "Tabs" : "Cars";
     modalFields.innerHTML = "";
     modalFields.style.display = "none";
     applyBtn.style.display = "none";
-    renderCarList();
+    modalUp.style.display = "none";
+    modalDown.style.display = "none";
+    modalList.innerHTML = "";
+    if (kind === "tabs") renderTabsList();
+    else renderCarList();
     modal.classList.add("edModal--on");
+  }
+
+  /* a small list row: a name, a quiet note, and its buttons */
+  function listRow(name, note, buttons) {
+    var row = document.createElement("div");
+    row.className = "edList__row";
+
+    var title = document.createElement("span");
+    title.textContent = name;
+    row.appendChild(title);
+
+    var meta = document.createElement("em");
+    meta.textContent = note;
+    row.appendChild(meta);
+
+    buttons.forEach(function (b) { if (b) row.appendChild(b); });
+    return row;
+  }
+
+  function renderTabsList() {
+    modalList.innerHTML = "";
+
+    S.tabs.forEach(function (tab, i) {
+      modalList.appendChild(listRow(tab.label, tab.groups.length + (tab.groups.length === 1 ? " group" : " groups"), [
+        button("↑", function () { move(S.tabs, i, i - 1); redraw(); renderTabsList(); }, "Move up", i === 0),
+        button("↓", function () { move(S.tabs, i, i + 1); redraw(); renderTabsList(); }, "Move down", i === S.tabs.length - 1),
+        button("edit", function () { openForm(tabTarget(tab)); }),
+        button("delete", function () { S.tabs.splice(i, 1); redraw(); renderTabsList(); })
+      ]));
+    });
+
+    /* the blog tab is not a tab, but it sits in the same row */
+    var blogTarget = {
+      title: "Blog tab",
+      obj: S.blog,
+      fields: [["label", "Label"], ["href", "Link"]],
+      afterSave: function () { openList("tabs"); },
+      cancelTo: function () { openList("tabs"); }
+    };
+    modalList.appendChild(listRow(S.blog.label, "the blog link in the row", [
+      button("edit", function () { openForm(blogTarget); })
+    ]));
+
+    var addRow = document.createElement("div");
+    addRow.className = "edList__row";
+    addRow.appendChild(button("add tab", function () { runAdd(tabAdd); }));
+    modalList.appendChild(addRow);
   }
 
   function renderCarList() {
@@ -361,7 +407,7 @@
       row.appendChild(meta);
       row.appendChild(button("↑", function () { move(S.car.models, i, i - 1); redraw(); renderCarList(); }, "Move up", i === 0));
       row.appendChild(button("↓", function () { move(S.car.models, i, i + 1); redraw(); renderCarList(); }, "Move down", i === S.car.models.length - 1));
-      row.appendChild(button("edit", function () { openForm(carTarget(car, i)); }));
+      row.appendChild(button("edit", function () { openForm(carTarget(car)); }));
       row.appendChild(button("delete", function () {
         S.car.models.splice(i, 1);
         redraw();
@@ -377,7 +423,7 @@
       var car = { name: "New car", src: "assets/", color: "#a03328", accel: 10, top: 340 };
       S.car.models.push(car);
       redraw();
-      openForm(carTarget(car, S.car.models.length - 1));
+      openForm(carTarget(car));
     }));
     modalList.appendChild(addRow);
   }
@@ -408,6 +454,8 @@
     modalFields.innerHTML = "";
     modalFields.style.display = "none";
     applyBtn.style.display = "none";
+    modalUp.style.display = "none";
+    modalDown.style.display = "none";
     modalList.innerHTML = "";
 
     var body = document.createElement("p");
@@ -419,6 +467,20 @@
 
     modal.classList.add("edModal--on");
   }
+
+  modalUp.addEventListener("click", function () {
+    if (!formTarget || !formTarget.up) return;
+    formTarget.up();
+    redraw();
+    refreshMove();
+  });
+
+  modalDown.addEventListener("click", function () {
+    if (!formTarget || !formTarget.down) return;
+    formTarget.down();
+    redraw();
+    refreshMove();
+  });
 
   q("#edCancel").addEventListener("click", function () {
     if (formTarget && formTarget.cancelTo) formTarget.cancelTo();
@@ -449,14 +511,6 @@
     else annotate();
   }
 
-  /* keep the controls lined up when the page changes shape */
-  window.addEventListener("resize", placeControls);
-  window.addEventListener("load", placeControls);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeControls);
-  document.addEventListener("click", function (e) {
-    if (e.target.closest && e.target.closest(".tab")) setTimeout(placeControls, 0);
-  }, true);
-
   /* ========================================================= the writing == */
 
   var posts = [];
@@ -465,6 +519,9 @@
   var pickerKind = "";
 
   function openPosts() {
+    /* the sheet is the real blog page, down to the title and the note */
+    el("edPostsTitle").textContent = S.blog.label;
+    el("edPostsNote").textContent = S.blog.note || "";
     el("edPosts").classList.add("edSheet--on");
     loadPosts();
   }
@@ -482,6 +539,10 @@
     }).catch(function () {
       el("edPostsStatus").textContent = "could not read the posts";
     });
+  }
+
+  function postButton(label, onClick, title) {
+    return button(label, onClick, title);
   }
 
   function renderPosts() {
@@ -502,9 +563,17 @@
     }
 
     posts.forEach(function (p) {
+      /* the row is the blog's row. its controls ride the date line, so the
+         title and the excerpt keep the blog's own width */
       var li = document.createElement("li");
-      var row = document.createElement("div");
-      row.className = "post post--edit";
+
+      var row = document.createElement("a");
+      row.className = "post";
+      row.href = "post.html?p=" + p.slug;
+      row.addEventListener("click", function (e) {
+        e.preventDefault();
+        openPost(p);
+      });
 
       if (p.image) {
         var thumb = document.createElement("span");
@@ -516,15 +585,25 @@
       var text = document.createElement("span");
       text.className = "post__text";
 
+      var head = document.createElement("span");
+      head.className = "post__head";
+
       var date = document.createElement("span");
       date.className = "post__date";
       date.textContent = p.date || "no date";
+      head.appendChild(date);
+
+      var ctl = document.createElement("span");
+      ctl.className = "edCtl";
+      ctl.appendChild(postButton("edit", function () { openPost(p); }, "Edit this post"));
+      ctl.appendChild(postButton("del", function () { removePost(p); }, "Delete this post"));
+      head.appendChild(ctl);
 
       var title = document.createElement("span");
       title.className = "post__title";
       title.textContent = p.title;
 
-      text.appendChild(date);
+      text.appendChild(head);
       text.appendChild(title);
 
       if (p.excerpt) {
@@ -535,11 +614,6 @@
       }
 
       row.appendChild(text);
-      row.appendChild(cluster([
-        ["edit", function () { openPost(p); }, "Edit this post"],
-        ["del", function () { removePost(p); }, "Delete this post"]
-      ]));
-
       li.appendChild(row);
       list.appendChild(li);
     });
@@ -857,6 +931,7 @@
 
   /* ============================================================== the dock */
 
+  q("#edTabs").addEventListener("click", function () { openList("tabs"); });
   q("#edCars").addEventListener("click", function () { openList("cars"); });
 
   q("#edDone").addEventListener("click", function () {

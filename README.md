@@ -44,23 +44,23 @@ Or `npm run serve`, which is the same command.
 npm run edit
 ```
 
-That opens an editor at `localhost:4174`. It is the real page, with a small
-control beside every field on it:
+That opens an editor at `localhost:4174`. It is the real page, with a small,
+quiet control inside every thing on it:
 
 - **text** name, role, line, and the location in the footer
-- **links** edit, delete, reorder, and add
-- **tabs** edit, delete, reorder, and add, plus the blog tab
-- **groups** the category labels, with edit, delete, reorder, and add
-- **items** every row, with edit, delete, reorder, and add
+- **links** edit, delete, and add, on the links row
+- **groups** the category labels, with edit, delete, and add
+- **items** every row, with edit, delete, and add
 - **the song** the Spotify link in the Personal tab
+- **the tabs** behind the tabs button, with reorder, plus the blog tab
 - **the cars** behind the cars button, with reorder
 - **the writing** behind the posts button, drawn as the blog list itself
 
-The controls are always visible, sitting next to the thing they change. Each
-one has up and down arrows to move it within its list. On the page they sit in
-one column in the right margin, so they line up down the side. Press **Done**
-and it writes `content.js`, then runs `git add`, `git commit` and `git push`.
-If git fails it prints the command to run by hand.
+Editing opens a card with that thing's fields, and the card carries **up** and
+**down** so it can be moved in its list, keeping the page itself free of
+arrows. The tab row is left alone, since tabs are managed from their card.
+Press **Done** and it writes `content.js`, then runs `git add`, `git commit`
+and `git push`. If git fails it prints the command to run by hand.
 
 Flags: `--port 4174`, `--no-git`, `--no-open`.
 

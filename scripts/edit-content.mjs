@@ -106,44 +106,55 @@ const PAGE = `<!doctype html>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 <style>
-  /* The page keeps its shape. Per-item controls sit in the right margin, in
-     one column down the side, placed by editor-client.js. */
+  /* The page keeps its shape. Every control sits inside the thing it changes,
+     kept small and quiet so it reads as part of the page. */
   html, body { height:auto; min-height:100svh; overflow:auto; }
   .panels { max-height:none; overflow:visible; margin-right:0; padding-right:0; }
   .car canvas, .player iframe { pointer-events:none; }
 
-  .edCtl { display:inline-flex; align-items:center; gap:2px; vertical-align:middle; }
-  .edCtl button { min-width:30px; height:19px; padding:0 5px; box-sizing:border-box; text-align:center;
-                  font-family:inherit; font-size:.56rem; letter-spacing:.08em; text-transform:uppercase;
-                  color:var(--fg-3); background:none; border:1px solid var(--rule); border-radius:2px;
-                  cursor:pointer; white-space:nowrap;
-                  transition:color .15s ease, border-color .15s ease, background .15s ease; }
-  .edCtl button:hover { color:var(--bg); background:var(--fg); border-color:var(--fg); }
-  .edCtl button:disabled { opacity:.26; cursor:default; }
-  .edCtl button:disabled:hover { color:var(--fg-3); background:none; border-color:var(--rule); }
+  .edCtl { display:inline-flex; align-items:center; gap:.75rem; margin-left:.85rem;
+           vertical-align:middle; white-space:nowrap; }
+  .edCtl button { background:none; border:0; padding:0; font-family:inherit; font-size:.6rem;
+                  letter-spacing:.16em; text-transform:uppercase; color:var(--fg-3);
+                  cursor:pointer; transition:color .15s ease; }
+  .edCtl button:hover { color:var(--fg); }
+  .edCtl button:disabled { opacity:.25; cursor:default; }
+  .edCtl button:disabled:hover { color:var(--fg-3); }
 
-  /* a block hands its controls to the right margin, so they all line up */
-  .edBlock > .edCtl { position:absolute; margin:0; white-space:nowrap; transform:translateY(-50%); }
-  .edAdd { min-height:1.5em; }
+  /* a line of its own, for adding to a list */
+  .edAdd { margin-top:.25rem; }
+  .edAdd .edCtl { margin-left:0; }
   .label--blank { min-height:1.1em; }
 
-  /* the tab and link rows are one line each, so their controls stay inline */
-  .tabs .edCtl, .links .edCtl { margin-left:8px; }
+  /* an item row keeps its year on the right, with the controls after it */
+  .panels .row { justify-content:flex-start; }
+  .panels .row__year { margin-left:auto; }
+
+  /* the blog row puts its controls on the date line, so the title and the
+     excerpt keep the blog's own width and line breaks */
+  .post__head { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; }
+  .post__head .edCtl { margin-left:0; }
+
+  /* the tab and link rows are one line each */
+  .tabs .edCtl, .links .edCtl { margin-left:.85rem; }
 
   /* the dock that holds Done */
   .edDock { position:fixed; right:1.25rem; bottom:1.25rem; z-index:41; display:flex; align-items:center; gap:.6rem; }
   .edDock__hint { font-size:.72rem; color:var(--fg-3); }
 
-  /* a sheet fills the screen. the writing one is just a page. */
+  /* A sheet carries the page's own grain, so it reads like a page of the
+     site and not a flat overlay. */
   .edSheet { position:fixed; inset:0; z-index:45; display:none; background:var(--bg); overflow:auto; }
+  .edSheet::before {
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.16;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
   .edSheet--on { display:block; }
   .edSheet--fill { overflow:hidden; }
   .edSheet--fill.edSheet--on { display:flex; flex-direction:column; }
   .edRow { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
   .edRow__end { display:flex; align-items:center; gap:.6rem; }
-
-  /* the writing list, in the blog's own clothes */
-  .post--edit .edCtl { margin-left:auto; align-self:center; }
+  .edRow__count { font-size:.78rem; color:var(--fg-3); }
 
   .edSheet__bar { display:flex; align-items:center; gap:.9rem; padding:16px 22px; border-bottom:1px solid var(--rule); }
   .edSheet__title { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--fg); }
@@ -186,7 +197,8 @@ const PAGE = `<!doctype html>
   .edModal__fields input { width:100%; background:none; border:0; border-bottom:1px solid var(--rule); color:var(--fg);
                            font-family:var(--font); font-size:1rem; padding:3px 0 6px; outline:none; color-scheme:dark; }
   .edModal__fields input:focus { border-bottom-color:var(--fg-3); }
-  .edModal__actions { display:flex; justify-content:flex-end; gap:.6rem; margin-top:24px; }
+  .edModal__actions { display:flex; align-items:center; justify-content:flex-end; gap:.6rem; margin-top:24px; }
+  .edGrow { flex:1 1 auto; }
   .edList { margin-top:16px; }
   .edList__row { display:flex; align-items:center; gap:1rem; padding:9px 0; border-top:1px solid var(--rule); }
   .edList__row span { flex:1 1 auto; font-size:.95rem; }
@@ -212,6 +224,7 @@ const PAGE = `<!doctype html>
 
 <div class="edDock">
   <span class="edDock__hint" id="edStatus">editing</span>
+  <button class="btn" id="edTabs">tabs</button>
   <button class="btn" id="edPostsBtn">posts</button>
   <button class="btn" id="edCars">cars</button>
   <button class="btn btn--solid" id="edDone">Done</button>
@@ -225,11 +238,12 @@ const PAGE = `<!doctype html>
         Back
       </a>
       <span class="edRow__end">
+        <span class="edRow__count" id="edPostsStatus"></span>
         <button class="btn btn--solid" id="edPostsNew">New post</button>
       </span>
     </div>
-    <h1 class="blog__title">Writing</h1>
-    <p class="blog__note" id="edPostsStatus"></p>
+    <h1 class="blog__title" id="edPostsTitle"></h1>
+    <p class="blog__note" id="edPostsNote"></p>
     <ul class="blog__list" id="edPostsList"></ul>
   </main>
 </div>
@@ -285,6 +299,9 @@ const PAGE = `<!doctype html>
     <div class="edModal__fields" id="edModalFields"></div>
     <div class="edList" id="edModalList"></div>
     <div class="edModal__actions">
+      <button class="btn" id="edModalUp" title="Move up">↑</button>
+      <button class="btn" id="edModalDown" title="Move down">↓</button>
+      <span class="edGrow"></span>
       <button class="btn" id="edCancel">Cancel</button>
       <button class="btn btn--solid" id="edApply">Apply</button>
     </div>
