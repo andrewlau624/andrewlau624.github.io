@@ -642,6 +642,40 @@ a.post:hover .post__title {
 }
 
 .prose .math .katex-display { margin: 0; }
+
+/* tables, with the same hairline rules as the rest of the page */
+.prose table {
+  width: 100%;
+  margin: 1.3rem 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th,
+.prose td {
+  padding: 0.42rem 0.7rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+
+.prose th:first-child,
+.prose td:first-child { padding-left: 0; }
+.prose th:last-child,
+.prose td:last-child { padding-right: 0; }
+
+.prose thead th {
+  border-bottom-color: var(--fg-3);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.prose tbody td {
+  font-size: 0.94rem;
+  color: var(--fg-2);
+}
 .prose ul, .prose ol { margin: 0.9rem 0; padding-left: 1.2rem; }
 .prose li { margin: 0.3rem 0; }
 

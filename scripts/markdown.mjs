@@ -37,6 +37,42 @@ const RULE = /^\s*(-{3,}|\*{3,}|_{3,})\s*$/;
 const FENCE = /^\s*```/;
 const MATH = /^\s*\$\$/;
 const MATH_END = /\$\$\s*$/;
+const TABLE_SEP = /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)+\|?\s*$/;
+
+/* a table is a row, a rule, then rows. the rule carries the alignment. */
+function tableAt(lines, i) {
+  return i + 1 < lines.length && lines[i].indexOf("|") !== -1 && TABLE_SEP.test(lines[i + 1]);
+}
+
+function splitRow(line) {
+  let s = String(line).trim();
+  if (s.charAt(0) === "|") s = s.slice(1);
+  if (s.charAt(s.length - 1) === "|") s = s.slice(0, -1);
+  return s.split("|").map((cell) => cell.trim());
+}
+
+function tableAlign(sep) {
+  return splitRow(sep).map((cell) => {
+    const left = cell.charAt(0) === ":";
+    const right = cell.charAt(cell.length - 1) === ":";
+    if (left && right) return "center";
+    if (right) return "right";
+    if (left) return "left";
+    return "";
+  });
+}
+
+function renderTable(header, align, rows) {
+  const cell = (tag, text, at) => {
+    const style = align[at] ? ' style="text-align:' + align[at] + '"' : "";
+    return "<" + tag + style + ">" + renderInline(text) + "</" + tag + ">";
+  };
+  const head = header.map((text, at) => cell("th", text, at)).join("");
+  const body = rows
+    .map((row) => "<tr>" + row.map((text, at) => cell("td", text, at)).join("") + "</tr>")
+    .join("");
+  return "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+}
 
 /* a $$ block is kept as one piece, so it is not folded into a paragraph.
    KaTeX renders it in the preview and on the page. */
@@ -151,6 +187,19 @@ export function renderMarkdown(markdown) {
       continue;
     }
 
+    if (tableAt(lines, i)) {
+      const header = splitRow(line);
+      const align = tableAlign(lines[i + 1]);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && !isBlank(lines[i]) && lines[i].indexOf("|") !== -1 && !tableAt(lines, i)) {
+        rows.push(splitRow(lines[i]));
+        i += 1;
+      }
+      out.push(renderTable(header, align, rows));
+      continue;
+    }
+
     if (QUOTE.test(line)) {
       const buf = [];
       while (i < lines.length && QUOTE.test(lines[i])) {
@@ -184,7 +233,8 @@ export function renderMarkdown(markdown) {
       !QUOTE.test(lines[i]) &&
       !FENCE.test(lines[i]) &&
       !RULE.test(lines[i]) &&
-      !MATH.test(lines[i])
+      !MATH.test(lines[i]) &&
+      !tableAt(lines, i)
     ) {
       buf.push(lines[i].trim());
       i += 1;

@@ -81,6 +81,8 @@ see is exactly what ships. The markdown behaves like an editor:
 - Cover picks the one image the list shows
 - maths, written as `$z_i$` inline or `$$ ... $$` on its own, rendered by
   KaTeX. A `$$` block is kept out of the paragraph flow, so it stays a block
+- tables, written as `| a | b |` with a `|---|---:|` rule under the header.
+  The rule sets the alignment, and the numbers line up on tabular figures
 
 **Save & push** writes `posts/<slug>.md`, saves the cover, rebuilds
 `posts.js`, then commits and pushes. Deleting a post does the same. The

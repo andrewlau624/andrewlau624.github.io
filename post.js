@@ -38,6 +38,42 @@
   var FENCE = /^\s*```/;
   var MATH = /^\s*\$\$/;
   var MATH_END = /\$\$\s*$/;
+  var TABLE_SEP = /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)+\|?\s*$/;
+
+  /* a table is a row, a rule, then rows. the rule carries the alignment. */
+  function tableAt(lines, i) {
+    return i + 1 < lines.length && lines[i].indexOf("|") !== -1 && TABLE_SEP.test(lines[i + 1]);
+  }
+
+  function splitRow(line) {
+    var s = String(line).trim();
+    if (s.charAt(0) === "|") s = s.slice(1);
+    if (s.charAt(s.length - 1) === "|") s = s.slice(0, -1);
+    return s.split("|").map(function (cell) { return cell.trim(); });
+  }
+
+  function tableAlign(sep) {
+    return splitRow(sep).map(function (cell) {
+      var left = cell.charAt(0) === ":";
+      var right = cell.charAt(cell.length - 1) === ":";
+      if (left && right) return "center";
+      if (right) return "right";
+      if (left) return "left";
+      return "";
+    });
+  }
+
+  function renderTable(header, align, rows) {
+    function cell(tag, text, at) {
+      var style = align[at] ? ' style="text-align:' + align[at] + '"' : "";
+      return "<" + tag + style + ">" + inline(text) + "</" + tag + ">";
+    }
+    var head = header.map(function (text, at) { return cell("th", text, at); }).join("");
+    var body = rows.map(function (row) {
+      return "<tr>" + row.map(function (text, at) { return cell("td", text, at); }).join("") + "</tr>";
+    }).join("");
+    return "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+  }
 
   /* a $$ block is kept as one piece, so it is not folded into a paragraph.
      KaTeX renders it on the page and in the editor preview. */
@@ -139,6 +175,19 @@
         continue;
       }
 
+      if (tableAt(lines, i)) {
+        var header = splitRow(line);
+        var align = tableAlign(lines[i + 1]);
+        i += 2;
+        var rows = [];
+        while (i < lines.length && !isBlank(lines[i]) && lines[i].indexOf("|") !== -1 && !tableAt(lines, i)) {
+          rows.push(splitRow(lines[i]));
+          i += 1;
+        }
+        out.push(renderTable(header, align, rows));
+        continue;
+      }
+
       if (QUOTE.test(line)) {
         var quote = [];
         while (i < lines.length && QUOTE.test(lines[i])) {
@@ -170,7 +219,8 @@
         !QUOTE.test(lines[i]) &&
         !FENCE.test(lines[i]) &&
         !RULE.test(lines[i]) &&
-        !MATH.test(lines[i])
+        !MATH.test(lines[i]) &&
+        !tableAt(lines, i)
       ) {
         para.push(lines[i].trim());
         i += 1;
