@@ -1,0 +1,10 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "edit": "node scripts/edit-content.mjs",
+    "build:posts": "node scripts/build-posts.mjs",
+    "serve": "python3 -m http.server 8001"
+  }
+}
