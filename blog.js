@@ -2,7 +2,7 @@
    blog.js  |  the blog list
    --------------------------------------------------------------------------
    Renders window.POSTS, which is generated from the markdown files in posts/
-   by scripts/build-posts.mjs. Add a post with `npm run new`.
+   by scripts/build-posts.mjs. Add a post with `npm run edit`.
    ========================================================================== */
 
 (function () {
@@ -31,7 +31,7 @@
 
   if (!posts.length) {
     list.innerHTML = '<li><div class="post"><span class="post__excerpt">' +
-      "No posts yet. Run npm run new to write one.</span></div></li>";
+      "No posts yet.</span></div></li>";
     return;
   }
 
