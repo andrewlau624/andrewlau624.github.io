@@ -275,7 +275,21 @@ function init() {
     fit();
   }
 
+  /* typing in a field is not driving. this matters most in the editor, where
+     space, the arrows, and w a s d would otherwise never reach the input. */
+  function isTyping(e) {
+    const target = e.target;
+    if (!target || !target.tagName) return false;
+    return (
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.tagName === "SELECT" ||
+      target.isContentEditable === true
+    );
+  }
+
   window.addEventListener("keydown", function (e) {
+    if (isTyping(e)) return;
     keys[e.key] = true;
     if (DRIVE_KEYS.indexOf(e.key) !== -1) {
       enterDrive();

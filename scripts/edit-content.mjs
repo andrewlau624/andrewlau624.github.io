@@ -7,8 +7,9 @@
    small control beside every field, and it holds the writing too.
 
      the page      name, role, line, location, links, tabs, groups, items,
-                   the song, and the three cars
-     the writing   add, edit and delete posts, with the real post preview
+                   the song, and the three cars. every control can reorder.
+     the writing   add, edit and delete posts, in the blog's own clothes,
+                   with the real post preview
 
    Press Done and it writes content.js, then git add, commit and push.
    Saving a post writes posts/<slug>.md and rebuilds posts.js, so the single
@@ -99,47 +100,55 @@ const PAGE = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Edit</title>
 <meta name="color-scheme" content="dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 <style>
-  /* the page is untouched. these controls sit beside everything on it. */
+  /* The page keeps its shape. Per-item controls sit in the right margin, in
+     one column down the side, placed by editor-client.js. */
   html, body { height:auto; min-height:100svh; overflow:auto; }
+  .panels { max-height:none; overflow:visible; margin-right:0; padding-right:0; }
   .car canvas, .player iframe { pointer-events:none; }
 
-  .edCtl { display:inline-flex; align-items:center; gap:3px; margin-left:8px; vertical-align:middle; }
-  .edCtl button { font-family:inherit; font-size:.56rem; letter-spacing:.1em; text-transform:uppercase;
+  .edCtl { display:inline-flex; align-items:center; gap:2px; vertical-align:middle; }
+  .edCtl button { min-width:30px; height:19px; padding:0 5px; box-sizing:border-box; text-align:center;
+                  font-family:inherit; font-size:.56rem; letter-spacing:.08em; text-transform:uppercase;
                   color:var(--fg-3); background:none; border:1px solid var(--rule); border-radius:2px;
-                  padding:1px 5px; line-height:1.6; cursor:pointer; white-space:nowrap;
-                  transition:color .15s ease, border-color .15s ease; }
+                  cursor:pointer; white-space:nowrap;
+                  transition:color .15s ease, border-color .15s ease, background .15s ease; }
   .edCtl button:hover { color:var(--bg); background:var(--fg); border-color:var(--fg); }
+  .edCtl button:disabled { opacity:.26; cursor:default; }
+  .edCtl button:disabled:hover { color:var(--fg-3); background:none; border-color:var(--rule); }
 
-  /* a row keeps its year, and makes room for the controls at its right */
-  .panels li { position:relative; padding-right:86px; }
-  .panels li > .edCtl { position:absolute; right:0; top:50%; transform:translateY(-50%); margin:0; }
-  .row { position:relative; }
+  /* a block hands its controls to the right margin, so they all line up */
+  .edBlock > .edCtl { position:absolute; margin:0; white-space:nowrap; transform:translateY(-50%); }
+  .edAdd { min-height:1.5em; }
+  .label--blank { min-height:1.1em; }
 
-  /* tabs and links are single lines, so pull each control back to its word */
-  .tabs .edCtl, .links .edCtl { margin-left:-1.2rem; align-self:center; }
-  .tabs .edCtl--add, .links .edCtl--add { margin-left:0; }
-
-  /* an add control reads as a quiet line of its own */
-  .edAdd { display:block; margin-top:.28rem; }
-  .edAdd .edCtl { margin-left:0; }
+  /* the tab and link rows are one line each, so their controls stay inline */
+  .tabs .edCtl, .links .edCtl { margin-left:8px; }
 
   /* the dock that holds Done */
   .edDock { position:fixed; right:1.25rem; bottom:1.25rem; z-index:41; display:flex; align-items:center; gap:.6rem; }
   .edDock__hint { font-size:.72rem; color:var(--fg-3); }
 
-  /* the sheets: the writing list, and one post */
-  .edSheet { position:fixed; inset:0; z-index:45; display:none; flex-direction:column; background:var(--bg); }
-  .edSheet--on { display:flex; }
+  /* a sheet fills the screen. the writing one is just a page. */
+  .edSheet { position:fixed; inset:0; z-index:45; display:none; background:var(--bg); overflow:auto; }
+  .edSheet--on { display:block; }
+  .edSheet--fill { overflow:hidden; }
+  .edSheet--fill.edSheet--on { display:flex; flex-direction:column; }
+  .edRow { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+  .edRow__end { display:flex; align-items:center; gap:.6rem; }
+
+  /* the writing list, in the blog's own clothes */
+  .post--edit .edCtl { margin-left:auto; align-self:center; }
+
   .edSheet__bar { display:flex; align-items:center; gap:.9rem; padding:16px 22px; border-bottom:1px solid var(--rule); }
   .edSheet__title { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--fg); }
   .edSheet__status { font-size:.78rem; color:var(--fg-3); }
   .edSheet__end { margin-left:auto; display:flex; align-items:center; gap:.6rem; }
-  .edSheet__body { padding:8px 22px 22px; overflow:auto; }
 
   .edPost__fields { display:flex; flex-wrap:wrap; gap:1.75rem; padding:16px 22px; border-bottom:1px solid var(--rule); }
   .edPost__fields label { flex:1 1 200px; display:flex; flex-direction:column; gap:.4rem; }
@@ -183,8 +192,9 @@ const PAGE = `<!doctype html>
   .edList__row span { flex:1 1 auto; font-size:.95rem; }
   .edList__row em { font-style:normal; font-size:.78rem; color:var(--fg-3); }
   .edList__row button { background:none; border:0; color:var(--fg-3); font-family:var(--font);
-                        font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; }
+                        font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; }
   .edList__row button:hover { color:var(--fg); }
+  .edList__row button:disabled { opacity:.26; cursor:default; }
 </style>
 </head>
 <body>
@@ -208,20 +218,23 @@ const PAGE = `<!doctype html>
 </div>
 
 <div class="edSheet" id="edPosts">
-  <div class="edSheet__bar">
-    <span class="edSheet__title">Writing</span>
-    <span class="edSheet__status" id="edPostsStatus"></span>
-    <span class="edSheet__end">
-      <button class="btn" id="edPostsNew">New post</button>
-      <button class="btn" id="edPostsBack">Back to the page</button>
-    </span>
-  </div>
-  <div class="edSheet__body">
-    <div class="edList" id="edPostsList"></div>
-  </div>
+  <main class="blog">
+    <div class="edRow">
+      <a class="btn" id="edPostsBack" href="#">
+        <svg viewBox="0 0 14 12" aria-hidden="true"><path d="M13 6H1M6 1L1 6l5 5"/></svg>
+        Back
+      </a>
+      <span class="edRow__end">
+        <button class="btn btn--solid" id="edPostsNew">New post</button>
+      </span>
+    </div>
+    <h1 class="blog__title">Writing</h1>
+    <p class="blog__note" id="edPostsStatus"></p>
+    <ul class="blog__list" id="edPostsList"></ul>
+  </main>
 </div>
 
-<div class="edSheet" id="edPost">
+<div class="edSheet edSheet--fill" id="edPost">
   <div class="edSheet__bar">
     <span class="edSheet__title">Post</span>
     <span class="edSheet__status" id="edPostStatus">new post</span>
@@ -466,6 +479,7 @@ function contentType(file) {
   if (file.endsWith(".css")) return "text/css; charset=utf-8";
   if (file.endsWith(".js") || file.endsWith(".mjs")) return "text/javascript; charset=utf-8";
   if (file.endsWith(".html")) return "text/html; charset=utf-8";
+  if (file.endsWith(".svg")) return "image/svg+xml";
   if (file.endsWith(".glb")) return "model/gltf-binary";
   if (file.endsWith(".png")) return "image/png";
   if (file.endsWith(".jpg") || file.endsWith(".jpeg")) return "image/jpeg";
@@ -564,7 +578,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET") {
     const safe = decodeURIComponent(url);
     const allowed =
-      /^\/(styles\.css|render\.js|content\.js|posts\.js|blog\.js|post\.js|stage\.js|blog\.html|post\.html|resume\.pdf)$/.test(safe) ||
+      /^\/(styles\.css|render\.js|content\.js|posts\.js|blog\.js|post\.js|stage\.js|blog\.html|post\.html|favicon\.svg|resume\.pdf)$/.test(safe) ||
       (/^\/assets\/[A-Za-z0-9._\/-]+$/.test(safe) && safe.indexOf("..") === -1);
 
     if (allowed) {

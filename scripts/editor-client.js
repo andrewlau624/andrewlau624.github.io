@@ -2,24 +2,19 @@
    scripts/editor-client.js
    --------------------------------------------------------------------------
    The editing layer behind npm run edit. It loads after render.js has drawn
-   the real page, then hangs a small control next to everything on it:
+   the real page, then hands every field a small set of controls:
 
-     name, role, line, location      edit
-     every link                      edit  del        and  add link
-     every tab                       edit  del        and  add tab
-     the blog tab                    edit
-     every group                     edit  del        and  add group
-     every item                      edit  del        and  add item
-     the song                        edit
-     the cars                        the cars button
-     the writing                     the posts button
+     up, down        reorder it in its list
+     edit            change its fields
+     del             remove it
+     add             grow a list
 
-   The controls are always visible, sitting beside the thing they change. The
-   posts button opens the list, and then one post at a time, with the real
-   post preview beside the markdown.
+   On the page the controls sit in the right margin, in one column, so they
+   line up. The tab and link rows keep theirs inline, because they are one
+   line each. The writing list is the real blog list, with controls on it.
 
-   Press Done and the server writes content.js, then commits and pushes. A
-   saved post writes posts/<slug>.md and rebuilds posts.js, so one Done
+   Press Done and the server writes content.js, then commits and pushes.
+   Saving a post writes posts/<slug>.md and rebuilds posts.js, so one Done
    carries all of it out.
 
    Loaded only by scripts/edit-content.mjs.
@@ -55,6 +50,12 @@
 
   /* =========================================================== the page == */
 
+  function move(list, from, to) {
+    if (to < 0 || to >= list.length) return;
+    var item = list.splice(from, 1)[0];
+    list.splice(to, 0, item);
+  }
+
   function tabById(id) {
     for (var i = 0; i < S.tabs.length; i++) if (S.tabs[i].id === id) return S.tabs[i];
     return null;
@@ -64,17 +65,26 @@
     return { title: title, obj: obj, fields: fields };
   }
 
+  /* a target that can be moved and removed inside a list */
+  function listTarget(base, list, index) {
+    base.up = function () { move(list, index, index - 1); };
+    base.upOff = index === 0;
+    base.down = function () { move(list, index, index + 1); };
+    base.downOff = index === list.length - 1;
+    base.remove = function () { list.splice(index, 1); };
+    return base;
+  }
+
   function itemTarget(item, list, index) {
-    return {
+    return listTarget({
       title: "Item",
       obj: item,
-      fields: [["name", "Name"], ["note", "Note"], ["year", "Year"], ["href", "Link"]],
-      remove: function () { list.splice(index, 1); }
-    };
+      fields: [["name", "Name"], ["note", "Note"], ["year", "Year"], ["href", "Link"]]
+    }, list, index);
   }
 
   function carTarget(car, index) {
-    return {
+    return listTarget({
       title: "Car",
       obj: car,
       fields: [
@@ -84,64 +94,82 @@
         ["accel", "Acceleration, m/s2"],
         ["top", "Top speed, km/h"]
       ],
-      remove: function () { S.car.models.splice(index, 1); },
       afterSave: function () { openList("cars"); },
       cancelTo: function () { openList("cars"); }
+    }, S.car.models, index);
+  }
+
+  function linkTarget(link, index) {
+    return listTarget({
+      title: "Link",
+      obj: link,
+      fields: [["label", "Label"], ["href", "Link"]]
+    }, S.links, index);
+  }
+
+  function tabTarget(tab, index) {
+    return listTarget({
+      title: "Tab",
+      obj: tab,
+      fields: [["label", "Label"], ["id", "Id"]]
+    }, S.tabs, index);
+  }
+
+  function groupTarget(tab, group, index) {
+    return listTarget({
+      title: "Group",
+      obj: group,
+      fields: [["label", "Label"]]
+    }, tab.groups, index);
+  }
+
+  function additionsOf(kind, make) {
+    return {
+      addLabel: kind,
+      add: function () { return make(); }
     };
   }
 
-  var additions = {
-    link: {
-      addLabel: "add link",
-      add: function () {
-        var link = { label: "New link", href: "https://" };
-        S.links.push(link);
-        return target("Link", link, [["label", "Label"], ["href", "Link"]]);
-      }
-    },
-    tab: {
-      addLabel: "add tab",
-      add: function () {
-        var tab = {
-          id: "tab-" + Date.now().toString(36),
-          label: "New tab",
-          groups: [{ label: "", items: [] }]
-        };
-        S.tabs.push(tab);
-        return target("Tab", tab, [["label", "Label"], ["id", "Id"]]);
-      }
-    },
-    group: function (tab) {
-      return {
-        addLabel: "add group",
-        add: function () {
-          var group = { label: "New group", items: [] };
-          tab.groups.push(group);
-          return target("Group", group, [["label", "Label"]]);
-        }
-      };
-    },
-    item: function (group) {
-      return {
-        addLabel: "add item",
-        add: function () {
-          var item = { name: "New item", note: "", year: "" };
-          group.items.push(item);
-          return itemTarget(item, group.items, group.items.length - 1);
-        }
-      };
-    }
-  };
+  var linkAdd = additionsOf("add link", function () {
+    var link = { label: "New link", href: "https://" };
+    S.links.push(link);
+    return linkTarget(link, S.links.length - 1);
+  });
 
-  function button(label, onClick, title) {
+  var tabAdd = additionsOf("add tab", function () {
+    var tab = { id: "tab-" + Date.now().toString(36), label: "New tab", groups: [{ label: "", items: [] }] };
+    S.tabs.push(tab);
+    return tabTarget(tab, S.tabs.length - 1);
+  });
+
+  function groupAdd(tab) {
+    return additionsOf("add group", function () {
+      var group = { label: "New group", items: [] };
+      tab.groups.push(group);
+      return groupTarget(tab, group, tab.groups.length - 1);
+    });
+  }
+
+  function itemAdd(group) {
+    return additionsOf("add item", function () {
+      var item = { name: "New item", note: "", year: "" };
+      group.items.push(item);
+      return itemTarget(item, group.items, group.items.length - 1);
+    });
+  }
+
+  /* -------------------------------------------------------------- controls */
+
+  function button(label, onClick, title, disabled) {
     var b = document.createElement("button");
     b.type = "button";
     b.textContent = label;
     if (title) b.title = title;
+    if (disabled) b.disabled = true;
     b.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      onClick();
+      if (!disabled) onClick();
     });
     return b;
   }
@@ -151,83 +179,86 @@
     wrap.className = "edCtl";
     items.forEach(function (item) {
       if (!item) return;
-      wrap.appendChild(button(item[0], item[1], item[2]));
+      wrap.appendChild(button(item[0], item[1], item[2], item[3]));
     });
     return wrap;
   }
 
+  function runAdd(t) {
+    var next = t.add();
+    redraw();
+    if (next) openForm(next);
+  }
+
   function controls(t) {
     var items = [];
+    if (t.up) items.push(["↑", function () { t.up(); redraw(); }, "Move up", t.upOff]);
+    if (t.down) items.push(["↓", function () { t.down(); redraw(); }, "Move down", t.downOff]);
     if (t.fields) items.push(["edit", function () { openForm(t); }, "Edit " + t.title.toLowerCase()]);
-    if (t.list) items.push(["edit", function () { openList(t.list); }, "Edit the cars"]);
     if (t.remove) items.push(["del", function () { t.remove(); redraw(); }, "Delete " + t.title.toLowerCase()]);
-    if (t.add) items.push([t.addLabel || "add", function () {
-      var next = t.add();
-      redraw();
-      if (next) openForm(next);
-    }, t.addLabel]);
+    if (t.add) items.push([t.addLabel || "add", function () { runAdd(t); }, t.addLabel]);
     return cluster(items);
   }
 
-  /* a control line of its own, for adding to a list */
-  function addLine(t) {
+  /* a block hands its controls to the right margin. placeControls lines them up */
+  function intoBlock(node, t) {
+    if (!node) return;
+    node.classList.add("edBlock");
+    node.appendChild(controls(t));
+  }
+
+  function addBlock(t) {
     var wrap = document.createElement("div");
-    wrap.className = "edAdd";
-    wrap.appendChild(sharedAdd(t));
+    wrap.className = "edBlock edAdd";
+    wrap.appendChild(controls(t));
     return wrap;
   }
 
-  /* an add control that sits inline at the end of a flex row */
   function addInline(t) {
-    var wrap = sharedAdd(t);
+    var wrap = cluster([[t.addLabel || "add", function () { runAdd(t); }, t.addLabel]]);
     wrap.className = "edCtl edCtl--add";
     return wrap;
   }
 
-  function sharedAdd(t) {
-    return cluster([[
-      t.addLabel || "add",
-      function () { var next = t.add(); redraw(); if (next) openForm(next); },
-      t.addLabel
-    ]]);
+  function after(node, next) {
+    if (node && node.parentNode) node.parentNode.insertBefore(next, node.nextSibling);
   }
 
-  function into(node, t) { if (node) node.appendChild(controls(t)); }
-  function after(node, next) { if (node && node.parentNode) node.parentNode.insertBefore(next, node.nextSibling); }
+  /* line every block control up in the right margin of its container */
+  function placeControls() {
+    qa(".edBlock > .edCtl").forEach(function (ctl) {
+      var block = ctl.parentNode;
+      var host = block.closest(".foot") || block.closest(".page") || block.closest(".blog");
+      if (!host) return;
+      var b = block.getBoundingClientRect();
+      var h = host.getBoundingClientRect();
+      ctl.style.top = Math.round(b.top - h.top + b.height / 2) + "px";
+      ctl.style.left = Math.round(h.width + 14) + "px";
+    });
+  }
 
   function annotate() {
     S = window.PORTFOLIO;
 
     /* the intro: name, role, line, and the location in the footer */
-    into(q("#intro .name"), target("Name", S.meta, [["name", "Name"]]));
-    into(q("#intro .role"), target("Role", S.meta, [["role", "Role"], ["school", "School"]]));
-    into(q("#intro .bio"), target("Intro line", S.intro, [["bio", "Line"]]));
-    into(q("#foot span"), target("Location", S.meta, [["location", "Location"]]));
+    intoBlock(q("#intro .name"), target("Name", S.meta, [["name", "Name"]]));
+    intoBlock(q("#intro .role"), target("Role", S.meta, [["role", "Role"], ["school", "School"]]));
+    intoBlock(q("#intro .bio"), target("Intro line", S.intro, [["bio", "Line"]]));
+    intoBlock(q("#foot"), target("Location", S.meta, [["location", "Location"]]));
 
-    /* the links row */
+    /* the links row stays on one line, so its controls sit inline */
     qa("#links a").forEach(function (a, i) {
-      var link = S.links[i];
-      if (!link) return;
-      after(a, controls({
-        title: "Link",
-        obj: link,
-        fields: [["label", "Label"], ["href", "Link"]],
-        remove: function () { S.links.splice(i, 1); }
-      }));
+      if (!S.links[i]) return;
+      after(a, controls(linkTarget(S.links[i], i)));
     });
     var linksNav = q("#links");
-    if (linksNav) linksNav.appendChild(addInline(additions.link));
+    if (linksNav) linksNav.appendChild(addInline(linkAdd));
 
-    /* the tabs, and the blog tab */
+    /* the tabs, and the blog tab, also on one line */
     qa("#tabs .tab[data-tab]").forEach(function (buttonEl) {
       var tab = tabById(buttonEl.getAttribute("data-tab"));
       if (!tab) return;
-      after(buttonEl, controls({
-        title: "Tab",
-        obj: tab,
-        fields: [["label", "Label"], ["id", "Id"]],
-        remove: function () { S.tabs.splice(S.tabs.indexOf(tab), 1); }
-      }));
+      after(buttonEl, controls(tabTarget(tab, S.tabs.indexOf(tab))));
     });
     after(q("#tabs .tab--link"), controls({
       title: "Blog tab",
@@ -235,7 +266,7 @@
       fields: [["label", "Label"], ["href", "Link"]]
     }));
     var tabsNav = q("#tabs");
-    if (tabsNav) tabsNav.appendChild(addInline(additions.tab));
+    if (tabsNav) tabsNav.appendChild(addInline(tabAdd));
 
     /* the panels: groups and their items */
     qa("#panels .panel[data-panel]").forEach(function (panel) {
@@ -246,30 +277,30 @@
         var group = tab.groups[gi];
         if (!group) return;
 
-        var controlsFor = {
-          title: "Group",
-          obj: group,
-          fields: [["label", "Label"]],
-          remove: function () { tab.groups.splice(gi, 1); }
-        };
-
         var labelEl = q(".label", groupEl);
-        if (labelEl) into(labelEl, controlsFor);
-        else groupEl.insertBefore(controls(controlsFor), groupEl.firstChild);
+        if (!labelEl) {
+          labelEl = document.createElement("p");
+          labelEl.className = "label label--blank";
+          groupEl.insertBefore(labelEl, groupEl.firstChild);
+        }
+        intoBlock(labelEl, groupTarget(tab, group, gi));
 
         var rowsEl = q(".rows", groupEl);
         if (rowsEl) {
-          after(rowsEl, addLine(additions.item(group)));
           qa("li", rowsEl).forEach(function (li, ii) {
-            if (group.items[ii]) into(li, itemTarget(group.items[ii], group.items, ii));
+            if (group.items[ii]) intoBlock(li, itemTarget(group.items[ii], group.items, ii));
           });
+          after(rowsEl, addBlock(itemAdd(group)));
         }
       });
 
-      panel.appendChild(addLine(additions.group(tab)));
+      panel.appendChild(addBlock(groupAdd(tab)));
 
-      into(q(".player", panel), target("Song", S.song, [["url", "Spotify link"]]));
+      var player = q(".player", panel);
+      if (player) intoBlock(player, target("Song", S.song, [["url", "Spotify link"]]));
     });
+
+    placeControls();
   }
 
   /* ------------------------------------------------------------- the modal */
@@ -328,6 +359,8 @@
 
       row.appendChild(name);
       row.appendChild(meta);
+      row.appendChild(button("↑", function () { move(S.car.models, i, i - 1); redraw(); renderCarList(); }, "Move up", i === 0));
+      row.appendChild(button("↓", function () { move(S.car.models, i, i + 1); redraw(); renderCarList(); }, "Move down", i === S.car.models.length - 1));
       row.appendChild(button("edit", function () { openForm(carTarget(car, i)); }));
       row.appendChild(button("delete", function () {
         S.car.models.splice(i, 1);
@@ -398,6 +431,13 @@
     if (e.target === modal) closeModal();
   });
 
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (modal.classList.contains("edModal--on")) { closeModal(); return; }
+    if (el("edPost").classList.contains("edSheet--on")) { closePost(); return; }
+    if (el("edPosts").classList.contains("edSheet--on")) closePosts();
+  });
+
   /* the page should not navigate off while it is being edited */
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest("a[href]") : null;
@@ -408,6 +448,14 @@
     if (window.renderPortfolio) window.renderPortfolio(S);
     else annotate();
   }
+
+  /* keep the controls lined up when the page changes shape */
+  window.addEventListener("resize", placeControls);
+  window.addEventListener("load", placeControls);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeControls);
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest(".tab")) setTimeout(placeControls, 0);
+  }, true);
 
   /* ========================================================= the writing == */
 
@@ -441,29 +489,59 @@
     list.innerHTML = "";
 
     if (!posts.length) {
-      var empty = document.createElement("p");
-      empty.className = "edSheet__status";
-      empty.textContent = "No posts yet. New post starts one.";
+      var empty = document.createElement("li");
+      var emptyRow = document.createElement("div");
+      emptyRow.className = "post";
+      var emptyText = document.createElement("span");
+      emptyText.className = "post__excerpt";
+      emptyText.textContent = "No posts yet. New post starts one.";
+      emptyRow.appendChild(emptyText);
+      empty.appendChild(emptyRow);
       list.appendChild(empty);
       return;
     }
 
     posts.forEach(function (p) {
+      var li = document.createElement("li");
       var row = document.createElement("div");
-      row.className = "edList__row";
+      row.className = "post post--edit";
 
-      var title = document.createElement("span");
-      title.textContent = p.title;
+      if (p.image) {
+        var thumb = document.createElement("span");
+        thumb.className = "post__thumb";
+        thumb.style.backgroundImage = "url(" + p.image + ")";
+        row.appendChild(thumb);
+      }
 
-      var date = document.createElement("em");
+      var text = document.createElement("span");
+      text.className = "post__text";
+
+      var date = document.createElement("span");
+      date.className = "post__date";
       date.textContent = p.date || "no date";
 
-      row.appendChild(title);
-      row.appendChild(date);
-      row.appendChild(button("edit", function () { openPost(p); }));
-      row.appendChild(button("delete", function () { removePost(p); }));
+      var title = document.createElement("span");
+      title.className = "post__title";
+      title.textContent = p.title;
 
-      list.appendChild(row);
+      text.appendChild(date);
+      text.appendChild(title);
+
+      if (p.excerpt) {
+        var excerpt = document.createElement("span");
+        excerpt.className = "post__excerpt";
+        excerpt.textContent = p.excerpt;
+        text.appendChild(excerpt);
+      }
+
+      row.appendChild(text);
+      row.appendChild(cluster([
+        ["edit", function () { openPost(p); }, "Edit this post"],
+        ["del", function () { removePost(p); }, "Delete this post"]
+      ]));
+
+      li.appendChild(row);
+      list.appendChild(li);
     });
   }
 
@@ -726,6 +804,7 @@
       if (!out.ok) { showMessage(out.message); return; }
       posts = out.posts;
       renderPosts();
+      el("edPostsStatus").textContent = posts.length + (posts.length === 1 ? " post" : " posts");
     });
   }
 
@@ -777,13 +856,6 @@
   });
 
   /* ============================================================== the dock */
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape") return;
-    if (modal.classList.contains("edModal--on")) { closeModal(); return; }
-    if (el("edPost").classList.contains("edSheet--on")) { closePost(); return; }
-    if (el("edPosts").classList.contains("edSheet--on")) closePosts();
-  });
 
   q("#edCars").addEventListener("click", function () { openList("cars"); });
 

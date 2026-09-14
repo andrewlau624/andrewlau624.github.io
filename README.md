@@ -48,17 +48,19 @@ That opens an editor at `localhost:4174`. It is the real page, with a small
 control beside every field on it:
 
 - **text** name, role, line, and the location in the footer
-- **links** edit, delete, and add
-- **tabs** edit, delete, and add, plus the blog tab
-- **groups** the category labels, with edit, delete, and add
-- **items** every row, with edit, delete, and add
+- **links** edit, delete, reorder, and add
+- **tabs** edit, delete, reorder, and add, plus the blog tab
+- **groups** the category labels, with edit, delete, reorder, and add
+- **items** every row, with edit, delete, reorder, and add
 - **the song** the Spotify link in the Personal tab
-- **the cars** behind the cars button
-- **the writing** behind the posts button
+- **the cars** behind the cars button, with reorder
+- **the writing** behind the posts button, drawn as the blog list itself
 
-The controls are always visible, sitting next to the thing they change. Press
-**Done** and it writes `content.js`, then runs `git add`, `git commit` and
-`git push`. If git fails it prints the command to run by hand.
+The controls are always visible, sitting next to the thing they change. Each
+one has up and down arrows to move it within its list. On the page they sit in
+one column in the right margin, so they line up down the side. Press **Done**
+and it writes `content.js`, then runs `git add`, `git commit` and `git push`.
+If git fails it prints the command to run by hand.
 
 Flags: `--port 4174`, `--no-git`, `--no-open`.
 
