@@ -188,7 +188,8 @@ window.PORTFOLIO = {
   "blog": {
     "label": "Blog",
     "href": "blog.html",
-    "note": "Just my thoughts."
+    "note": "Just my thoughts.",
+    "perPage": 6
   },
   "car": {
     "note": "Up to drive, left and right to steer",

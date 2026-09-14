@@ -155,7 +155,7 @@ The model can therefore learn relationships between different tokens and represe
 
 Modern LLMs are primarily built using the **Transformer architecture**.
 
-The Transformer was introduced in the 2017 paper *[](https://arxiv.org/pdf/1706.03762)Attention Is All You Need[](https://arxiv.org/pdf/1706.03762)*.
+The Transformer was introduced in the 2017 paper [Attention Is All You Need](https://arxiv.org/pdf/1706.03762).
 
 The key idea behind Transformers is **attention**.
 

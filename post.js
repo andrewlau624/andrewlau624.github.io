@@ -287,9 +287,17 @@
 
   document.title = post.title + " / " + P.meta.name;
   if (titleEl) titleEl.textContent = post.title;
-  if (dateEl) dateEl.textContent = post.date;
+  if (dateEl) {
+    dateEl.innerHTML = esc(post.date) +
+      (post.category
+        ? ' · <a href="blog.html?c=' + encodeURIComponent(post.categoryKey) + '">' +
+            esc(post.category) + "</a>"
+        : "");
+  }
 
-  fetch("posts/" + encodeURIComponent(post.slug) + ".md")
+  /* a slug can be llms/intro-to-llms, so encode each part, not the slash */
+  var rel = post.slug.split("/").map(encodeURIComponent).join("/");
+  fetch("posts/" + rel + ".md")
     .then(function (res) { return res.ok ? res.text() : ""; })
     .then(function (raw) {
       var cover = post.image

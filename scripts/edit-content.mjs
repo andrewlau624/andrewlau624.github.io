@@ -22,11 +22,11 @@
    ========================================================================== */
 
 import http from "node:http";
-import { readFile, writeFile, readdir, mkdir, unlink } from "node:fs/promises";
+import { readFile, writeFile, readdir, mkdir, rmdir, unlink } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildPosts, toSlug, parseFrontMatter } from "./build-posts.mjs";
+import { buildPosts, toSlug, parseFrontMatter, postFiles } from "./build-posts.mjs";
 import { renderMarkdown, esc } from "./markdown.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -289,7 +289,9 @@ const PAGE = `<!doctype html>
   <div class="edPost__fields">
     <label><span>Title</span><input id="edPostTitle" type="text" placeholder="A new post"></label>
     <label><span>Date</span><input id="edPostDate" type="date"></label>
+    <label><span>Category</span><input id="edPostCategory" type="text" placeholder="none" list="edPostCats"></label>
     <label><span>Summary</span><input id="edPostExcerpt" type="text" placeholder="optional"></label>
+    <datalist id="edPostCats"></datalist>
   </div>
 
   <div class="edTools">
@@ -394,37 +396,52 @@ function serialize(state) {
 /* ------------------------------------------------------------ the writing */
 
 async function listPosts() {
-  let names = [];
-  try {
-    names = await readdir(postsDir);
-  } catch (e) {
-    names = [];
-  }
-
   const posts = [];
-  for (const file of names.filter((f) => f.endsWith(".md")).sort()) {
-    const raw = await readFile(path.join(postsDir, file), "utf8");
+
+  for (const rel of await postFiles()) {
+    const raw = await readFile(path.join(postsDir, rel), "utf8");
     const { meta, body } = parseFrontMatter(raw);
-    const slug = file.replace(/\.md$/, "");
+    const slug = rel.replace(/\.md$/, "");
+    const folder = slug.split("/").slice(0, -1).join(" / ");
+
     posts.push({
       slug,
-      title: meta.title || slug,
+      title: meta.title || slug.split("/").pop(),
       date: meta.date || "",
       excerpt: meta.excerpt || "",
       image: meta.image || "",
+      category: String(meta.category || folder || "").trim(),
       body: body.replace(/\s+$/, "")
     });
   }
 
-  posts.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  posts.sort(
+    (a, b) => String(b.date).localeCompare(String(a.date)) || a.title.localeCompare(b.title)
+  );
   return posts;
+}
+
+/* a category becomes a folder, named by its slug */
+function folderOf(category) {
+  return String(category || "").trim() ? toSlug(category) : "";
+}
+
+async function prune(folder) {
+  if (!folder) return;
+  try {
+    const left = await readdir(path.join(postsDir, folder));
+    if (!left.length) await rmdir(path.join(postsDir, folder));
+  } catch (e) { /* it was not empty, or already gone */ }
 }
 
 async function savePost(post) {
   const title = String(post.title || "").trim();
   if (!title) throw new Error("a title is needed");
 
-  const slug = toSlug(title);
+  const category = String(post.category || "").trim();
+  const folder = folderOf(category);
+  const name = toSlug(title);
+  const slug = folder ? folder + "/" + name : name;
   const date = post.date || new Date().toISOString().slice(0, 10);
   const excerpt = String(post.excerpt || "").trim();
 
@@ -434,8 +451,8 @@ async function savePost(post) {
     if (match) {
       const ext = match[1] === "jpeg" ? "jpg" : match[1];
       await mkdir(blogAssets, { recursive: true });
-      await writeFile(path.join(blogAssets, slug + "." + ext), Buffer.from(match[2], "base64"));
-      imagePath = "assets/blog/" + slug + "." + ext;
+      await writeFile(path.join(blogAssets, name + "." + ext), Buffer.from(match[2], "base64"));
+      imagePath = "assets/blog/" + name + "." + ext;
     }
   }
 
@@ -445,14 +462,16 @@ async function savePost(post) {
     "date: " + date + "\n" +
     "excerpt: " + excerpt + "\n" +
     "image: " + imagePath + "\n" +
+    (category ? "category: " + category + "\n" : "") +
     "---\n\n";
 
-  await mkdir(postsDir, { recursive: true });
+  await mkdir(path.join(postsDir, folder), { recursive: true });
   await writeFile(path.join(postsDir, slug + ".md"), front + String(post.body || "").trim() + "\n");
 
-  /* a changed title moves the file, so clear the one it left behind */
+  /* a changed title or category moves the file, so clear the one it left */
   if (post.original && post.original !== slug) {
     try { await unlink(path.join(postsDir, post.original + ".md")); } catch (e) { /* it was new */ }
+    await prune(post.original.split("/").slice(0, -1).join("/"));
   }
 
   await buildPosts();
@@ -470,6 +489,8 @@ async function deletePost(slug) {
   } catch (e) { /* already gone */ }
 
   try { await unlink(file); } catch (e) { /* already gone */ }
+  await prune(slug.split("/").slice(0, -1).join("/"));
+
   if (image) {
     try { await unlink(path.join(root, image)); } catch (e) { /* shared or hand made */ }
   }

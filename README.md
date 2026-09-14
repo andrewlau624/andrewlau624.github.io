@@ -67,8 +67,11 @@ Flags: `--port 4174`, `--no-git`, `--no-open`.
 ## Writing a post
 
 The **posts** button on the edit page. It lists every post, with edit and
-delete, and **New post** starts one. Each post opens with its title, date and
-summary, a toolbar, the markdown, and the real post page beside it.
+delete, and **New post** starts one. Each post opens with its title, date,
+category and summary, a toolbar, the markdown, and the real post page beside
+it. **Category** files the post into a folder, and every category already in
+use is offered as you type, so an existing one can be reused rather than
+retyped. Changing it moves the file, and an emptied folder is cleared away.
 
 The preview is the real post page: the same stylesheet, the same column
 width, the same renderer, drawn in an iframe and scaled to fit, so what you
@@ -90,7 +93,7 @@ see is exactly what ships. The markdown behaves like an editor:
 `posts.js`, then commits and pushes. Deleting a post does the same. The
 **Done** on the page writes `content.js` and pushes that too.
 
-Markdown lives in `posts/*.md` with front matter:
+Markdown lives under `posts/`, at any depth, with front matter:
 
 ```
 ---
@@ -98,6 +101,7 @@ title: Why we rebuilt our search stack
 date: 2026-02-14
 excerpt: One line for the list.
 image: assets/blog/search-stack.png
+category: Systems
 ---
 
 The body.
@@ -107,6 +111,15 @@ The body.
 loads. Run it alone with `npm run build:posts`. `scripts/markdown.mjs` is the
 renderer shared by the editor preview; `post.js` carries the same code so the
 site stays dependency free.
+
+## Folders and pages
+
+A folder under `posts/` is a category, and `category:` in front matter names
+it. The blog list grows a row of category links when there is more than one,
+`blog.html?c=llms` narrows to one category, and `blog.perPage` in
+`content.js` sets how many posts a page holds. Past that, the list pages
+itself with newer/older and page numbers, and paging keeps the category.
+Each post carries its category under the title, linking back to that list.
 
 ## Tabs
 

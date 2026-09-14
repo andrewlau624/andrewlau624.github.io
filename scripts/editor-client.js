@@ -535,9 +535,31 @@
     fetch("/posts").then(function (r) { return r.json(); }).then(function (list) {
       posts = list;
       el("edPostsStatus").textContent = list.length + (list.length === 1 ? " post" : " posts");
+      fillCategories();
       renderPosts();
     }).catch(function () {
       el("edPostsStatus").textContent = "could not read the posts";
+    });
+  }
+
+  /* every category already in use, offered as you type */
+  function fillCategories() {
+    var seen = {};
+    var names = [];
+    posts.forEach(function (p) {
+      if (p.category && !seen[p.category]) {
+        seen[p.category] = true;
+        names.push(p.category);
+      }
+    });
+
+    var list = el("edPostCats");
+    if (!list) return;
+    list.innerHTML = "";
+    names.sort().forEach(function (name) {
+      var option = document.createElement("option");
+      option.value = name;
+      list.appendChild(option);
     });
   }
 
@@ -590,7 +612,7 @@
 
       var date = document.createElement("span");
       date.className = "post__date";
-      date.textContent = p.date || "no date";
+      date.textContent = (p.date || "no date") + (p.category ? " · " + p.category : "");
       head.appendChild(date);
 
       var ctl = document.createElement("span");
@@ -620,13 +642,14 @@
   }
 
   function newPost() {
-    openPost({ slug: "", title: "", date: today(), excerpt: "", image: "", body: "" });
+    openPost({ slug: "", title: "", date: today(), excerpt: "", image: "", body: "", category: "" });
   }
 
   function openPost(post) {
     postForm = { original: post.slug || "", image: post.image || "" };
     el("edPostTitle").value = post.title || "";
     el("edPostDate").value = post.date || today();
+    el("edPostCategory").value = post.category || "";
     el("edPostExcerpt").value = post.excerpt || "";
     el("edPostBody").value = post.body || "";
     el("edPostDelete").style.display = post.slug ? "" : "none";
@@ -913,6 +936,7 @@
         original: postForm.original,
         title: el("edPostTitle").value,
         date: el("edPostDate").value,
+        category: el("edPostCategory").value,
         excerpt: el("edPostExcerpt").value,
         body: el("edPostBody").value,
         image: postForm.image

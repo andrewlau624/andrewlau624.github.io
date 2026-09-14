@@ -5,13 +5,17 @@ window.POSTS = [
     "title": "Intro to LLMs",
     "date": "2026-09-14",
     "excerpt": "A basic overview of LLM architecture",
-    "image": ""
+    "image": "",
+    "category": "",
+    "categoryKey": ""
   },
   {
     "slug": "pilot",
     "title": "Pilot",
     "date": "2026-09-14",
     "excerpt": "Episode 1",
-    "image": ""
+    "image": "",
+    "category": "",
+    "categoryKey": ""
   }
 ];
