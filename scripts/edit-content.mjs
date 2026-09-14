@@ -70,6 +70,9 @@ function previewHtml(post) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <style>
   /* the page is one screen tall, but the preview needs its own height */
   html, body { height:auto; }
@@ -87,6 +90,29 @@ function previewHtml(post) {
   <p class="blog__meta">${date}</p>
   <article class="prose">${renderMarkdown(post.body)}</article>
 </main>
+<script>
+  (function () {
+    var tries = 0;
+    function typeset() {
+      if (window.renderMathInElement) {
+        try {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false,
+            strict: false
+          });
+        } catch (e) { /* leave the maths as written */ }
+        return;
+      }
+      if (tries++ < 50) setTimeout(typeset, 100);
+    }
+    window.addEventListener("DOMContentLoaded", typeset);
+    if (document.readyState !== "loading") typeset();
+  })();
+</script>
 </body>
 </html>`;
 }

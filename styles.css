@@ -633,6 +633,15 @@ a.post:hover .post__title {
 }
 
 .prose p { margin: 0.9rem 0; }
+
+/* display maths, rendered by KaTeX. it may be wider than the column */
+.prose .math {
+  margin: 1.2rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose .math .katex-display { margin: 0; }
 .prose ul, .prose ol { margin: 0.9rem 0; padding-left: 1.2rem; }
 .prose li { margin: 0.3rem 0; }
 

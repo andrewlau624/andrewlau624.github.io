@@ -36,6 +36,23 @@
   var QUOTE = /^\s*>/;
   var RULE = /^\s*(-{3,}|\*{3,}|_{3,})\s*$/;
   var FENCE = /^\s*```/;
+  var MATH = /^\s*\$\$/;
+  var MATH_END = /\$\$\s*$/;
+
+  /* a $$ block is kept as one piece, so it is not folded into a paragraph.
+     KaTeX renders it on the page and in the editor preview. */
+  function renderMath(start, lines, at) {
+    var block = [start.trim()];
+    var i = at;
+    var single = MATH_END.test(start) && start.trim() !== "$$";
+    while (!single && i < lines.length) {
+      block.push(lines[i].trim());
+      var closes = MATH_END.test(lines[i]);
+      i += 1;
+      if (closes) break;
+    }
+    return { html: '<div class="math">' + esc(block.join("\n")) + "</div>", at: i };
+  }
 
   function isBlank(line) { return !line.trim(); }
 
@@ -115,6 +132,13 @@
 
       if (RULE.test(line)) { out.push("<hr>"); i += 1; continue; }
 
+      if (MATH.test(line)) {
+        var block = renderMath(line, lines, i + 1);
+        out.push(block.html);
+        i = block.at;
+        continue;
+      }
+
       if (QUOTE.test(line)) {
         var quote = [];
         while (i < lines.length && QUOTE.test(lines[i])) {
@@ -145,7 +169,8 @@
         !HEADING.test(lines[i]) &&
         !QUOTE.test(lines[i]) &&
         !FENCE.test(lines[i]) &&
-        !RULE.test(lines[i])
+        !RULE.test(lines[i]) &&
+        !MATH.test(lines[i])
       ) {
         para.push(lines[i].trim());
         i += 1;
@@ -160,6 +185,28 @@
   /* the markdown files carry front matter, which the page does not need */
   function stripFrontMatter(raw) {
     return String(raw).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
+  }
+
+  /* KaTeX turns the maths into type once it has arrived from the CDN, which
+     can land after this script has drawn the post */
+  function typeset(node) {
+    var tries = 0;
+    (function attempt() {
+      if (window.renderMathInElement) {
+        try {
+          window.renderMathInElement(node, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false,
+            strict: false
+          });
+        } catch (e) { /* leave the maths as it was written */ }
+        return;
+      }
+      if (tries++ < 50) setTimeout(attempt, 100);
+    })();
   }
 
   var slug = new URLSearchParams(window.location.search).get("p");
@@ -191,9 +238,15 @@
       var cover = post.image
         ? '<img class="post__cover" src="' + esc(post.image) + '" alt="">'
         : "";
-      if (bodyEl) bodyEl.innerHTML = cover + render(stripFrontMatter(raw));
+      if (bodyEl) {
+        bodyEl.innerHTML = cover + render(stripFrontMatter(raw));
+        typeset(bodyEl);
+      }
     })
     .catch(function () {
-      if (bodyEl) bodyEl.innerHTML = render(post.excerpt || "");
+      if (bodyEl) {
+        bodyEl.innerHTML = render(post.excerpt || "");
+        typeset(bodyEl);
+      }
     });
 })();

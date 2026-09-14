@@ -35,6 +35,23 @@ const HEADING = /^(#{1,3})\s+(.*)$/;
 const QUOTE = /^\s*>/;
 const RULE = /^\s*(-{3,}|\*{3,}|_{3,})\s*$/;
 const FENCE = /^\s*```/;
+const MATH = /^\s*\$\$/;
+const MATH_END = /\$\$\s*$/;
+
+/* a $$ block is kept as one piece, so it is not folded into a paragraph.
+   KaTeX renders it in the preview and on the page. */
+function renderMath(start, lines, at) {
+  const block = [start.trim()];
+  let i = at;
+  const single = MATH_END.test(start) && start.trim() !== "$$";
+  while (!single && i < lines.length) {
+    block.push(lines[i].trim());
+    const closes = MATH_END.test(lines[i]);
+    i += 1;
+    if (closes) break;
+  }
+  return { html: '<div class="math">' + esc(block.join("\n")) + "</div>", at: i };
+}
 
 function isBlank(line) {
   return !line.trim();
@@ -127,6 +144,13 @@ export function renderMarkdown(markdown) {
       continue;
     }
 
+    if (MATH.test(line)) {
+      const block = renderMath(line, lines, i + 1);
+      out.push(block.html);
+      i = block.at;
+      continue;
+    }
+
     if (QUOTE.test(line)) {
       const buf = [];
       while (i < lines.length && QUOTE.test(lines[i])) {
@@ -159,7 +183,8 @@ export function renderMarkdown(markdown) {
       !HEADING.test(lines[i]) &&
       !QUOTE.test(lines[i]) &&
       !FENCE.test(lines[i]) &&
-      !RULE.test(lines[i])
+      !RULE.test(lines[i]) &&
+      !MATH.test(lines[i])
     ) {
       buf.push(lines[i].trim());
       i += 1;

@@ -79,9 +79,12 @@ see is exactly what ships. The markdown behaves like an editor:
 - Cmd or Ctrl with B or I, and the toolbar toggles rather than inserting
 - Image and File upload to `assets/` and drop the markdown in for you
 - Cover picks the one image the list shows
+- maths, written as `$z_i$` inline or `$$ ... $$` on its own, rendered by
+  KaTeX. A `$$` block is kept out of the paragraph flow, so it stays a block
 
-**Save** writes `posts/<slug>.md`, saves the cover, and rebuilds `posts.js`.
-The single **Done** on the page then commits and pushes everything together.
+**Save & push** writes `posts/<slug>.md`, saves the cover, rebuilds
+`posts.js`, then commits and pushes. Deleting a post does the same. The
+**Done** on the page writes `content.js` and pushes that too.
 
 Markdown lives in `posts/*.md` with front matter:
 
