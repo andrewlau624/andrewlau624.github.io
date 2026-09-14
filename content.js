@@ -100,22 +100,19 @@ window.PORTFOLIO = {
       "label": "Leadership",
       "groups": [
         {
-          "label": "Leadership",
+          "label": "Extracurriculars",
           "items": [
             {
               "name": "Generative AI @ Berkeley",
               "note": "President",
-              "year": "2026 - Present"
-            }
-          ]
-        },
-        {
-          "label": "Volunteering",
-          "items": [
+              "year": "2026 - Present",
+              "href": "https://berkeleygenai.org/"
+            },
             {
               "name": "Computer Science Mentors",
               "note": "Junior Mentor",
-              "year": "2026 - Present"
+              "year": "2026",
+              "href": ""
             }
           ]
         },
