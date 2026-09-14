@@ -113,6 +113,12 @@ window.PORTFOLIO = {
               "note": "Junior Mentor",
               "year": "2026",
               "href": ""
+            },
+            {
+              "name": "Berkeley Asian American Association",
+              "note": "Social Memeber",
+              "year": "2026",
+              "href": ""
             }
           ]
         },
