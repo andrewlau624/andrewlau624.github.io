@@ -13,7 +13,7 @@ window.PORTFOLIO = {
     "email": "andrew.lau@berkeley.edu"
   },
   "intro": {
-    "bio": "I build token efficiency tools and optimize agentic workflows. Currently a software engineer at Pacific, and President of Generative AI @ Berkeley - the first and largest student-run generative ai organization in California."
+    "bio": "I build token efficiency tools and optimize agentic workflows. Currently a software engineer at Pacific, and President of Generative AI @ Berkeley - the first and largest student-run generative AI organization in California."
   },
   "tabs": [
     {

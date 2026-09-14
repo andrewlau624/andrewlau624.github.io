@@ -470,29 +470,30 @@ async function saveUpload(body) {
 
 /* ------------------------------------------------------------------- git */
 
+/* stage everything, commit it, and push. a fresh clone, or a branch made by
+   hand, can arrive with no upstream, so set one on the first push. */
+async function gitCommit(label) {
+  if (!useGit) return "--no-git was set, nothing was committed";
+
+  const add = await run("git", ["add", "-A"]);
+  if (!add.ok) return "git add failed:\n  " + add.out.trim();
+
+  const commit = await run("git", ["commit", "-m", label]);
+  const nothing = !commit.ok && /nothing to commit/i.test(commit.out);
+  if (!commit.ok && !nothing) return "git commit failed:\n  " + commit.out.trim();
+
+  let push = await run("git", ["push"]);
+  if (!push.ok && /upstream/i.test(push.out)) {
+    push = await run("git", ["push", "--set-upstream", "origin", "HEAD"]);
+  }
+  if (!push.ok) return "git push failed:\n  " + push.out.trim();
+
+  return nothing ? "nothing new to commit, already up to date" : "committed and pushed";
+}
+
 async function saveContent(state) {
   await writeFile(contentFile, serialize(state));
-
-  let report = "wrote content.js";
-  if (useGit) {
-    const add = await run("git", ["add", "-A"]);
-    if (!add.ok) return report + "\n\ngit add failed:\n  " + add.out.trim();
-
-    const commit = await run("git", ["commit", "-m", "content: edit the page"]);
-    if (!commit.ok && commit.out.indexOf("nothing to commit") === -1) {
-      return report + "\n\ngit commit failed:\n  " + commit.out.trim();
-    }
-    /* a fresh clone, or a branch made by hand, can arrive with no upstream.
-       set one on the first push instead of failing. */
-    let push = await run("git", ["push"]);
-    if (!push.ok && /upstream/i.test(push.out)) {
-      push = await run("git", ["push", "--set-upstream", "origin", "HEAD"]);
-    }
-    report += push.ok ? "\n\npushed to the repo" : "\n\ngit push failed:\n  " + push.out.trim();
-  } else {
-    report += "\n\n--no-git was set, nothing was committed";
-  }
-  return report;
+  return "wrote content.js\n\n" + (await gitCommit("content: edit the page"));
 }
 
 /* --------------------------------------------------------------- server */
@@ -567,8 +568,14 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "POST" && url === "/post/save") {
     try {
-      const saved = await savePost(await readJson(req));
-      ok(res, { ok: true, slug: saved.slug, posts: await listPosts() });
+      const post = await readJson(req);
+      const saved = await savePost(post);
+      const posts = await listPosts();
+      const message =
+        "wrote posts/" + saved.slug + ".md\n" +
+        "rebuilt posts.js (" + posts.length + " posts)\n\n" +
+        (await gitCommit("post: " + (post.title || saved.slug)));
+      ok(res, { ok: true, slug: saved.slug, posts: posts, message: message });
     } catch (e) {
       fail(res, e.message);
     }
@@ -579,7 +586,12 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await readJson(req);
       await deletePost(body.slug);
-      ok(res, { ok: true, posts: await listPosts() });
+      const posts = await listPosts();
+      const message =
+        "deleted posts/" + body.slug + ".md\n" +
+        "rebuilt posts.js (" + posts.length + " posts)\n\n" +
+        (await gitCommit("post: delete " + body.slug));
+      ok(res, { ok: true, posts: posts, message: message });
     } catch (e) {
       fail(res, e.message);
     }
