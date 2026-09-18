@@ -118,6 +118,17 @@
     );
   }
 
+  /* a tab that is a link out, like the blog or the algorithms */
+  function tabLink(item) {
+    if (!item) return "";
+    return (
+      '<a class="tab tab--link" href="' + esc(item.href) + '">' +
+        esc(item.label) +
+        '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 9.5L9.5 2.5M4.5 2.5h5v5"/></svg>' +
+      "</a>"
+    );
+  }
+
   function tabRow(data) {
     return (
       each(data.tabs, function (tab, i) {
@@ -130,12 +141,8 @@
             ' data-tab="' + esc(tab.id) + '">' + esc(tab.label) + "</button>"
         );
       }) +
-      (data.blog
-        ? '<a class="tab tab--link" href="' + esc(data.blog.href) + '">' +
-            esc(data.blog.label) +
-            '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 9.5L9.5 2.5M4.5 2.5h5v5"/></svg>' +
-          "</a>"
-        : "")
+      tabLink(data.blog) +
+      tabLink(data.algo)
     );
   }
 

@@ -661,7 +661,8 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET") {
     const safe = decodeURIComponent(url);
     const allowed =
-      /^\/(styles\.css|render\.js|content\.js|posts\.js|blog\.js|post\.js|stage\.js|blog\.html|post\.html|favicon\.svg|resume\.pdf)$/.test(safe) ||
+      /^\/(styles\.css|render\.js|content\.js|posts\.js|blog\.js|post\.js|stage\.js|algorithms\.js|blog\.html|post\.html|algorithms\.html|favicon\.svg|resume\.pdf)$/.test(safe) ||
+      (/^\/algorithms\/[A-Za-z0-9._\/-]+$/.test(safe) && safe.indexOf("..") === -1) ||
       (/^\/assets\/[A-Za-z0-9._\/-]+$/.test(safe) && safe.indexOf("..") === -1);
 
     if (allowed) {

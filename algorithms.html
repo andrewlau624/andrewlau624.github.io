@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Algorithms</title>
+  <meta name="description" content="Sorting, pathfinding, trees, graphs, and attention, drawn in the browser.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="doc">
+  <main class="algo">
+    <a class="btn" href="index.html">
+      <svg viewBox="0 0 14 12" aria-hidden="true"><path d="M13 6H1M6 1L1 6l5 5"/></svg>
+      Back
+    </a>
+    <h1 class="blog__title">Algorithms</h1>
+
+    <section class="algo__panel" id="algoPanel" aria-live="polite">
+      <header>
+        <h2 class="algo__name" id="algoName"></h2>
+        <p class="algo__blurb" id="algoBlurb"></p>
+      </header>
+
+      <div class="algo__work">
+        <div class="algo__stage" id="algoStage">
+          <canvas id="algoCanvas" aria-label="The algorithm, drawing itself"></canvas>
+          <span class="algo__progress"><i id="algoBar"></i></span>
+        </div>
+        <div class="algo__code" id="algoCode" aria-label="Pseudocode"></div>
+      </div>
+
+      <div class="algo__controls" id="algoControls"></div>
+    </section>
+
+    <div class="algo__list" id="algoList"></div>
+  </main>
+
+  <script type="module" src="algorithms.js"></script>
+</body>
+</html>

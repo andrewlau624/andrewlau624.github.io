@@ -14,8 +14,10 @@ python3 -m http.server 8001
 # open http://localhost:8001
 ```
 
-Serve it, so the 3D car can load Three.js as an ES module. Opened straight
-from disk the page still works and the car area says to serve locally.
+Serve it, so the 3D car can load Three.js as an ES module, and so the
+visualizer can load its algorithms as modules. Opened straight from disk the
+page still works, the car area says to serve locally, and the algorithms page
+stays blank.
 
 Or `npm run serve`, which is the same command.
 
@@ -24,11 +26,14 @@ Or `npm run serve`, which is the same command.
   index.html    the one page.
   blog.html     the writing list.
   post.html     one post.
+  algorithms.html  the visualizer.
   content.js    all content. Written by npm run edit.
   render.js     the column, tabs, items, links, and the car.
   blog.js       the writing list.
   post.js       one post, with the markdown renderer inline.
   stage.js      the car, and the driving game.
+  algorithms.js the visualizer shell: clock, controls, canvas.
+  algorithms/   the algorithms, and the views they draw with.
   styles.css    the theme.
   posts.js      the generated manifest of the posts.
   posts/        the writing, one markdown file per post.
@@ -111,6 +116,71 @@ The body.
 loads. Run it alone with `npm run build:posts`. `scripts/markdown.mjs` is the
 renderer shared by the editor preview; `post.js` carries the same code so the
 site stays dependency free.
+
+## Algorithms
+
+`algorithms.html` is the visualizer. The running algorithm sits at the top:
+its name, its complexity, a stage on the left and its pseudocode on the right,
+with the line for the current step lit up. Three controls: **Next** (or Space,
+or the right arrow), **Auto**, and **Reset**. The left arrow steps back and R
+resets. Below that, the algorithms are grouped by kind, and each group
+collapses. The chosen algorithm sits in the address bar, so
+`algorithms.html#quick` links straight to quicksort.
+
+Five views draw everything, and they all print the numbers:
+
+- **array** bars with their values, for sorting
+- **grid** cells with distances or visit order, for pathfinding
+- **graph** weighted edges, settled distances, and spanning trees
+- **tree** nodes with their values in order, for a binary search tree
+- **attention** the weight matrix and the output each query writes
+
+A view owns how to make an input, how to fold an event into its state, and how
+to draw it. The shell owns the clock, the controls, and the code panel, which
+is what keeps a new algorithm small.
+
+An algorithm is one module: metadata, pseudocode, a map from event to line, and
+a generator. `time`, `omega` and `theta` are the worst, best and tight bounds,
+shown in a footer under the pseudocode, with `space` beneath them.
+
+```js
+export default {
+  id: "bubble",
+  name: "Bubble Sort",
+  view: "array",
+  time: "O(n²)",
+  omega: "Ω(n)",
+  theta: "Θ(n²)",
+  space: "O(1)",
+  blurb: "One line, shown on the page.",
+  code: ["for end = n-1 down to 1:", "  ...", "    swap a[i], a[i+1]"],
+  lines: { compare: 0, swap: 2 },
+  *run(input) {
+    // input.values is a shuffled array
+    yield ["compare", i, j];
+    yield ["swap", i, j];
+    yield ["done"];
+  }
+};
+```
+
+The events a view understands are listed at the top of its file under
+`algorithms/views/`. Add the module to the two lists in `algorithms/index.js`
+and it appears, with stepping, autoplay, and the code panel, and nothing else
+to wire. `lines` can also be a function of the event when one op maps to
+different places, as it does in the tree.
+
+An algorithm can also override its view's parameters, since selection merges
+`algo.defaults` over `view.defaults`. The minimum spanning trees set
+`anchors: false` to drop the start and target rings that Dijkstra draws, and
+the graph view understands a `pass` event for an edge skipped because it would
+close a cycle.
+
+The site has one accent, a soft blue, and the views spend it only on a
+finished result: the found route, the tree the MST settled on, the sorted bars,
+the node a search landed on, the attention output. Work in progress stays
+off-white at a different wash, or a different shape, so the blue always reads
+as the answer.
 
 ## Folders and pages
 

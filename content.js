@@ -191,6 +191,10 @@ window.PORTFOLIO = {
     "note": "Just my thoughts.",
     "perPage": 6
   },
+  "algo": {
+    "label": "Algorithms",
+    "href": "algorithms.html"
+  },
   "car": {
     "note": "Up to drive, left and right to steer",
     "models": [
