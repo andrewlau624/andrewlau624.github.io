@@ -69,16 +69,34 @@ window.PORTFOLIO = {
               "href": "https://nerfguard.com/"
             },
             {
+              "name": "Swing Trader",
+              "note": "Live systematic trading platform; 2.06 Sharpe backtest.",
+              "year": "2026",
+              "href": "https://github.com/andrewlau624/swing-trader"
+            },
+            {
+              "name": "agentmaxx",
+              "note": "Cuts coding-agent cost 18% without losing task quality.",
+              "year": "2026",
+              "href": "https://github.com/andrewlau624/agentmaxx"
+            },
+            {
+              "name": "Quantum RL",
+              "note": "RL vs. classical control for qubit gates; honest negative result.",
+              "year": "2026",
+              "href": ""
+            },
+            {
               "name": "Orpheus Live",
               "note": "Simulating conversational cognition through Orpheus TTS.",
               "year": "2025",
               "href": "https://github.com/andrewlau624/orpheus-live"
             },
             {
-              "name": "Chowtown",
-              "note": "Chinatown Hacks winner.",
-              "year": "2025",
-              "href": "https://github.com/andrewlau624/chinatown-hacks-restaurant-project"
+              "name": "Discord Remote Agent",
+              "note": "Drive coding agents from Discord with approval gates.",
+              "year": "2026",
+              "href": "https://github.com/andrewlau624/discord-remote-agent"
             }
           ]
         },
