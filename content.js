@@ -192,7 +192,7 @@ window.PORTFOLIO = {
     },
     {
       "label": "LinkedIn",
-      "href": "https://www.linkedin.com/in/andrewlau624/"
+      "href": "https://www.linkedin.com/in/andrew-lau-dev/"
     },
     {
       "label": "Resume",
