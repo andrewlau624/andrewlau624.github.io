@@ -196,7 +196,7 @@ window.PORTFOLIO = {
     },
     {
       "label": "Resume",
-      "href": "resume.pdf"
+      "href": "andrew_lau_resume.pdf"
     },
     {
       "label": "Email",

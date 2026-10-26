@@ -39,7 +39,7 @@ Or `npm run serve`, which is the same command.
   posts/        the writing, one markdown file per post.
   scripts/      the editor, and the markdown renderer.
   assets/       the cars, and the images the writing uses.
-  resume.pdf
+  andrew_lau_resume.pdf
   README.md
 ```
 
